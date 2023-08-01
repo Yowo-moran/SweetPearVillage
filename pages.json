@@ -49,28 +49,37 @@
 	"uniIdRouter": {},
 	"tabBar": {
 		"color": "#6F876F",
-		"selectedColor": "#E3FBE3",
-		"backgroundColor": "#ffffff",
+		"selectedColor": "#BFC6AE",
+		"backgroundColor": "#E3FBE3",
 		"list": [
 			{
 				"text": "村村",
-				"pagePath": "pages/village/village"
+				"pagePath": "pages/village/village",
+				"iconPath": "static/村情简介.png",
+				"selectedIconPath": "static/村情简介 (1).png"
 			},
 			{
 				"text": "墙墙",
-				"pagePath": "pages/wall/wall"
+				"pagePath": "pages/wall/wall",
+				"iconPath": "static/24gl-bricks.png",
+				"selectedIconPath": "static/24gl-bricks (1).png"
 			},
 			{
-				"text": "+",
-				"pagePath": "pages/publish/publish"
+				"text": "",
+				"pagePath": "pages/publish/publish",
+				"iconPath": "static/加.png"
 			}, 
 			{	
 				"text": "消息",
-				"pagePath": "pages/massage/massage"
+				"pagePath": "pages/massage/massage",
+				"iconPath": "static/消息-置灰.png",
+				"selectedIconPath": "static/消息-置灰 (1).png"
 			}, 
 			{
 				"text": "我的",
-				"pagePath": "pages/mine/mine"
+				"pagePath": "pages/mine/mine",
+				"iconPath": "static/个人中心-置灰.png",
+				"selectedIconPath": "static/个人中心-置灰 (1).png"
 			}
 		]
 	}
