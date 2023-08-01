@@ -39,7 +39,34 @@
 			}
 
 		}
-	],
+	    ,{
+            "path" : "pages/mine/setting",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "设置",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/mine/myReward",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的悬赏",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/mine/myIdle",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的闲置",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
