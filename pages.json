@@ -66,6 +66,13 @@
 				"navigationBarTitleText": "我的闲置",
 				"enablePullDownRefresh": false
 			}
+		},
+		{
+			"path": "pages/village/search/search",
+			"style": {
+				"navigationBarTitleText": "搜索",
+				"enablePullDownRefresh": false
+			}
 		}
 	],
 	"globalStyle": {

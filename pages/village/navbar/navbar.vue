@@ -11,6 +11,12 @@
 
 <script>
 	export default {
+		props:{
+			tabIndex:{
+				type:Number,
+				default:0
+			}
+		},
 		data() {
 			return {
 				tabItems:['悬赏','书籍','闲置'],
@@ -27,6 +33,12 @@
 					index:index
 				})
 			}
+		},
+		watch:{
+			// 监听tab变化
+			tabIndex(newValue,oldValue){
+				this.activeIndex=newValue
+			}
 		}
 	}
 </script>
@@ -41,7 +53,7 @@
 			justify-content: space-around;
 			align-items: center;
 			// background-color: green;
-			font-size: large;
+			font-size: 50rpx;
 			height: 100%;
 			width: 100%;
 			.active{
