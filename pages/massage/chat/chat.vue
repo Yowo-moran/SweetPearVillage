@@ -6,32 +6,40 @@
 		</uni-nav-bar>
 
 		<view class="box" :style="{height:safeArea+'px'}">
-			<scroll-view ref="scroll" class="message-container" scroll-y :scroll-into-view="messages[messages.length-1].id">
+			<scroll-view :scroll-top="scrollTop" class="message-container" scroll-y :scroll-into-view="messages[messages.length-1].id">
 			    <view class="message" v-for="message in messages" :key="message.id" :class="message.sender === 'self' ? 'self' : 'other'">
 			      <view class="avatar" ></view>
-			      <view class="content">
+			      <view class="content" >
 			          <view v-if="message.type === 'text'">
 			          	{{ message.content }}
 			          </view>
 			        
-			          <image :src="message.content" mode="aspectFit" v-else-if="message.type === 'image'"></image>
-			     
+			          <image :src="message.content" mode="aspectFit" v-else-if="message.type === 'image'" @tap="preview(message.content)"></image>
+						
+						<view v-if="message.type === 'voice'" class="voice-content">
+							{{message.length}}
+							<image src="../../../static/icon/wave.png" mode="scaleToFill" class="voice-img" :style="{width:message.length+20+'px'}"></image>
+						</view>
 			      </view>
 			    </view>
 			  </scroll-view>
 			
 			<view class="input" :class="showFooter?'hHeight':''" >
 				<view class="header" >
-					<span style="margin:0 10px;"><u-icon :name="!isVoice?'mic':'edit-pen'" size="28" @tap="isVoice=!isVoice"></u-icon></span>
-					<view class="textarea" >
-						<u-textarea v-if="!isVoice" v-model="inform" placeholder="请输入内容" autoHeight style="background-color: antiquewhite;"></u-textarea>
+					<span style="margin:0 10px;" @tap="showFooter = false" ><u-icon :name="!isVoice?'mic':'edit-pen'" size="28" @tap="isVoice=!isVoice" ></u-icon></span>
+					<view class="textarea"  v-if="!isVoice">
+						<u-textarea  v-model="inform" placeholder="请输入内容" autoHeight class="area" ></u-textarea>
 						<button style="background-color: #e9eac9;color: #fff; height: 45px;" @tap="sendMessage">发送</button>
 					</view>
-					
+					<view class="voice" v-else @touchstart="handleTouchStart" @touchend="handleTouchEnd">
+						<view class="button">
+							{{!needCancel?'按住说话':''}}
+						</view>
+					</view>
 					<span style="margin:0 10px;"><u-icon name="plus-circle" size="28" @tap.stop="changeShow" :color="showFooter?'skyblue':''"></u-icon></span>
 				</view>
 				<view class="footer" v-if="showFooter" @tap.stop="">
-					<view class="btn">
+					<view class="btn" @tap="useCamera">
 						<view class="icon">
 							<u-icon name="camera" size="40" color="#fff"></u-icon>
 						</view>
@@ -57,7 +65,12 @@
 					</view>
 				</view>
 			</view>
+			<view class="cancel" v-if="needCancel">
+				<span>还可以录制{{60-length}}秒</span>
+				<span>松开停止录音</span>
+			</view>
 		</view>
+		
 	</view>
 </template>
 
@@ -73,6 +86,11 @@
 				inform:'',
 				showFooter:false,
 				isVoice:false,
+				scrollTop:0,
+				needCancel:false,
+				timer:null,
+				length:0,
+				recorder:null,
 				messages: [
 				        {
 				          id: 'firs',
@@ -107,6 +125,7 @@
 			this.topBarHeight = systemInfo.statusBarHeight||0;
 			this.safeBottom = systemInfo.windowHeight - this.topBarHeight - systemInfo.safeArea.height
 			this.safeArea = systemInfo.windowHeight - this.topBarHeight - 44 - this.safeBottom;
+			this.toBottom()
 		},
 		methods:{
 			back(){
@@ -114,6 +133,7 @@
 			},
 			changeShow(){
 				this.showFooter = !this.showFooter
+				this.isVoice = false
 				return false
 			},
 			sendMessage(){
@@ -121,11 +141,22 @@
 					this.messages.push({
 						id:Date.now(),
 						type:'text',
-						content:this.inform,
+						content:this.inform.trim(),
 						sender:'self'
 					});
 					this.inform = ''
+					this.toBottom();
 				}
+			},
+			sendImage(){
+				this.messages.push({
+					id:Date.now(),
+					type:'image',
+					content:this.inform,
+					sender:'self'
+				})
+				this.inform = ''
+				this.showFooter = false
 			},
 			chooseImage(){
 				uni.chooseMedia({
@@ -135,20 +166,67 @@
 						console.log(res.tempFiles);
 						this.inform = res.tempFiles[0].tempFilePath;
 						console.log(this.inform)
-						this.messages.push({
-							id:Date.now(),
-							type:'image',
-							content:this.inform,
-							sender:'self'
-						})
-						this.inform = ''
-						this.scroll()
-						this.showFooter = false
+						this.sendImage();
+						this.toBottom();
 					}.bind(this)
 				})
 			},
-			scroll(){
-					console.log(this.$refs)
+			useCamera(){
+				uni.chooseMedia({
+					mediaType:['image'],
+					sourceType:['camera'],
+					camera:'back',
+					success:function(res){
+						console.log(res.tempFiles);
+						this.inform = res.tempFiles[0].tempFilePath;
+						console.log(this.inform)
+						this.sendImage();
+						this.toBottom();
+					}.bind(this)
+				})
+			},
+			toBottom(){
+				this.$nextTick(()=>{
+					const query = uni.createSelectorQuery().in(this);
+					query.selectAll('.message').fields({size:true,rect:true},data=>{
+						const elements = Array.from(data);
+						this.scrollTop = elements[elements.length-1].top;
+					}).exec();
+				})
+			},
+			preview(url){
+				uni.previewImage({
+					urls:[url],
+				})
+			},
+			handleTouchStart(){
+				this.needCancel = true
+				this.recorder = uni.getRecorderManager()
+				this.recorder.start();
+				this.timer = setInterval(()=>{
+					this.length+=1;
+					if(this.length>=60){
+						this.handleTouchEnd();
+					}
+				},1000)
+			},
+			handleTouchEnd(){
+				clearInterval(this.timer);
+				this.recorder.stop();
+				this.recorder.onStop((res)=>{
+					const message = {
+						id:Date.now(),
+						type:'voice',
+						content:res.tempFilePath,
+						length:this.length,
+						sender:'self'
+					}
+					console.log(message)
+					this.messages.push(message)
+					this.needCancel = false
+					this.length = 0;
+				})
+				
 			}
 		}
 	}
@@ -158,6 +236,7 @@
 	.box{
 		display: flex;
 		flex-direction: column;
+		position: relative;
 		.message-container{
 			background-color: blanchedalmond;
 			flex-grow: 1;
@@ -175,12 +254,27 @@
 			    margin:0 10px;
 			  }
 			  .content {
-			    padding: 10px;
-				max-width: 320px;
+				box-sizing:border-box;
+				max-width: 280px;
+				padding: 10px;
 			    border-radius: 10px;
 			    background-color: #fff;
 			    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 				word-break: break-all;
+				display: flex;
+				justify-content: center;
+				.voice-content{
+					display: flex;
+					justify-content: flex-end;
+					align-items: center;
+					font-size: 12px;
+					font-weight: 200;
+					.voice-img{
+						margin-left: 5px;
+						height: 22px;
+					}
+				}
+				
 			  }	
 			}
 			.self{
@@ -202,40 +296,70 @@
 				.textarea{
 					flex-grow: 1;
 					display: flex;
+					
+				}
+				.textarea /deep/ .u-textarea{
+					max-height:40px;
+					overflow: auto;
+				}
+				.voice{
+					flex-grow: 1;
+					.button{
+						width: 100%;
+						height: 36px;
+						background-color: #eee;
+						text-align: center;
+						line-height: 36px;
+						border-radius: 5px;
+					}
+				}
+			}
+			.footer{
+				position: relative;
+				bottom: 0;
+				margin: 15px 0;
+				display: flex;
+				justify-content: space-around;
+				height: 70px;
+				
+				.btn{
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					height: 70px;
+					justify-content: space-around;
+					.text{
+						font-size: 10px;
+						text-align: center;
+						width: 60px;
+					}
+					.icon{
+						background-color: #d6d7bc;
+						width: 50px;
+						height: 50px;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						flex-direction: column;
+						font-weight: 400;
+					}
 				}
 			}
 		}
-		.footer{
-			position: relative;
-			bottom: 0;
-			margin: 15px 0;
+		.cancel{
+			position: absolute;
+			bottom: 50%;
+			width: 40vw;
+			height: 7vh;
+			background: #fff;
 			display: flex;
-			justify-content: space-around;
-			height: 70px;
-			
-			.btn{
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				height: 70px;
-				justify-content: space-around;
-				.text{
-					font-size: 10px;
-					text-align: center;
-					width: 60px;
-				}
-				.icon{
-					background-color: #d6d7bc;
-					width: 50px;
-					height: 50px;
-					display: flex;
-					justify-content: center;
-					align-items: center;
-					flex-direction: column;
-					font-weight: 400;
-				}
-			}
+			justify-content: center;
+			align-items: center;
+			left: 50%;
+			transform: translateX(-50%);
+			border-radius: 10px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 		}
 	}
-
+	
 </style>

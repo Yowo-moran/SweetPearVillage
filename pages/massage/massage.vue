@@ -4,19 +4,19 @@
 			<view class="left">
 				<u-icon name="chat" size="64"></u-icon>
 			</view>
-			<view class="right">
+			<view class="right" @click="toNotice">
 				<view class="titles">通知</view>
 				<view class="preview">欢迎大家加入天理村儿～！</view>
 			</view>
 		</view>
 		<view class="inform">
 			<scroll-view scroll-y="true" class="scroll">
-				<view class="scrollItem">
+				<view class="scrollItem" @click="jump">
 					<view class="left">
 						<image src="../../static/60155475_p0_master1200.jpg" mode="aspectFill" class="img"></image>
 					</view>
 					<view class="content">
-						<view class="right"  @click="jump">
+						<view class="right"  >
 							<view class="titles">猪猪不爱吃珠珠</view>
 							<view class="preview">欢迎大家加入天理村儿～！</view>
 							<view class="time">
@@ -25,12 +25,12 @@
 						</view>
 					</view>
 				</view>
-				<view class="scrollItem">
+				<view class="scrollItem" @click="jump">
 					<view class="left">
 						<image src="../../static/60155475_p0_master1200.jpg" mode="aspectFill" class="img"></image>
 					</view>
 					<view class="content">
-						<view class="right" @click="jump">
+						<view class="right" >
 							<view class="titles">猪猪不爱吃珠珠</view>
 							<view class="preview">欢迎大家加入天理村儿～！</view>
 							<view class="time">
@@ -42,12 +42,12 @@
 						</view>
 					</view>
 				</view>
-				<view class="scrollItem">
+				<view class="scrollItem" @click="jump">
 					<view class="left">
 						<image src="../../static/60155475_p0_master1200.jpg" mode="aspectFill" class="img"></image>
 					</view>
 					<view class="content">
-						<view class="right" @click="jump">
+						<view class="right" >
 							<view class="titles">猪猪不爱吃珠珠</view>
 							<view class="preview">欢迎大家加入天理村儿～！</view>
 							<view class="time">
@@ -74,6 +74,11 @@
 				uni.navigateTo({
 					url:'/pages/massage/chat/chat'
 				})
+			},
+			toNotice(){
+				uni.navigateTo({
+					url:'notice/notice'
+				})
 			}
 		}
 	}
@@ -98,7 +103,7 @@
 			width: 79vw;
 			display: flex;
 			flex-direction: column;
-			padding-top: 10px;
+			padding-top: 5px;
 			.titles{
 				font-size: 22px;
 				color: #878865;
@@ -117,7 +122,7 @@
 				margin-top: 10px;
 				display: flex;
 				justify-content: space-between;
-				height: 11vh;
+				height: 12vh;
 				.left{
 					width: 20vw;
 					display: flex;
@@ -130,16 +135,17 @@
 					}
 				}
 				.content{
-					width: 80vw;
+					width: 90vw;
 					.right{
 						position: relative;
 						padding-left: 10px;
-						width: 80%;
+						width: 90%;
 						height: 100%;
 						display: flex;
 						flex-direction: column;
 						justify-content: space-around;
-						padding-top: 10px;
+						padding-top: 5px;
+						box-sizing: border-box;
 						box-sizing: border-box;
 						border-bottom: 1px solid #e5e5d4;
 						.titles{
