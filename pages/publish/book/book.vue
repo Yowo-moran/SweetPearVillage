@@ -84,16 +84,17 @@
 			@select="gradeSelect">
 		</u-action-sheet>
 		<u-upload
-				:fileList="fileList1"
-				@afterRead="afterRead"
-				@delete="deletePic"
-				name="1"
-				multiple
-				:maxCount="10"
-			></u-upload>
-			<view class="bottom">
-				<button>发布</button>
-			</view>
+		:previewFullImage="true"
+		:fileList="fileList1"
+		@afterRead="afterRead"
+		@delete="deletePic"
+		name="1"
+		multiple
+		:maxCount="10"
+		></u-upload>
+		<view class="bottom">
+			<button @click="finish">发布</button>
+		</view>
 	</view>
 </template>
 
@@ -107,6 +108,8 @@
 				showGrade:false,
 				labelStyle:{
 					color:'#626341',
+					fontSize:17+"px",
+					
 				},
 				model1: {
 					userInfo: {
@@ -156,6 +159,12 @@
 			},
 			gradeSelect(e){
 				this.model1.userInfo.grade= e.name
+			},
+			finish(){
+							  // uni.request({
+							  	
+							  // })
+							 uni.navigateBack()
 			},
 			// 删除图片
 			deletePic(event) {
@@ -214,13 +223,19 @@
 	padding-left: 20px;
 	padding-top: 10px;
 }
-button{
+.bottom{
 	
-	background-color:rgb(214,215,185);
-	width: 150rpx;
-	line-height: 80rpx;
-	fontsize:10px;
-	color: rgb(124,125,82);
-		
-	}
+	position: absolute;
+	bottom: 10%;
+	right: 7%;
+	
+	button{
+		background-color:rgb(214,215,185);
+		width: 150rpx;
+		line-height: 80rpx;
+		fontsize:10px;
+		color: rgb(124,125,82);
+			
+		}
+}
 </style>

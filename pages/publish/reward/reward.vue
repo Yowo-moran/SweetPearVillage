@@ -31,7 +31,7 @@
 			>
 				<u--input
 					v-model="model1.userInfo.place"
-					placeholder="请选择地点"
+					placeholder="请输入地点,可选择"
 					border="none"
 				></u--input>
 				<u-icon
@@ -47,36 +47,16 @@
 				</u--input>
 			</u-form-item> 
 		</u-form>
-		
-		<!-- <u-form>
-			<u-form-item>
-				<span >悬赏内容：</span>
-				<u--textarea 
-				placeholder="请输入悬赏内容" 
-				count height="100px"
-				></u--textarea>
-			</u-form-item>
-			<u-form-item>
-				<span>赏金:</span>
-				<u--input placeholder="请输入金额" type="number"></u--input>
-			</u-form-item>
-			<u-form-item>
-				<span>地点:</span>
-				<u--input type="text" placeholder="请输入地点,可选择" ></u--input>
-				
-			</u-form-item>
-			<u-form-item>
-				<span>收货地址:</span>
-				<u--input placeholder="请输入收货地址"></u--input>
-			</u-form-item>
-		</u-form> -->	
-			
-			
-			
-		
-		
+		<u-action-sheet
+			:show="showPlace"
+			:actions="place"
+			title="请选择地址"		
+			@close="showPlace = false"
+			@select="placeSelect"
+				>
+		</u-action-sheet>
 		<view class="bottom">
-			<button>发布</button>
+			<button @click="finish">发布</button>
 		</view>
 		
 	</view>
@@ -90,6 +70,7 @@
 				showPlace:false,
 				labelStyle:{
 					color:'#626341',
+					fontSize:17+"px",
 					
 				},
 				model1: {
@@ -101,40 +82,58 @@
 						
 					},
 				},
+				place:[
+					{
+						name:"一食堂",
+					},
+					{
+						name:"二食堂",
+					},
+					{
+						name:"南区快递",
+					},
+					{
+						name:"北区快递",
+					}
+				]
 			};
 		},
 		 methods:{
-		      
+		      placeSelect(e){
+				  model1.userInfo.place=e.name
+			  },
+			  finish(){
+				  // uni.request({
+				  	
+				  // })
+				 uni.navigateBack()
+			  }
 		    }
 	}
 </script>
 
 <style lang="scss">
 .bottom{
-	display: flex;
 	
-	// flex-direction: row-reverse;
-	// justify-content: flex-end;
-	padding-left: 500rpx;
+	position: absolute;
+	bottom: 10%;
+	right: 7%;
 	
+	button{
+		background-color:rgb(214,215,185);
+		width: 150rpx;
+		line-height: 80rpx;
+		fontsize:10px;
+		color: rgb(124,125,82);
+			
+		}
 }
 .u-form-item{
-	padding:0px 10px;
+	padding:5rpx 10px;
 	span{
 		color: #626341;
-		font-size: 15px;
-	}
-}
-button{
-	
-	background-color:rgb(214,215,185);
-	width: 150rpx;
-	line-height: 80rpx;
-	fontsize:10px;
-	color: rgb(124,125,82);
+		font-size: 17px;
 		
 	}
-// .u-form{
-	
-// }
+}
 </style>
