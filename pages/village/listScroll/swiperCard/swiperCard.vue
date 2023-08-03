@@ -1,8 +1,8 @@
 <template>
 	<view class="scroll">
 		<!-- 添加上下滑动区 -->
-		<scroll-view scroll-y="true"class="demo-scroll-block">
-			<listItem v-for="item in 10" :tagName="tagName"></listItem>
+		<scroll-view scroll-y="true"class="demo-scroll-block" >
+			<listItem v-for="item in 10" :tagName="tagName" ></listItem>
 		</scroll-view>
 	</view>
 </template>
