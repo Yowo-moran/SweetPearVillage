@@ -1,20 +1,30 @@
 const state={
-	tagNum:0
+	// 历史记录
+	historyList:[]
 }
-const mutation={
-	SETTAGNUM(state,num){
-		this.state.tagNum=num
+const mutations={
+	SETHISTORYLIST(state,history){
+		state.historyList=history;
+	},
+	CLEARHISTORYLIST(state){
+		state.historyList=[]
 	}
 }
 const actions={
-	setTageNum({commit,state},num){
-		commit('SETTAGNUM',num)
-	}
+	 setHistoryList({commit,state},history){
+		 let list=state.historyList
+		 list.unshift(history)
+		 commit('SETHISTORYLIST',list)
+	 },
+	 clearHistoryList({commit,state}){
+		 commit('CLEARHISTORYLIST')
+	 }
 }
 const getters={}
 export default{
+	namespaced:true,
 	state,
-	mutation,
+	mutations,
 	actions,
 	getters
 }

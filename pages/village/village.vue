@@ -4,7 +4,7 @@
 		<view class="header">
 			<!-- 自定义导航栏 -->
 			<navbar @changeTagNum="changeTagNum" :tabIndex="tabIndex" u></navbar>
-			<searchbox></searchbox>
+			<searchbox :tagName="tagName"></searchbox>
 		</view>
 		<!-- 将内容撑开 -->
 		<view style="height: 160rpx;"></view>
