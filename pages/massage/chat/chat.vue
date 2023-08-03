@@ -23,15 +23,24 @@
 			      </view>
 			    </view>
 			  </scroll-view>
-			
-			<view class="input" :class="showFooter?'hHeight':''" >
+			<view class="cancel" v-if="needCancel">
+				<view class="voiceTime" :class="cancel?'warn':''">
+					<image src="../../../static/icon/voice.png" mode="scaleToFill" class="left"></image>
+					<span style="margin: 0 5px;">{{cancel?'松开手指取消发送':time}}</span>
+					<image src="../../../static/icon/voice.png" mode="scaleToFill" class="right"></image>
+				</view>
+				<view class="voiceIcon" >
+					<image src="../../../static/icon/cancel.png" mode="scaleToFill" class="cancelIcon"></image>
+				</view>
+			</view>
+			<view class="input" :class="showFooter?'hHeight':''">
 				<view class="header" >
 					<span style="margin:0 10px;" @tap="showFooter = false" ><u-icon :name="!isVoice?'mic':'edit-pen'" size="28" @tap="isVoice=!isVoice" ></u-icon></span>
 					<view class="textarea"  v-if="!isVoice">
 						<u-textarea  v-model="inform" placeholder="请输入内容" autoHeight class="area" ></u-textarea>
 						<button style="background-color: #e9eac9;color: #fff; height: 45px;" @tap="sendMessage">发送</button>
 					</view>
-					<view class="voice" v-else @touchstart="handleTouchStart" @touchend="handleTouchEnd">
+					<view class="voice" v-else @touchstart="handleTouchStart" @touchend="handleTouchEnd" @touchmove="move">
 						<view class="button">
 							{{!needCancel?'按住说话':''}}
 						</view>
@@ -41,33 +50,29 @@
 				<view class="footer" v-if="showFooter" @tap.stop="">
 					<view class="btn" @tap="useCamera">
 						<view class="icon">
-							<u-icon name="camera" size="40" color="#fff"></u-icon>
+							<u-icon name="camera" size="60" color="#fff"></u-icon>
 						</view>
 						<view class="text">拍照</view>
 					</view>
 					<view class="btn" @tap="chooseImage">
 						<view class="icon">
-							<u-icon name="photo" size="40" color="#fff"></u-icon>
+							<u-icon name="photo" size="60" color="#fff"></u-icon>
 						</view>
 						<view class="text" >相册</view>
 					</view>
 					<view class="btn">
 						<view class="icon">
-							<u-icon name="weixin-fill" size="40" color="#fff"></u-icon>
+							<u-icon name="weixin-fill" size="60" color="#fff"></u-icon>
 						</view>
 						<view class="text">发送微信号</view>
 					</view>
 					<view class="btn">
 						<view class="icon">
-							<u-icon name="phone" size="40" color="#fff"></u-icon>
+							<u-icon name="phone" size="60" color="#fff"></u-icon>
 						</view>
 						<view class="text">发送手机号</view>
 					</view>
 				</view>
-			</view>
-			<view class="cancel" v-if="needCancel">
-				<span>还可以录制{{60-length}}秒</span>
-				<span>松开停止录音</span>
 			</view>
 		</view>
 		
@@ -90,11 +95,14 @@
 				isVoice:false,
 				scrollTop:0,
 				needCancel:false,
+				cancel:false,
 				timer:null,
 				length:0,
 				recorder:null,
 				innerAudioContext:null,
 				isPlay:false,
+				startY:0,
+				time:'0:00',
 				messages: [
 				        {
 				          id: 'firs',
@@ -111,7 +119,7 @@
 				        {
 				          id: 'third',
 				          type: 'image',
-				          content: '../../../static/60155475_p0_master1200.jpg',
+				          content: '../../../static/111.jpg',
 				          sender: 'other',
 				        },
 				        {
@@ -217,13 +225,20 @@
 					urls:[url],
 				})
 			},
-			handleTouchStart(){
-				
+			handleTouchStart(e){
+				this.startY = e.touches[0].pageY
 				this.needCancel = true
 				this.recorder = uni.getRecorderManager()
 				this.recorder.start();
+				let minute = 0;
+				let ten = 0;
+				let ge = 0;
 				this.timer = setInterval(()=>{
 					this.length+=1;
+					ge = this.length%10;
+					ten = Math.floor(this.length/10);
+					minute = Math.floor(this.length/60)
+					this.time = minute+':'+ten+ge
 					if(this.length>=60){
 						this.handleTouchEnd();
 					}
@@ -245,12 +260,20 @@
 						sender:'self'
 					}
 					console.log(message)
-					this.messages.push(message)
+					if(!this.cancel && this .length >=1)this.messages.push(message)
 					this.needCancel = false
+					this.cancel = false
 					this.length = 0;
 					this.toBottom();
 				})
-				
+				this.time = '0:00'
+			},
+			move(e){
+				if(this.startY - e.touches[0].pageY > 55){
+					this.cancel = true
+				}else{
+					this.cancel = false
+				}
 			},
 			play(url){
 				console.log(url)
@@ -323,6 +346,58 @@
 		.hHeight{
 			height: 150px!important;
 		}
+		.cancel{
+			position: absolute;
+			width: 100%;
+			height: 200px;
+			background: #fff;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			left: 50%;
+			transform: translateX(-50%);
+			bottom: 60px;
+			.voiceIcon{
+				position: absolute;
+				bottom: 25px;
+				background: #eeeeee;
+				padding: 12px;
+				border-radius: 50%;
+				overflow: hidden;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				.cancelIcon{
+					width: 35px;
+					height: 35px;
+				}
+			}
+			
+			.voiceTime{
+				display: flex;
+				align-items: center;
+				justify-content: space-around;
+				margin-bottom: 55px;
+				.left {
+					width: 40px;
+					height: 25px;
+					
+				}
+				.right{
+					width: 40px;
+					height: 25px;
+					transform: rotate(180deg);
+				}
+			}
+			
+			.warn{
+				color: white;
+				background-color: indianred;
+				border-radius: 10px;
+			}
+			
+			
+		}
 		.input{
 			height: 60px;
 			display: flex;
@@ -359,14 +434,15 @@
 				margin: 15px 0;
 				display: flex;
 				justify-content: space-around;
-				height: 70px;
+				height: 100px;
 				
 				.btn{
 					display: flex;
 					flex-direction: column;
 					align-items: center;
-					height: 70px;
+					height: 80px;
 					justify-content: space-around;
+					
 					.text{
 						font-size: 10px;
 						text-align: center;
@@ -374,8 +450,9 @@
 					}
 					.icon{
 						background-color: #d6d7bc;
-						width: 50px;
-						height: 50px;
+						border-radius: 10px;
+						width: 70px;
+						height: 70px;
 						display: flex;
 						justify-content: center;
 						align-items: center;
@@ -385,20 +462,7 @@
 				}
 			}
 		}
-		.cancel{
-			position: absolute;
-			bottom: 50%;
-			width: 40vw;
-			height: 7vh;
-			background: #fff;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			left: 50%;
-			transform: translateX(-50%);
-			border-radius: 10px;
-			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-		}
+		
 	}
 	
 </style>
