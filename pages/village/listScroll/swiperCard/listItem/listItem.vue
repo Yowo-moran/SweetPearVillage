@@ -1,6 +1,6 @@
 <template>
 	<!-- 横向卡片 悬赏-->
-	<view class=listItem v-if="tagItem==='悬赏'"> 
+	<view class=listItem v-if="tagItem==='悬赏'" @click="jump"> 
 		<view class="listItemContent">猪猪不爱吃猪猪，猪猪不爱吃猪猪，猪猪不爱吃猪猪猪猪不爱吃猪猪猪猪不爱吃猪猪猪猪不爱吃猪猪，猪猪不爱吃猪猪，猪猪不爱吃猪猪</view>
 		<view class="userInfo">
 			<!-- 用户头像 -->
@@ -12,7 +12,7 @@
     </view>
 </view>
 	<!-- 纵向卡片 书籍 -->	
-	<view class="verListItem" v-else-if="tagItem==='书籍'">
+	<view class="verListItem" v-else-if="tagItem==='书籍'" @click="jump">
 		<view class="bookPhoto">
 			<image src="../../../../../static/60155475_p0_master1200.jpg"></image>
 		</view>
@@ -27,7 +27,7 @@
 		</view>
 	</view>
 	<!-- 横向卡片 闲置 -->
-	<view class="rowlistItem" v-else-if="tagItem==='闲置'">
+	<view class="rowlistItem" v-else-if="tagItem==='闲置'" @click="jump">
 		<view class="listItemImage">
 			<image src="../../../../../static/111.jpg"></image>
 		</view>
@@ -57,7 +57,11 @@
 			}
 		},
 		methods: {
-			
+			jump(){
+				uni.navigateTo({
+					url:'/pages/massage/chat/chat'
+				})
+			}
 		},
 		watch:{
 			tagName(value){

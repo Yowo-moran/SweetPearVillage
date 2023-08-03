@@ -39,6 +39,13 @@
 			}
 		},
 		{
+			"path": "pages/wall/topicDetail",
+			"style": {
+				"navigationBarTitleText": "评论详情",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
 			"path": "pages/massage/chat/chat",
 			"style": {
 				"navigationBarTitleText": "",
