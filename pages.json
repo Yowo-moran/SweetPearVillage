@@ -89,7 +89,55 @@
                 "enablePullDownRefresh": false
             }
             
-        }
+        },
+		{
+		    "path" : "pages/publish/reward/reward",
+		    "style" :                                                                                    
+		    {
+		       "navigationBarTitleText": "",
+		       "enablePullDownRefresh": false,
+		        "navigationStyle": "custom" ,
+		        "navigationBarTextStyle": "black" 
+		        	
+		    }
+		    
+		},
+		{
+		    "path" : "pages/publish/goods/goods",
+		    "style" :                                                                                    
+		    {
+		       "navigationBarTitleText": "",
+		       "enablePullDownRefresh": false,
+		        "navigationStyle": "custom" ,
+		        "navigationBarTextStyle": "black" 
+		        	
+		    }
+		    
+		},
+		{
+		    "path" : "pages/publish/post/post",
+		    "style" :                                                                                    
+		    {
+		       "navigationBarTitleText": "",
+		       "enablePullDownRefresh": false,
+		        "navigationStyle": "custom" ,
+		        "navigationBarTextStyle": "black" 
+		        	
+		    }
+		    
+		},
+		{
+		    "path" : "pages/publish/book/book",
+		    "style" :                                                                                    
+		    {
+		       "navigationBarTitleText": "",
+		       "enablePullDownRefresh": false,
+		        "navigationStyle": "custom" ,
+		        "navigationBarTextStyle": "black" 
+		        	
+		    }
+		    
+		}
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
