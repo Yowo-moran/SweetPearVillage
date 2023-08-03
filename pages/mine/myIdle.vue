@@ -49,7 +49,7 @@ export default {
 <style lang="scss">
 .allIdle {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #d6d7b9;
   .listItem {
     height: 230rpx;

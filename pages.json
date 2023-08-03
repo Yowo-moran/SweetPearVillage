@@ -131,6 +131,24 @@
 		    }
 		    
 		}
+        ,{
+            "path" : "pages/mine/myBook",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的书籍",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/mine/myPost",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的帖子",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
