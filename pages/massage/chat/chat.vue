@@ -16,7 +16,7 @@
 			        
 			          <image :src="message.content" mode="aspectFit" v-else-if="message.type === 'image'" @tap="preview(message.content)"></image>
 						
-						<view v-if="message.type === 'voice'" class="voice-content">
+						<view v-if="message.type === 'voice'" class="voice-content" @tap="play(message.content)">
 							{{message.length}}
 							<image src="../../../static/icon/wave.png" mode="scaleToFill" class="voice-img" :style="{width:message.length+20+'px'}"></image>
 						</view>
@@ -76,9 +76,11 @@
 
 
 <script>
+	import moment from 'moment'
 	export default {
 		data() {
 			return {
+				query:null,
 				title:'',
 				topBarHeight:0,
 				safeArea:0,
@@ -91,6 +93,8 @@
 				timer:null,
 				length:0,
 				recorder:null,
+				innerAudioContext:null,
+				isPlay:false,
 				messages: [
 				        {
 				          id: 'firs',
@@ -126,6 +130,19 @@
 			this.safeBottom = systemInfo.windowHeight - this.topBarHeight - systemInfo.safeArea.height
 			this.safeArea = systemInfo.windowHeight - this.topBarHeight - 44 - this.safeBottom;
 			this.toBottom()
+			uni.getSetting({
+				success: (res) => {
+					console.log(res.authSetting['scope.record']);
+					if(!res.authSetting['scope.record']){
+						uni.authorize({
+							scope:'scope.record'
+						})
+					}
+				}
+				
+			})
+			this.innerAudioContext = uni.createInnerAudioContext()
+			console.log(this.innerAudioContext)
 		},
 		methods:{
 			back(){
@@ -139,18 +156,18 @@
 			sendMessage(){
 				if(this.inform){
 					this.messages.push({
-						id:Date.now(),
+						id:moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
 						type:'text',
 						content:this.inform.trim(),
 						sender:'self'
 					});
 					this.inform = ''
-					this.toBottom();
+					this.toBottom()
 				}
 			},
 			sendImage(){
 				this.messages.push({
-					id:Date.now(),
+					id:moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
 					type:'image',
 					content:this.inform,
 					sender:'self'
@@ -164,8 +181,7 @@
 					sourceType:['album'],
 					success:function(res){
 						console.log(res.tempFiles);
-						this.inform = res.tempFiles[0].tempFilePath;
-						console.log(this.inform)
+						this.inform = res.tempFiles[0].tempFilePath
 						this.sendImage();
 						this.toBottom();
 					}.bind(this)
@@ -178,20 +194,22 @@
 					camera:'back',
 					success:function(res){
 						console.log(res.tempFiles);
-						this.inform = res.tempFiles[0].tempFilePath;
-						console.log(this.inform)
+						this.inform = res.tempFiles[0].tempFilePath
 						this.sendImage();
 						this.toBottom();
 					}.bind(this)
 				})
 			},
+			
 			toBottom(){
 				this.$nextTick(()=>{
-					const query = uni.createSelectorQuery().in(this);
-					query.selectAll('.message').fields({size:true,rect:true},data=>{
-						const elements = Array.from(data);
-						this.scrollTop = elements[elements.length-1].top;
-					}).exec();
+					this.query = uni.createSelectorQuery().in(this);
+							this.query.selectAll('.message').boundingClientRect(data=>{
+								const elements = Array.from(data);
+								let index = elements.length-1;
+								this.scrollTop = elements[index].bottom-elements[0].bottom
+							}).exec();
+					this.query = null
 				})
 			},
 			preview(url){
@@ -200,6 +218,7 @@
 				})
 			},
 			handleTouchStart(){
+				
 				this.needCancel = true
 				this.recorder = uni.getRecorderManager()
 				this.recorder.start();
@@ -213,9 +232,13 @@
 			handleTouchEnd(){
 				clearInterval(this.timer);
 				this.recorder.stop();
+				if(this.length<1){
+					this.needCancel = false
+					return;
+				}
 				this.recorder.onStop((res)=>{
 					const message = {
-						id:Date.now(),
+						id:moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
 						type:'voice',
 						content:res.tempFilePath,
 						length:this.length,
@@ -225,8 +248,22 @@
 					this.messages.push(message)
 					this.needCancel = false
 					this.length = 0;
+					this.toBottom();
 				})
 				
+			},
+			play(url){
+				console.log(url)
+				console.log(this.innerAudioContext)
+				this.innerAudioContext.src = url;
+				this.isPlay = !this.isPlay;
+				this.isPlay?this.innerAudioContext.play():this.innerAudioContext.stop();
+				this.innerAudioContext.onEnded(()=>{
+					this.isPlay = false;
+				})
+				this.innerAudioContext.onStop(()=>{
+					this.isPlay = false
+				})
 			}
 		}
 	}
@@ -240,11 +277,12 @@
 		.message-container{
 			background-color: blanchedalmond;
 			flex-grow: 1;
-			overflow:hidden;
+			box-sizing: border-box;
+			overflow: hidden;
 			.message {
 			  display: flex;
 			  align-items: center;
-			  margin: 10px 0;
+			  padding: 10px 0;
 			  
 			  .avatar {
 			    width: 40px;
@@ -286,11 +324,12 @@
 			height: 150px!important;
 		}
 		.input{
-			height: 56px;
+			height: 60px;
 			display: flex;
 			flex-direction: column;
 			justify-content: space-around;
 			.header{
+				height: 60px;
 				display: flex;
 				align-items: center;
 				.textarea{

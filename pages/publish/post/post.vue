@@ -14,6 +14,7 @@
 			 </u-form-item>
 		 </u-form>
 		 <u-upload
+				:previewFullImage="true"
 		 		:fileList="fileList1"
 		 		@afterRead="afterRead"
 		 		@delete="deletePic"
@@ -24,7 +25,7 @@
 		
 		
 		<view class="bottom">
-			<button>发布</button>
+			<button @click="finish">发布</button>
 		</view>
 	</view>
 </template>
@@ -39,6 +40,12 @@
 			};
 		},
 		methods:{
+			finish(){
+							  // uni.request({
+							  	
+							  // })
+							 uni.navigateBack()
+			},
 			// 删除图片
 			deletePic(event) {
 				this[`fileList${event.name}`].splice(event.index, 1)
@@ -96,14 +103,19 @@
 	padding-left: 20px;
 	padding-top: 10px;
 }
-
-button{
+.bottom{
 	
-	background-color:rgb(214,215,185);
-	width: 150rpx;
-	line-height: 80rpx;
-	fontsize:10px;
-	color: rgb(124,125,82);
-		
-	}
+	position: absolute;
+	bottom: 10%;
+	right: 7%;
+	
+	button{
+		background-color:rgb(214,215,185);
+		width: 150rpx;
+		line-height: 80rpx;
+		fontsize:10px;
+		color: rgb(124,125,82);
+			
+		}
+}
 </style>
