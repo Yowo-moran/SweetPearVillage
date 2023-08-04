@@ -6,8 +6,8 @@
 		</uni-nav-bar>
 
 		<view class="box" :style="{height:safeArea+'px'}">
-			<scroll-view :scroll-top="scrollTop" class="message-container" scroll-y :scroll-into-view="messages[messages.length-1].id">
-			    <view class="message" v-for="message in messages" :key="message.id" :class="message.sender === 'self' ? 'self' : 'other'">
+			<scroll-view :scroll-top="scrollTop" class="message-container" scroll-y  @scrolltoupper="getChat" :scroll-into-view="scrollIntoIndex">
+			    <view class="message" v-for="message in messages" :key="message.id" :class="message.sender === 'self' ? 'self' : 'other'" :id="message.id">
 			      <view class="avatar" ></view>
 			      <view class="content" >
 			          <view v-if="message.type === 'text'">
@@ -50,25 +50,25 @@
 				<view class="footer" v-if="showFooter" @tap.stop="">
 					<view class="btn" @tap="useCamera">
 						<view class="icon">
-							<u-icon name="camera" size="60" color="#fff"></u-icon>
+							<u-icon name="camera" size="50" color="#fff"></u-icon>
 						</view>
 						<view class="text">拍照</view>
 					</view>
 					<view class="btn" @tap="chooseImage">
 						<view class="icon">
-							<u-icon name="photo" size="60" color="#fff"></u-icon>
+							<u-icon name="photo" size="50" color="#fff"></u-icon>
 						</view>
 						<view class="text" >相册</view>
 					</view>
 					<view class="btn">
 						<view class="icon">
-							<u-icon name="weixin-fill" size="60" color="#fff"></u-icon>
+							<u-icon name="weixin-fill" size="50" color="#fff"></u-icon>
 						</view>
 						<view class="text">发送微信号</view>
 					</view>
 					<view class="btn">
 						<view class="icon">
-							<u-icon name="phone" size="60" color="#fff"></u-icon>
+							<u-icon name="phone" size="50" color="#fff"></u-icon>
 						</view>
 						<view class="text">发送手机号</view>
 					</view>
@@ -102,10 +102,12 @@
 				innerAudioContext:null,
 				isPlay:false,
 				startY:0,
+				scrollIntoIndex:'',
 				time:'0:00',
+				newHeight:0,
 				messages: [
 				        {
-				          id: 'firs',
+				          id: 'first',
 				          type: 'text',
 				          content: 'Hello, how are you?',
 				          sender: 'other',
@@ -155,6 +157,42 @@
 		methods:{
 			back(){
 				uni.navigateBack();
+			},
+			getChat(e){
+				console.log(e);
+				console.log('到顶了')
+				this.messages.unshift({
+				      id: 'five',
+				      type: 'image',
+				      content: '../../../static/111.jpg',
+				      sender: 'other',
+				    },
+					{
+					  id: 'six',
+					  type: 'image',
+					  content: '../../../static/111.jpg',
+					  sender: 'other',
+					},
+					{
+					  id: 'seven',
+					  type: 'image',
+					  content: '../../../static/111.jpg',
+					  sender: 'other',
+					},
+					{
+					  id: 'eight',
+					  type: 'image',
+					  content: '../../../static/111.jpg',
+					  sender: 'other',
+					},
+					{
+					  id: 'nine',
+					  type: 'image',
+					  content: '../../../static/111.jpg',
+					  sender: 'other',
+					},)
+					this.scrollIntoIndex = 'first'
+				
 			},
 			changeShow(){
 				this.showFooter = !this.showFooter
@@ -214,6 +252,7 @@
 					this.query = uni.createSelectorQuery().in(this);
 							this.query.selectAll('.message').boundingClientRect(data=>{
 								const elements = Array.from(data);
+								console.log(elements)
 								let index = elements.length-1;
 								this.scrollTop = elements[index].bottom-elements[0].bottom
 							}).exec();
@@ -451,8 +490,8 @@
 					.icon{
 						background-color: #d6d7bc;
 						border-radius: 10px;
-						width: 70px;
-						height: 70px;
+						width: 60px;
+						height: 60px;
 						display: flex;
 						justify-content: center;
 						align-items: center;

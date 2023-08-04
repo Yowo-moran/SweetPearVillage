@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <view>
     <view class="post-item" v-for="(item, index) in list" :key="index">
       <u-image
@@ -114,4 +114,4 @@ export default {
     }
   }
 }
-</style>
+</style> -->
