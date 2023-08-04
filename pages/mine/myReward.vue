@@ -49,7 +49,7 @@ export default {
 <style lang="scss">
 .allReward {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #C3977E;
   .listItem {
     height: 230rpx;

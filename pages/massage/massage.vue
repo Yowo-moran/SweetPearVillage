@@ -13,7 +13,7 @@
 			<scroll-view scroll-y="true" class="scroll">
 				<view class="scrollItem" @click="jump">
 					<view class="left">
-						<image src="../../static/60155475_p0_master1200.jpg" mode="aspectFill" class="img"></image>
+						<image src="../../static/111.jpg" mode="aspectFill" class="img"></image>
 					</view>
 					<view class="content">
 						<view class="right"  >
@@ -27,7 +27,7 @@
 				</view>
 				<view class="scrollItem" @click="jump">
 					<view class="left">
-						<image src="../../static/60155475_p0_master1200.jpg" mode="aspectFill" class="img"></image>
+						<image src="../../static/111.jpg" mode="aspectFill" class="img"></image>
 					</view>
 					<view class="content">
 						<view class="right" >
@@ -44,7 +44,7 @@
 				</view>
 				<view class="scrollItem" @click="jump">
 					<view class="left">
-						<image src="../../static/60155475_p0_master1200.jpg" mode="aspectFill" class="img"></image>
+						<image src="../../static/111.jpg" mode="aspectFill" class="img"></image>
 					</view>
 					<view class="content">
 						<view class="right" >

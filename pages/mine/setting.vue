@@ -143,7 +143,7 @@ export default {
 <style lang="scss">
 .allSetting {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

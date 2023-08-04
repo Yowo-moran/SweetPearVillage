@@ -28,7 +28,7 @@
         ><view class="options"
           ><text>我的悬赏</text><img src="../../static/箭头.png" alt="" /></view
       ></navigator>
-      <navigator
+      <navigator url="/pages/mine/myBook"
         ><view class="options"
           ><text>我出售的书籍</text
           ><img src="../../static/箭头.png" alt="" /></view
@@ -37,9 +37,11 @@
         ><view class="options"
           ><text>我的闲置</text><img src="../../static/箭头.png" alt="" /></view
       ></navigator>
-      <view class="options"
-        ><text>我的帖子</text><img src="../../static/箭头.png" alt=""
-      /></view>
+      <navigator url="/pages/mine/myPost">
+        <view class="options"
+          ><text>我的帖子</text><img src="../../static/箭头.png" alt=""
+        /></view>
+      </navigator>
     </view>
   </view>
 </template>
