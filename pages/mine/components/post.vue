@@ -13,9 +13,9 @@
         <view>{{ item.content }}</view>
         <view class="photos">
           <u-image
-            v-for="(photo, index) in item.images"
-            :key="index"
-            :src="item.profilePhoto"
+            v-for="(photo, it) in item.images"
+            :key="it"
+            :src="photo"
             :lazy-load="true"
             radius="0"
             width="200rpx"

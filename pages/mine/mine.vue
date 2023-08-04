@@ -2,7 +2,14 @@
   <view class="allMine">
     <view class="header">
       <view class="headportrait">
-        <img src="../../static/111.jpg" alt="" />
+        <u-image
+          :src="personalDetails.profilePhoto"
+          :lazy-load="true"
+          radius="50%"
+          width="170rpx"
+          height="170rpx"
+          style="margin: 15rpx"
+        ></u-image>
         <view class="username" style="margin-right: 130rpx">
           <text style="font-weight: bold; font-size: 36rpx; color: #818258">{{
             personalDetails.name
@@ -51,6 +58,8 @@ export default {
   data() {
     return {
       personalDetails: {
+        profilePhoto:
+          "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
         name: "Yowo_moran",
         gender: "男",
         college: "机械工程学院",
@@ -63,7 +72,7 @@ export default {
 
 <style lang="scss">
 .allMine {
-  // height: 950rpx;
+  min-height: 100vh;
   background-color: #d6d7b9;
   font-size: 28rpx;
   color: #aeaf75;
@@ -85,12 +94,6 @@ export default {
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-      img {
-        width: 170rpx;
-        height: 170rpx;
-        border-radius: 50%;
-        margin: 15rpx;
-      }
       .username {
         display: flex;
         flex-direction: column;
@@ -106,7 +109,6 @@ export default {
   .main {
     box-sizing: border-box;
     width: 90vw;
-    height: 64vh;
     margin: 5vw;
     .options {
       width: 100%;
