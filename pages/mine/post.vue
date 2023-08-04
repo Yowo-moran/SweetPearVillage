@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <view>
     <view class="post-item" v-for="(item, index) in list" :key="index">
       <u-image
@@ -27,11 +27,11 @@
           <view style="width: 340rpx; display: flex">
             <view class="likes">
               <button>删除</button>
-              <text style="margin-right: 20rpx;">{{ item.lisks }}</text>
+              <text style="margin-right: 20rpx">{{ item.lisks }}</text>
               <u-icon name="thumb-up" color="#b9ba88" size="50rpx"></u-icon>
             </view>
             <view class="comments" style="margin-left: 20rpx">
-              <text style="margin-right: 20rpx;">{{ item.comments }}</text>
+              <text style="margin-right: 20rpx">{{ item.comments }}</text>
               <u-icon name="chat" color="#b9ba88" size="50rpx"></u-icon>
             </view>
           </view>
@@ -114,4 +114,4 @@ export default {
     }
   }
 }
-</style> -->
+</style>
