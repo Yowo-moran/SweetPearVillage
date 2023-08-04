@@ -5,9 +5,9 @@
 		:bgColor="bgColor" 
 		placeholder>
 		 </u-navbar>
-		 <u-form>
-			 <u-form-item>
-				<u--textarea v-model="content" 
+		 <u-form :model="model1">
+			 <u-form-item prop="user.content">
+				<u--textarea v-model="model1.user.content" 
 				placeholder="说点什么......" 
 				border="none">
 				</u--textarea>
@@ -34,6 +34,12 @@
 	export default {
 		data() {
 			return {
+				model1:{
+					user:{
+						content:"",
+						
+					},
+				},
 				bgColor:"#d6d7b9",
 				content:'',
 				fileList1: [],

@@ -100,7 +100,7 @@
 		},
 		 methods:{
 		      placeSelect(e){
-				  model1.userInfo.place=e.name
+				  this.model1.userInfo.place=e.name
 			  },
 			  finish(){
 				  // uni.request({
