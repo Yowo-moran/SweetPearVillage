@@ -10,7 +10,7 @@
 				mode="aspectFit"
 				@click="goReward"></image>
 				<button shape="circle"  @click="goReward">悬赏派单</button>
-				<image class="right"  src="../../static/icon/arrow-right.png" 
+				<image class="right"  src="../../static/right .png" 
 				mode="aspectFit"
 				@click="goReward"></image>
 			</view>
@@ -19,7 +19,7 @@
 				mode="aspectFit"
 				@click="goBook"></image>
 				<button shape="circle" @click="goBook">闲置书籍</button>
-				<image class="right" src="../../static/icon/arrow-right.png"
+				<image class="right" src="../../static/right .png"
 				mode="aspectFit"
 				@click="goBook"></image>
 			</view>
@@ -28,7 +28,7 @@
 				mode="aspectFit"
 				@click="goGoods"></image>
 				<button shape="circle" @click="goGoods">闲置物品</button>
-				<image class="right" src="../../static/icon/arrow-right.png"
+				<image class="right" src="../../static/right .png"
 				mode="aspectFit"
 				@click="goGoods"></image>
 			</view>
@@ -37,7 +37,7 @@
 				mode="aspectFit"
 				@click="goPost"></image>
 				<button shape="circle" @click="goPost">发布帖子</button>
-				<image class="right" src="../../static/icon/arrow-right.png"
+				<image class="right" src="../../static/right .png"
 				mode="aspectFit"
 				@click="goPost"></image>
 			</view>
@@ -129,7 +129,7 @@ page{
 			
 			button{
 				position: absolute;
-				transform: translateX(30%);
+				transform: translateX(35%);
 				background-color:rgb(170,168,144);
 				width: 250rpx;
 				line-height: 100rpx;
