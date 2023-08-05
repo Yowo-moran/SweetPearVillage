@@ -1,23 +1,23 @@
 <template>
 	<view class="searchBar">
 		<navigator class="search" :url="'/pages/village/search/search?tagName='+tagName">
-			<image class="searchIcon" src="../../../static/搜索.png"></image> 
+			<image class="searchIcon" src="../../../static/搜索-黑.png"></image> 
 			<view class="searchText">uniapp\vue</view>
 		</navigator>
 		<view class="setting" @click="show = true" v-if="tagName=='悬赏'||tagName=='书籍'">
 			<image class="settingIcon" src="../../../static/设置.png" ></image> 
 		</view>
 		<view class="upopup">
-		<u-popup :show="show"  @click.native="closePopup"  style="padding-bottom: 0;  " v-if="tagName=='悬赏'">
+		<u-popup :show="show"  :safeAreaInsetBottom="false" @click.native="closePopup"  style="padding-bottom: 0;  " v-if="tagName=='悬赏'">
 			<view class="chooseTag" >
 				<view class="title">分类</view>
 				<view class="contentOne">
-					<view v-for="item,index in tags" @click="chooseTag(index)" :style="{color:(currentTags.indexOf(index)!=-1 ? 'red': '#fff')}">{{item}}</view>
+					<view v-for="item,index in tags" @click="chooseTag(index)" :style="{color:(currentTags.indexOf(index)!=-1 ? '#6F876F': '#fff')}">{{item}}</view>
 				</view>
 				<button @click="show=false">确定</button>
 			</view>
 		</u-popup>
-		<u-popup :show="show"  @click.native="closePopup"  style="padding-bottom: 0; " v-else-if="tagName=='书籍'">
+		<u-popup :show="show" :safeAreaInsetBottom="false" @click.native="closePopup"  style="padding-bottom: 0; " v-else-if="tagName=='书籍'">
 			<view class="chooseTag">
 				<view class="title">分类</view>
 				<view class="contentTwo">
@@ -156,7 +156,7 @@
 			height: 60rpx;
 			width: 85%;
 			border-radius: 60rpx;
-			background-color:#8FBC8F;
+			background-color:#E3FBE3;
 			.searchIcon{
 				margin-right: 20rpx;
 				width: 36rpx;
@@ -169,7 +169,7 @@
 			}
 		}
 		.setting{
-			width: 15%;
+			width: 12%;
 			height: 100%;
 			padding: 20rpx;
 			box-sizing: border-box;
@@ -182,19 +182,20 @@
 	.upopup{
 		.chooseTag{
 			width: 100%;
+			padding-bottom: 80rpx ;
 			 // height: 600rpx;
 			background-color: #BFC0A2;
 			.title{
 				margin: 20rpx auto;
 				width: 100rpx;
 				height: 10%;
-				font-size: 25px;
+				font-size: 20px;
 				color: #fff;
 			}
 			.contentOne{
 				display: flex;
 				align-content: space-around;
-				justify-content: space-around;
+				justify-content: flex-start;
 				flex-wrap: wrap;
 				padding: 0 40rpx;
 				margin-bottom: 20px;
@@ -218,14 +219,15 @@
 					margin-left: 50rpx;
 					margin: 30rpx;
 					line-height: 50rpx;
+					color: black;
 					.selector{
 						position: relative;
 						margin-left: 40rpx;
 						padding: 10rpx 20rpx;
 						width: 70%;
 						height: 50rpx;
-						line-height: 40rpx;
-						border: 1px solid black;
+						line-height: 30rpx;
+						border: 1px solid #6F876F;
 						border-radius: 10rpx;
 						box-sizing: border-box;
 					}
@@ -245,9 +247,10 @@
 			}
 			button{
 				position: absolute;
-				bottom: 0;
+				bottom: 10rpx;
 				right: 10rpx;
 				background-color: #BFC0A2;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, .32), 0 0 6px rgba(0, 0, 0, .20);
 			}
 		}
 		.u-safe-area-inset-bottom {

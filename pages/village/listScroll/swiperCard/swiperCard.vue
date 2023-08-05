@@ -2,7 +2,7 @@
 	<view class="scroll">
 		<!-- 添加上下滑动区 -->
 		<scroll-view scroll-y="true"class="demo-scroll-block" >
-			<listItem v-for="item in 10" :tagName="tagName" ></listItem>
+			<listItem v-for="item in 10" :tagName="tagName"></listItem>
 		</scroll-view>
 	</view>
 </template>
@@ -26,7 +26,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.scroll{
 		height: 100%;
 		flex: 1;
@@ -36,6 +36,6 @@
 		width: 100%;
 		height: 100%;
 		display: flex;
-		flex-direction: column;
 	}
+	
 </style>

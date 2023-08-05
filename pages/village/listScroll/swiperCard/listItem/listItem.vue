@@ -4,7 +4,7 @@
 		<view class="listItemContent">猪猪不爱吃猪猪，猪猪不爱吃猪猪，猪猪不爱吃猪猪猪猪不爱吃猪猪猪猪不爱吃猪猪猪猪不爱吃猪猪，猪猪不爱吃猪猪，猪猪不爱吃猪猪</view>
 		<view class="userInfo">
 			<!-- 用户头像 -->
-			<image class="userAvatar" src="../../../../../static/60155475_p0_master1200.jpg"></image>
+			<image class="userAvatar" src="../../../../../static/bochi.png"></image>
 			<!-- 用户名称 -->
 			<view class="userName">猪猪不爱吃珠珠猪猪不爱吃</view>
 			<!-- 价格 -->
@@ -14,15 +14,15 @@
 	<!-- 纵向卡片 书籍 -->	
 	<view class="verListItem" v-else-if="tagItem==='书籍'" @click="jump">
 		<view class="bookPhoto">
-			<image src="../../../../../static/60155475_p0_master1200.jpg"></image>
+			<image src="../../../../../static/111.jpg"></image>
 		</view>
 		<view class="listItemContent">
 			<view class="price">￥ 20</view>
 			<view class="listItemTitle">高等数学 第七版 上册 高等数学 </view>
 			<!-- 描述信息 -->
 			<view class="litsItemDec">
-				<view>猪不爱吃珠珠猪</view>
-				<view>猪猪不爱吃珠珠猪猪不爱吃猪猪猪</view>
+				<view class="college"><view style="width: 30%">学院：</view><view style="width: 70%;">集成电路与工程学院</view></view>
+				<view class="majority"><view  style="width: 30%;">专业：</view><view style="width: 70%;">电子信息工程</view></view>
 			</view>
 		</view>
 	</view>
@@ -34,7 +34,7 @@
 		<view class="listContent">
 			<view class="listDes">珠珠就爱就爱就爱吃猪猪珠珠就爱吃猪猪珠珠就爱吃猪猪</view>
 			<view class="user">
-				<image class="userAvatar" src="../../../../../static/60155475_p0_master1200.jpg"></image>
+				<image class="userAvatar" src="../../../../../static/bochi.png"></image>
 				<text class="userName">珠珠就爱吃猪猪</text>
 				<text class="price">￥ 20</text>
 			</view>
@@ -78,7 +78,7 @@
     flex-direction: column;
     height: 200rpx;
     // width: 100%;
-	background-color: #fff;
+	background-color: #F3F3EA;
     margin: 30rpx 10rpx;
     border-radius: 15rpx;
     padding: 20rpx 40rpx;
@@ -120,6 +120,8 @@
         }
         .price{
             margin-right: 10rpx;
+			font-size: 40rpx;
+			color: #b38f8f;
         }
     }
 }
@@ -128,11 +130,11 @@
 }
 .verListItem{
     display: inline-block;
-    margin: 15rpx 14rpx;
+    margin: 15rpx 18.75rpx;
     padding: 30rpx 5rpx;
     width: 45%;
-    background-color: #fff;
-     // box-sizing: border-box;
+    background-color: #F3F3EA;
+    box-sizing: border-box;
     .bookPhoto{
         width: 75%;
         margin: 0 auto;
@@ -148,17 +150,27 @@
         width: 100%;
         .price{
             text-align: center;
-            font-size: large;
+           font-size: 40rpx;
+           color: #b38f8f;
         }
         .listItemTitle{
-            font-size: large;
+			font-size: 32rpx;
+			font-weight: bold;
             width: 90%;
             margin: 0 auto;
             box-sizing: border-box;
         }
         .litsItemDec{
+			font-size: 26rpx;
             width: 90%;
             margin: 40rpx auto 0;
+			.college{
+				display: flex;
+				margin-bottom: 20rpx;
+			}
+			.majority{
+				display: flex;
+			}
         }
     }
 }
@@ -202,6 +214,7 @@
 		}
 		.user{
 			height: 20%;
+			margin-bottom: 10rpx;
 			.userAvatar{
 				height: 100%;
 				width: 30rpx;
@@ -214,6 +227,8 @@
 			}
 			.price{
 				margin-left: 60rpx;
+				font-size: 40rpx;
+				color: #b38f8f;
 			}
 		}
 	}

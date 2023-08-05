@@ -4,7 +4,7 @@
 			<view class="searchIcon">
 				<image src="../../../static/搜索-黑.png"></image>
 			</view>
-			<input  placeholder="请输入搜索内容" v-model="value" @input="inputChange"/>
+			<input  placeholder="请输入搜索内容" v-model="value" @input="inputChange" />
 			<view class="searchButton" @click="goSearch">搜索</view>
 		</view>
 	
@@ -97,11 +97,14 @@
 			display: flex;
 			width: 100%;
 			margin-left: 30rpx;
-			height: 40rpx;
+			height: 60rpx;
 			padding: 10rpx;
 			.searchIcon{
-				width: 40rpx;
-				height: 40rpx;
+				border-top-left-radius: 20rpx;
+				border-bottom-left-radius: 20rpx;
+				width: 60rpx;
+				height: 60rpx;
+				padding-left: 10rpx;
 				background-color: #E4E0E0;
 				image{
 					width: 100%;
@@ -109,15 +112,18 @@
 				}
 			}
 			input{
+				border-top-right-radius: 20rpx;
+				border-bottom-right-radius: 20rpx;
 				font-size: 30rpx;
+				font-weight: 350;
 				padding-left: 8rpx;
 				background-color: #E4E0E0;
 				width: 70%;
 				height: 100%;
-				margin-right: 40rpx;
+				margin-right: 20rpx;
 			}
 			.searchButton{
-				color: #FFA500;
+				color: #000;
 				font-size: 30rpx;
 				height: 40rpx;
 				width: 70rpx;
@@ -137,7 +143,7 @@
 				border-bottom: 1px #f5f5f5 solid;
 
 				.label-title {
-					color: red;
+					font-weight: bold;
 				}
 
 				.label-clear {

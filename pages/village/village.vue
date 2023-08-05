@@ -44,7 +44,7 @@
 
 <style lang="scss">
 	page{
-		background-color: #FFDAB9;
+		background-color: #fff;
 	}
 	.header{
 		// 消除顶部空隙

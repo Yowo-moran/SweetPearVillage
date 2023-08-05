@@ -53,7 +53,7 @@
 			justify-content: space-around;
 			align-items: center;
 			// background-color: green;
-			font-size: 50rpx;
+			font-size: 45rpx;
 			height: 100%;
 			width: 100%;
 			.active{
