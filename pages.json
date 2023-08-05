@@ -156,6 +156,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/mine/imparityClause",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "服务条款",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

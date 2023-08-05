@@ -11,9 +11,12 @@
           style="margin: 15rpx"
         ></u-image>
         <view class="username" style="margin-right: 130rpx">
-          <text style="font-weight: bold; font-size: 36rpx; color: #818258">{{
-            personalDetails.name
-          }}</text>
+          <text
+            style="font-weight: bold; font-size: 36rpx; color: #818258"
+            @click="loginPopup = true"
+            >{{ personalDetails.name }}</text
+          >
+
           <text style="margin-top: 20rpx">{{ personalDetails.gender }}</text>
         </view>
         <navigator url="/pages/mine/setting"
@@ -50,6 +53,24 @@
         /></view>
       </navigator>
     </view>
+    <u-popup :show="loginPopup" @close="close" @open="open" round="20rpx">
+      <view class="loginPopup">
+        <u-button
+          type="primary"
+          icon="weixin-fill"
+          text="微信用户一键登录"
+          color="#5AC725"
+          class="button"
+          shape="circle"
+          open-type="getPhoneNumber"
+          :safeAreaInsetBottom="false"
+          @getphonenumber="getPhoneNumber"
+        ></u-button>
+        <view class="imparityClause">登录即表示同意知晓《甜梨村》
+              <navigator style="color: #2979ff" url="/pages/mine/imparityClause">服务条款</navigator>
+        </view>
+      </view>
+    </u-popup>
   </view>
 </template>
 
@@ -57,6 +78,7 @@
 export default {
   data() {
     return {
+      loginPopup: false,
       personalDetails: {
         profilePhoto:
           "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
@@ -65,7 +87,57 @@ export default {
         college: "机械工程学院",
         major: "机械电子工程",
       },
+      info: {},
     };
+  },
+  methods: {
+    getPhoneNumber(e) {
+      console.log(e);
+      var that = this;
+      if (e.detail.code) {
+        this.$api.appPlateForm(
+          "POST",
+          this.$url.getPhoneNumber,
+          {
+            code: e.detail.code,
+          },
+          function (res) {
+            if (res.code == "200") {
+              uni.setStorageSync("getPhone", res.data.phone);
+              console.log("打印获取的手机号", uni.getStorageSync("getPhone"));
+              that.info.mobile = res.data.phone;
+            }
+          }
+        );
+        console.log(that.info);
+      } else {
+      }
+    },
+    login() {
+      wx.login({
+        success(res) {
+          if (res.code) {
+            //发起网络请求
+            console.log(res.code);
+            // wx.request({
+            //   url: "https://example.com/onLogin",
+            //   data: {
+            //     code: res.code,
+            //   },
+            // });
+          } else {
+            console.log("登录失败！" + res.errMsg);
+          }
+        },
+      });
+    },
+    open() {
+      console.log("open");
+    },
+    close() {
+      this.loginPopup = false;
+      console.log("close");
+    },
   },
 };
 </script>
@@ -129,6 +201,18 @@ export default {
         margin-right: 40rpx;
       }
     }
+  }
+}
+.loginPopup {
+  box-sizing: border-box;
+  height: 20vh;
+  padding: 80rpx 50rpx 0 50rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  .imparityClause{
+    display: flex;
   }
 }
 </style>
