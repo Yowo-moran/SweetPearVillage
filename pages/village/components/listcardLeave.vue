@@ -35,7 +35,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .rowlistItem{
 	display: flex;
 	justify-content: space-around;

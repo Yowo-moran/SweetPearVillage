@@ -36,7 +36,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .verListItem{
     display: inline-block;
     margin: 15rpx 18.75rpx;

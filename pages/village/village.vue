@@ -37,12 +37,12 @@
 			},
 			skipChange(cur){
 				this.tabIndex=cur
-			}
+			},
 		}
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	page{
 		background-color: #fff;
 	}
