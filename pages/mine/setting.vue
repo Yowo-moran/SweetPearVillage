@@ -2,22 +2,22 @@
   <view class="allSetting">
     <u--form
       class="setOption"
-      :model="personalDetails"
-      :rules="personalDetailsRules"
+      :model="editDetails"
+      :rules="editDetailsRules"
       ref="personalfrom"
     >
-      <u-form-item prop="name">
+      <u-form-item prop="nickName">
         <view class="options"
           ><text>昵称：</text
           ><input
-            v-model="personalDetails.name"
+            v-model="editDetails.nickName"
             style="border-bottom: 4rpx solid #7c7d52"
             placeholder="请输入昵称"
             :maxlength="20"
           />
         </view>
       </u-form-item>
-      <u-form-item prop="gender">
+      <u-form-item prop="sex">
         <view class="options">
           <text>性别：</text>
           <view
@@ -28,7 +28,13 @@
               height: 65rpx;
             "
           >
-            {{ personalDetails.gender }}
+            {{
+              editDetails.sex === "请选择性别"
+                ? "请选择性别"
+                : editDetails.sex === 0
+                ? "男"
+                : "女"
+            }}
           </view>
         </view>
       </u-form-item>
@@ -43,7 +49,7 @@
               height: 65rpx;
             "
           >
-            {{ personalDetails.college }}
+            {{ editDetails.college }}
           </view>
         </view>
       </u-form-item>
@@ -58,26 +64,15 @@
               height: 65rpx;
             "
           >
-            {{ personalDetails.major }}
+            {{ editDetails.major }}
           </view>
         </view>
       </u-form-item>
-      <u-form-item prop="phoneNumber">
-        <view class="options"
-          ><text>手机号：</text
-          ><input
-            v-model="personalDetails.phoneNumber"
-            style="border-bottom: 4rpx solid #7c7d52"
-            placeholder="请输入手机号"
-            :maxlength="11"
-          />
-        </view>
-      </u-form-item>
-      <u-form-item prop="wechatId">
+      <u-form-item prop="wechatNumber">
         <view class="options"
           ><text>微信号：</text
           ><input
-            v-model="personalDetails.wechatId"
+            v-model="editDetails.wechatNumber"
             style="border-bottom: 4rpx solid #7c7d52"
             placeholder="请输入微信号"
             :maxlength="20"
@@ -118,21 +113,25 @@
 </template>
 
 <script>
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 export default {
   onReady() {
-    this.$refs.personalfrom.setRules(this.personalDetailsRules);
+    this.$refs.personalfrom.setRules(this.editDetailsRules);
+  },
+  onShow() {
+    this.editDetails = this.personalDetails;
   },
   data() {
     return {
-      personalDetailsRules: {
-        name: {
+      editDetailsRules: {
+        nickName: {
           type: "string",
           required: true,
           message: "请填写姓名",
           trigger: ["blur", "change"],
         },
-        gender: {
-          type: "string",
+        sex: {
+          type: "number",
           max: 1,
           required: true,
           message: "请选择男或女",
@@ -158,21 +157,7 @@ export default {
           message: "请选择专业",
           trigger: ["change", "blur"],
         },
-        phoneNumber: [
-          {
-            required: true,
-            message: "请输入手机号",
-            trigger: ["change", "blur"],
-          },
-          {
-            validator: (rule, value, callback) => {
-              return uni.$u.test.mobile(value);
-            },
-            message: "手机号码不正确",
-            trigger: ["change", "blur"],
-          },
-        ],
-        wechatId: {
+        wechatNumber: {
           type: "string",
           required: true,
           min: 6,
@@ -180,13 +165,12 @@ export default {
           trigger: ["blur", "change"],
         },
       },
-      personalDetails: {
+      editDetails: {
         name: "",
-        gender: "请选择性别",
+        sex: "请选择性别",
         college: "请选择学院",
         major: "请选择专业",
-        phoneNumber: "",
-        wechatId: "",
+        wechatNumber: "",
       },
       majorIndex: 0,
       majorShow: false,
@@ -195,26 +179,25 @@ export default {
       genders: [
         {
           name: "男",
+          value: 0,
         },
         {
           name: "女",
+          value: 1,
         },
       ],
       colleges: [
         [
           "机械工程学院",
           "材料科学与工程学院",
-          "自动化学院",
           "化学化工学院",
           "海运学院",
           "管理学院",
-          "外国语学院",
           "艺术学院",
           "环境科学与安全工程学院",
           "理学院",
           "聋人工学院",
           "华信软件学院",
-          "电气电子工程学院",
           "计算机科学与工程学院",
           "社会发展学院",
           "语言文化学院",
@@ -430,33 +413,68 @@ export default {
   methods: {
     genderSelect(e) {
       // console.log(e);
-      this.personalDetails.gender = e.name;
+      this.editDetails.sex = e.value;
       this.genderShow = false;
     },
     collegeSelect(e) {
       // console.log(e);
-      this.personalDetails.college = e.value[0];
+      this.editDetails.college = e.value[0];
       this.majorIndex = e.indexs[0] + 1;
-      this.personalDetails.major = "请选择专业";
+      this.editDetails.major = "请选择专业";
       this.collegeShow = false;
     },
     majorSelect(e) {
       // console.log(e);
       if (e.value[0] !== "请先选择学院") {
-        this.personalDetails.major = e.value[0];
+        this.editDetails.major = e.value[0];
       }
       this.majorShow = false;
+    },
+    edit() {
+      const that = this;
+      const token = wx.getStorageSync('token');
+      // const token = uni.getStorage({
+      //   key: "storage_key",
+      // });
+      wx.request({
+        method: "POST",
+        url: "http://101.43.254.115:7115/information",
+        data: {
+          newNickname: that.editDetails.nickName,
+          newSex: that.editDetails.sex,
+          newCollege: that.editDetails.college,
+          newMajor: that.editDetails.major,
+          newWechatNumber: that.editDetails.wechatNumber,
+        },
+        header: {
+          Authorization: token,
+        },
+        success(res) {
+          if (res.data.code !== "00000") {
+            console.log("修改失败！");
+            return;
+          }
+          console.log(res.data.message);
+          setPersonalDetails(that.editDetails);
+        },
+      });
     },
     submit() {
       this.$refs.personalfrom
         .validate()
         .then((res) => {
           uni.$u.toast("校验通过");
+          this.edit();
         })
         .catch((errors) => {
           uni.$u.toast("校验失败");
         });
     },
+    ...mapMutations("mine", ["setLogined", "setPersonalDetails"]),
+  },
+  computed: {
+    ...mapGetters("mine", ["getSex"]),
+    ...mapState("mine", ["logined", "personalDetails"]),
   },
 };
 </script>
