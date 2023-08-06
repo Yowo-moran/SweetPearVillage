@@ -39,7 +39,7 @@
 		<u-action-sheet
 		  :show="majorityShow"
 		  :actions="majoritys"
-		  title="请选择学院"
+		  title="请选择专业"
 		  @close="majorityShow = false"
 		  @select="majorityelect">
 		</u-action-sheet>
@@ -83,7 +83,31 @@
 				  },
 				  {
 					name:'默认'
-				  }
+				  },
+				  {
+					name:'材料科学与工程'  
+				  },
+				  {
+					name:'化学工程与技术'
+				  },
+				  {
+					name:'默认'
+				  },
+				  {
+					name:'材料科学与工程'  
+				  },
+				  {
+					name:'化学工程与技术'
+				  },
+				  {
+					name:'默认'
+				  },
+				  {
+					name:'材料科学与工程'  
+				  },
+				  {
+					name:'化学工程与技术'
+				  },
 				],
 				majoritys: [
 				  {
@@ -138,7 +162,6 @@
 </script>
 
 <style lang="scss">
-	
 	.searchBar{
 		display: flex;
 		position: relative;
@@ -146,7 +169,7 @@
 		align-items: center;
 		padding: 0 10rpx;
 		width: 100%;
-		height: 90rpx;
+		height: 91rpx;
 		background-color: #fff;
 		box-sizing: border-box;
 		.search{
