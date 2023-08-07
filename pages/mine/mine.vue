@@ -2,14 +2,15 @@
   <view class="allMine">
     <view class="header">
       <view class="headportrait">
-        <u-image
-          :src="personalDetails.avatar"
-          :lazy-load="true"
-          radius="50%"
-          width="170rpx"
-          height="170rpx"
-          style="margin: 15rpx"
-        ></u-image>
+        <button open-type="chooseAvatar" @chooseavatar="editAvatar" :disabled="!logined">
+          <u--image
+            :src="personalDetails.avatar"
+            :lazyLoad="false"
+            radius="50%"
+            width="170rpx"
+            height="170rpx"
+          ></u--image>
+        </button>
         <view class="username" style="margin-right: 130rpx">
           <text
             style="font-weight: bold; font-size: 36rpx; color: #818258"
@@ -23,7 +24,7 @@
 
           <text style="margin-top: 20rpx">{{ personalDetails.gender }}</text>
         </view>
-        <navigator url="/pages/mine/setting"
+        <view @click="jumpTo('/pages/mine/setting')"
           ><img
             src="../../static/菜单设置.png"
             alt=""
@@ -33,7 +34,7 @@
               margin-bottom: 50rpx;
               margin-right: 20rpx;
             "
-        /></navigator>
+        /></view>
       </view>
       <view class="usermajor">
         <text>学院： {{ personalDetails.college }}</text>
@@ -43,24 +44,18 @@
       </view>
     </view>
     <view class="main">
-      <navigator url="/pages/mine/myReward"
-        ><view class="options"
-          ><text>我的悬赏</text><img src="../../static/箭头.png" alt="" /></view
-      ></navigator>
-      <navigator url="/pages/mine/myBook"
-        ><view class="options"
-          ><text>我出售的书籍</text
-          ><img src="../../static/箭头.png" alt="" /></view
-      ></navigator>
-      <navigator url="/pages/mine/myIdle"
-        ><view class="options"
-          ><text>我的闲置</text><img src="../../static/箭头.png" alt="" /></view
-      ></navigator>
-      <navigator url="/pages/mine/myPost">
-        <view class="options"
-          ><text>我的帖子</text><img src="../../static/箭头.png" alt=""
-        /></view>
-      </navigator>
+      <view class="options" @click="jumpTo('/pages/mine/myReward')"
+        ><text>我的悬赏</text><img src="../../static/箭头.png" alt=""
+      /></view>
+      <view class="options" @click="jumpTo('/pages/mine/myBook')"
+        ><text>我出售的书籍</text><img src="../../static/箭头.png" alt=""
+      /></view>
+      <view class="options" @click="jumpTo('/pages/mine/myIdle')"
+        ><text>我的闲置</text><img src="../../static/箭头.png" alt=""
+      /></view>
+      <view class="options" @click="jumpTo('/pages/mine/myPost')"
+        ><text>我的帖子</text><img src="../../static/箭头.png" alt=""
+      /></view>
     </view>
     <u-popup :show="loginPopup" @close="close" @open="open" round="20rpx">
       <view class="loginPopup">
@@ -89,6 +84,13 @@
 <script>
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 export default {
+  onLoad() {
+    const details = wx.getStorageSync("details");
+    if (details) {
+      this.setLogined(true);
+      this.setPersonalDetails(details);
+    }
+  },
   data() {
     return {
       loginPopup: false,
@@ -109,11 +111,11 @@ export default {
                   console.log("登录失败！");
                   return;
                 }
+                console.log(typeof res.data);
                 uni.setStorage({
                   key: "token",
                   data: res.data.data.token,
                   success: function () {
-                    console.log("success");
                     that.setLogined(true);
                   },
                 });
@@ -137,6 +139,10 @@ export default {
                   phoneNumber,
                   wechatNumber,
                 };
+                uni.setStorage({
+                  key: "details",
+                  data: details,
+                });
                 that.setPersonalDetails(details);
               },
             });
@@ -162,6 +168,44 @@ export default {
         iconUrl: "https://cdn.uviewui.com/uview/demo/toast/loading.png",
         complete() {
           that.close();
+        },
+      });
+    },
+    jumpTo(url) {
+      if (!this.logined) {
+        this.loginPopup = true;
+        return;
+      }
+      uni.navigateTo({
+        url: url,
+      });
+    },
+    async editAvatar(e) {
+      const that = this;
+      console.log(e.detail.avatarUrl);
+      const token = wx.getStorageSync("token");
+      uni.uploadFile({
+        url: "http://101.43.254.115:7115/avatar",
+        filePath: e.detail.avatarUrl,
+        name: "avatar",
+        formData: {
+          user: "test",
+        },
+        header: {
+          Authorization: token,
+        },
+        success(res) {
+          let data = JSON.parse(res.data);
+          if (data.code !== "00000") {
+            console.log("修改失败！");
+            return;
+          }
+          that.setPersonalDetails({ avatar: data.data.url });
+          uni.setStorage({
+            key: "details",
+            data: that.personalDetails,
+          });
+          console.log("修改成功！");
         },
       });
     },
@@ -197,6 +241,15 @@ export default {
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
+      button {
+        padding: 0;
+        margin: 0;
+        border-radius: 50%;
+        background-color: #ffffff00;
+      }
+      button::after {
+        border: 0;
+      }
       .username {
         display: flex;
         flex-direction: column;
