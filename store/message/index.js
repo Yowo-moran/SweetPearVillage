@@ -28,62 +28,22 @@ const state = {
 	// 聊天界面数据
 	chatHistoryList: [
 		{
-			message: "Hello how are you?",
+			message: "",
 			msgId: 1,
 			msgType: 1,
 			receiverOpenId: "",
-			senderOpenId: "2375697969077461446034904154",
-			sendTime: "2023-08-08 12:51:24"
-		},
-		{
-			message: "I'm fine, thank you. And you ? ",
-			msgId: 2,
-			msgType: 1,
-			receiverOpenId: "",
-			senderOpenId: "2375697969077461446034901122",
-			sendTime: "2023-08-08 12:52:24"
-		},
-		{
-			message: "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-			msgId: 3,
-			msgType: 2,
-			receiverOpenId: "",
-			senderOpenId: "2375697969077461446034904154",
-			sendTime: "2023-08-08 12:53:24"
-		},
-		{
-			message: "Nice picture!",
-			msgId: 4,
-			msgType: 1,
-			receiverOpenId: "",
-			senderOpenId: "2375697969077461446034901122",
-			sendTime: "2023-08-08 12:54:24"
-		},
-		{
-			message: "Thank you",
-			msgId: 5,
-			msgType: 1,
-			receiverOpenId: "",
-			senderOpenId: "2375697969077461446034904154",
-			sendTime: "2023-08-08 12:55:24"
-		},
-		{
-			message: "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-			msgId: 6,
-			msgType: 2,
-			receiverOpenId: "",
-			senderOpenId: "2375697969077461446034904154",
-			sendTime: "2023-08-08 12:56:24"
+			senderOpenId: "",
+			sendTime: ""
 		},
 	],
-	receiverAvatar: 'https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg',
-	receiveNickname: '胡图图'
+	receiverAvatar: '',
+	receiveNickname: ''
 }
 
 const actions = {
 	connectWebSocket({ commit }) {
-		// const token = wx.getStorageSync('token')
-		const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvcGVuaWQiOiIyMzc1Njk3OTY5MDc3NDYxNDQ2MDM0OTA0MTU0IiwiaWQiOjEsImV4cCI6MTY5MjY5MDI0NX0.nfYhj4tjKmDKIHp4eH15_HjS64urMazIhM1tsSINR1U'
+		const token = wx.getStorageSync('token')
+		// const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvcGVuaWQiOiIyMzc1Njk3OTY5MDc3NDYxNDQ2MDM0OTA0MTU0IiwiaWQiOjEsImV4cCI6MTY5MjY5MDI0NX0.nfYhj4tjKmDKIHp4eH15_HjS64urMazIhM1tsSINR1U'
 		const socket = wx.connectSocket({
 			url: `wss://silentdragon.pro:7115/private-chat/{${token}}`
 		})
@@ -121,8 +81,8 @@ const actions = {
 		await wx.request({
 			url: 'https://101.43.254.115:7115/page/message',
 			header: {
-				// Authorization: wx.getStorageSync('token')
-				Authorization: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvcGVuaWQiOiIyMzc1Njk3OTY5MDc3NDYxNDQ2MDM0OTA0MTU0IiwiaWQiOjEsImV4cCI6MTY5MjY5MDI0NX0.nfYhj4tjKmDKIHp4eH15_HjS64urMazIhM1tsSINR1U'
+				Authorization: wx.getStorageSync('token')
+				// Authorization: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvcGVuaWQiOiIyMzc1Njk3OTY5MDc3NDYxNDQ2MDM0OTA0MTU0IiwiaWQiOjEsImV4cCI6MTY5MjY5MDI0NX0.nfYhj4tjKmDKIHp4eH15_HjS64urMazIhM1tsSINR1U'
 			},
 			method: 'GET',
 			success(res) {
@@ -139,7 +99,7 @@ const actions = {
 		await wx.request({
 			url: `http://101.43.254.115:7115/chat-page/{${openId}}`,
 			header: {
-				Authorization: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvcGVuaWQiOiIyMzc1Njk3OTY5MDc3NDYxNDQ2MDM0OTA0MTU0IiwiaWQiOjEsImV4cCI6MTY5MjY5MDI0NX0.nfYhj4tjKmDKIHp4eH15_HjS64urMazIhM1tsSINR1U'
+				Authorization: wx.getStorageSync('token')
 			},
 			method: 'GET',
 			success(res) {
