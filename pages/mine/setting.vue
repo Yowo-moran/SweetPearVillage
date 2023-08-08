@@ -1,5 +1,7 @@
 <template>
   <view class="allSetting">
+    <u-navbar leftText="设置" :autoBack="true" bgColor="#d6d7b9" placeholder>
+    </u-navbar>
     <u--form
       class="setOption"
       :model="editDetails"
@@ -166,7 +168,7 @@ export default {
         },
       },
       editDetails: {
-        name: "",
+        nickName: "",
         sex: "请选择性别",
         college: "请选择学院",
         major: "请选择专业",
@@ -430,15 +432,15 @@ export default {
       }
       this.majorShow = false;
     },
-    edit() {
+    async edit() {
       const that = this;
-      const token = wx.getStorageSync('token');
+      const token = wx.getStorageSync("token");
       // const token = uni.getStorage({
       //   key: "storage_key",
       // });
-      wx.request({
+      await wx.request({
         method: "POST",
-        url: "http://101.43.254.115:7115/information",
+        url: "https://101.43.254.115:7115/information",
         data: {
           newNickname: that.editDetails.nickName,
           newSex: that.editDetails.sex,
@@ -450,16 +452,20 @@ export default {
           Authorization: token,
         },
         success(res) {
+          if (res.data.code === "D0400") {
+            that.getToken(); //刷新token
+            that.edit(); //重新执行用户操作
+          }
           if (res.data.code !== "00000") {
             console.log("修改失败！");
             return;
           }
           // console.log(res.data.message);
           that.setPersonalDetails(that.editDetails);
-		  uni.setStorage({
-		  	key:'details',
-			data:that.editDetails
-		  })
+          uni.setStorage({
+            key: "details",
+            data: that.editDetails,
+          });
         },
       });
     },
@@ -474,10 +480,10 @@ export default {
           uni.$u.toast("校验失败");
         });
     },
+    ...mapActions("mine", ["getToken"]),
     ...mapMutations("mine", ["setLogined", "setPersonalDetails"]),
   },
   computed: {
-    ...mapGetters("mine", ["getSex"]),
     ...mapState("mine", ["logined", "personalDetails"]),
   },
 };

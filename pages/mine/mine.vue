@@ -105,13 +105,13 @@ export default {
           if (res.code) {
             //发起网络请求
             wx.request({
-              url: "http://101.43.254.115:7115/user/" + res.code,
+              url: "https://101.43.254.115:7115/user/" + res.code,
               success(res) {
                 if (res.data.code !== "00000") {
                   console.log("登录失败！");
                   return;
                 }
-                console.log(typeof res.data);
+                // console.log(typeof res.data);
                 uni.setStorage({
                   key: "token",
                   data: res.data.data.token,
@@ -126,8 +126,8 @@ export default {
                   sex,
                   college,
                   major,
-                  phoneNumber,
                   wechatNumber,
+                  openId
                 } = res.data.data;
                 const details = {
                   id,
@@ -136,8 +136,8 @@ export default {
                   sex,
                   college,
                   major,
-                  phoneNumber,
                   wechatNumber,
+                  openId
                 };
                 uni.setStorage({
                   key: "details",
@@ -184,13 +184,10 @@ export default {
       const that = this;
       console.log(e.detail.avatarUrl);
       const token = wx.getStorageSync("token");
-      uni.uploadFile({
-        url: "http://101.43.254.115:7115/avatar",
+      await uni.uploadFile({
+        url: "https://101.43.254.115:7115/avatar",
         filePath: e.detail.avatarUrl,
         name: "avatar",
-        formData: {
-          user: "test",
-        },
         header: {
           Authorization: token,
         },
