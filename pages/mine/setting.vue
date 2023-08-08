@@ -454,8 +454,12 @@ export default {
             console.log("修改失败！");
             return;
           }
-          console.log(res.data.message);
-          setPersonalDetails(that.editDetails);
+          // console.log(res.data.message);
+          that.setPersonalDetails(that.editDetails);
+		  uni.setStorage({
+		  	key:'details',
+			data:that.editDetails
+		  })
         },
       });
     },

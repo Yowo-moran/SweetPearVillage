@@ -1,18 +1,23 @@
 <script>
-	export default {
-		onLaunch: function() {
-			console.log('App Launch')
-		},
-		onShow: function() {
-			console.log('App Show')
-		},
-		onHide: function() {
-			console.log('App Hide')
-		}
-	}
+import { mapActions } from "vuex";
+export default {
+  onLaunch: function () {
+    console.log("App Launch");
+  },
+  onShow: function () {
+    console.log("App Show");
+    this.connectWebSocket();
+  },
+  onHide: function () {
+    console.log("App Hide");
+  },
+  methods: {
+    ...mapActions("message", ["connectWebSocket"]),
+  },
+};
 </script>
 
 <style lang="scss">
-	/*每个页面公共css */
-	@import "uview-ui/index.scss";
+/*每个页面公共css */
+@import "uview-ui/index.scss";
 </style>

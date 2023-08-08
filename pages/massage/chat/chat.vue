@@ -1,7 +1,7 @@
 <template>
   <view @tap="showFooter = false">
     <view class="topBar" :style="{ height: topBarHeight + 'px' }"> </view>
-    <uni-nav-bar title="猪猪不爱吃珠珠" left-icon="left" @clickLeft="back">
+    <uni-nav-bar :title="receiveNickname" left-icon="left" @clickLeft="back">
     </uni-nav-bar>
 
     <view class="box" :style="{ height: safeArea + 'px' }">
@@ -11,43 +11,51 @@
         scroll-y
         @scrolltoupper="getChat"
         :scroll-into-view="scrollIntoIndex"
+        @scroll="recordHeight"
       >
         <view
           class="message"
-          v-for="message in messages"
-          :key="message.time"
-          :class="message.sender === 'self' ? 'self' : 'other'"
-          :id="message.time"
+          v-for="item in chatHistoryList"
+          :key="item.sendTime"
+          :class="item.senderOpenId === openId ? 'other' : 'self'"
+          :id="item.sendTime"
         >
-          <view class="avatar" @tap="goTo(message.sender)">
+          <view
+            class="avatar"
+            @tap="goTo(item.senderOepnId)"
+            v-if="item.sendTime !== ''"
+          >
             <image
-              src="https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg"
+              :src="item.senderOpenId === openId ? receiverAvatar : avatar"
               mode="aspectFill"
               class="avatarItem"
+              :lazy-load="true"
             ></image>
           </view>
-          <view class="content">
-            <view v-if="message.type === 'text'">
-              {{ message.content }}
+          <view class="content" v-if="item.sendTime !== ''">
+            <view v-if="item.msgType === 1">
+              {{ item.message }}
             </view>
 
             <image
-              :src="message.content"
+              :src="item.message"
               mode="aspectFit"
-              v-else-if="message.type === 'image'"
-              @tap="preview(message.content)"
+              v-else-if="item.msgType === 2"
+              @tap="preview(item.message)"
+              :lazy-load="true"
             ></image>
 
             <view
-              v-if="message.type === 'voice'"
+              v-if="item.msgType === 3"
               class="voice-content"
-              @tap="play(message.content)"
+              @tap="play(item.message)"
             >
-              {{ message.length }}
+              {{ item.length }}
               <image
                 src="../../../static/icon/wave.png"
                 mode="scaleToFill"
                 class="voice-img"
+                :lazy-load="true"
                 :style="{ width: message.length + 20 + 'px' }"
               ></image>
             </view>
@@ -60,11 +68,13 @@
             src="../../../static/icon/voice.png"
             mode="scaleToFill"
             class="left"
+            :lazy-load="true"
           ></image>
           <span style="margin: 0 5px">{{
             cancel ? "松开手指取消发送" : time
           }}</span>
           <image
+            :lazy-load="true"
             src="../../../static/icon/voice.png"
             mode="scaleToFill"
             class="right"
@@ -72,6 +82,7 @@
         </view>
         <view class="voiceIcon">
           <image
+            :lazy-load="true"
             src="../../../static/icon/cancel.png"
             mode="scaleToFill"
             class="cancelIcon"
@@ -155,10 +166,11 @@
 
 <script>
 import moment from "moment";
-import message from "../../../store/message";
+import { mapState, mapActions, mapMutations } from "vuex";
 export default {
   data() {
     return {
+      avatar: "",
       query: null,
       title: "",
       topBarHeight: 0,
@@ -179,36 +191,9 @@ export default {
       scrollIntoIndex: "",
       time: "0:00",
       newHeight: 0,
-      messages: [
-        {
-          senderOpenId: "20222356",
-		  time:'2023-8-9 12:00:32',
-          content: "Hello, how are you?",
-          sender: "other",
-          type: "text",
-        },
-        {
-          senderOpenId: "20222356",
-		  time:'2023-8-9 12:00:33',
-          type: "text",
-          content: "I am fine, thank you. And you?",
-          sender: "self",
-        },
-        {
-          senderOpenId: "20222356",
-		  time:'2023-8-9 12:00:34',
-          type: "image",
-          content: "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          sender: "other",
-        },
-        {
-          senderOpenId: "20222468",
-		  time:'2023-8-9 12:00:35',
-          type: "text",
-          content: "Nice picture!",
-          sender: "self",
-        },
-      ],
+      openId: "",
+      myId: "",
+      newTop: 0,
     };
   },
   onLoad(options) {
@@ -232,46 +217,23 @@ export default {
     });
     this.innerAudioContext = uni.createInnerAudioContext();
     console.log(this.innerAudioContext);
+    console.log(options);
+    this.openId = options.openId;
+    this.avatar = wx.getStorageSync("details").avatar;
   },
+  onShow() {
+    this.getInform(this.openId);
+  },
+  onHide() {},
   methods: {
+    ...mapActions("message", ["getInform", "sendMine"]),
+    ...mapMutations("message", ["ADD_NEWCHAT"]),
     back() {
       uni.navigateBack();
     },
     getChat(e) {
       console.log(e);
       console.log("到顶了");
-      this.messages.unshift(
-        {
-          id: "five",
-          type: "image",
-          content: "../../../static/111.jpg",
-          sender: "other",
-        },
-        {
-          id: "six",
-          type: "image",
-          content: "../../../static/111.jpg",
-          sender: "other",
-        },
-        {
-          id: "seven",
-          type: "image",
-          content: "../../../static/111.jpg",
-          sender: "other",
-        },
-        {
-          id: "eight",
-          type: "image",
-          content: "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          sender: "other",
-        },
-        {
-          id: "nine",
-          type: "image",
-          content: "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          sender: "other",
-        }
-      );
       this.scrollIntoIndex = "first";
     },
     changeShow() {
@@ -281,22 +243,42 @@ export default {
     },
     sendMessage() {
       if (this.inform) {
-        this.messages.push({
-          id: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-          type: "text",
-          content: this.inform.trim(),
-          sender: "self",
+        const temp = {
+          sendTime: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+          msgType: 1,
+          message: this.inform.trim(),
+          senderOpenId: "",
+          receiverOpenId: this.openId,
+        };
+        this.ADD_NEWCHAT(temp);
+        this.sendMine({
+          sender: "",
+          receiver: this.openId,
+          sendTime: temp.sendTime,
+          message: temp.message,
         });
         this.inform = "";
         this.toBottom();
       }
     },
     sendImage() {
-      this.messages.push({
-        time: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-        type: "image",
-        content: this.inform,
-        sender: "self",
+      const temp = {
+        sendTime: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+        msgType: 2,
+        message: this.inform,
+        senderOpenId: "",
+        receiverOpenId: this.openId,
+      };
+      this.ADD_NEWCHAT(temp);
+      wx.uploadFile({
+        url: "https://101.43.254.115:7115/chat/file",
+        filePath: temp.message,
+        formData: {
+          sender: "",
+          receiver: temp.receiverOpenId,
+          sendTime: temp.sendTime,
+          msg_type: 2,
+        },
       });
       this.inform = "";
       this.showFooter = false;
@@ -335,6 +317,7 @@ export default {
           .boundingClientRect((data) => {
             const elements = Array.from(data);
             console.log(elements);
+            if (!elements.length) return;
             let index = elements.length - 1;
             this.scrollTop = elements[index].bottom - elements[0].bottom;
           })
@@ -343,7 +326,7 @@ export default {
       });
     },
     preview(url) {
-		console.log(url)
+      console.log(url);
       uni.previewImage({
         urls: [url],
       });
@@ -376,14 +359,27 @@ export default {
       }
       this.recorder.onStop((res) => {
         const message = {
-          time: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-          type: "voice",
-          content: res.tempFilePath,
+          sendTime: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+          msgType: 3,
+          message: res.tempFilePath,
           length: this.length,
-          sender: "self",
+          senderOepnId: "",
+          receiverOpenId: this.openId,
         };
         console.log(message);
-        if (!this.cancel && this.length >= 1) this.messages.push(message);
+        if (!this.cancel && this.length >= 1) {
+          this.ADD_NEWCHAT(message);
+          wx.uploadFile({
+            url: "https://101.43.254.115:7115/chat/file",
+            filePath: temp.message,
+            formData: {
+              sender: "",
+              receiver: temp.receiverOpenId,
+              sendTime: temp.sendTime,
+              msg_type: 3,
+            },
+          });
+        }
         this.needCancel = false;
         this.cancel = false;
         this.length = 0;
@@ -414,15 +410,34 @@ export default {
       });
     },
     goTo(sender) {
-		console.log(sender)
-		if(sender === 'other')
-      uni.navigateTo({
-        url: `/pages/massage/chat/other/other?key=${sender}`,
-      });
-	  else 
-	  uni.switchTab({
-	    url: `/pages/mine/mine`,
-	  });
+      console.log(sender);
+      if (sender === "2375697969077461446034904154")
+        uni.navigateTo({
+          url: `/pages/massage/chat/other/other?key=${sender}`,
+        });
+      else
+        uni.switchTab({
+          url: `/pages/mine/mine`,
+        });
+    },
+    recordHeight(e) {
+      console.log(e);
+      this.newTop = e.detail.scrollTop;
+    },
+  },
+  computed: {
+    ...mapState("message", [
+      "chatHistoryList",
+      "receiverAvatar",
+      "receiveNickname",
+      "count",
+    ]),
+  },
+  watch: {
+    count: {
+      handler() {
+        this.scrollTop = this.newTop;
+      },
     },
   },
 };
