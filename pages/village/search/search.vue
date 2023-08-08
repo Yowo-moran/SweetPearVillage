@@ -16,7 +16,7 @@
 				</view>
 				<!-- 历史标签 -->
 				<view v-if="historyList.length>0" class="label-content">
-					<view class="label-content__item" v-for="(item,index) in  historyList"  :key="index" @click="goHistoryList">
+					<view class="label-content__item" v-for="(item,index) in  historyList"  :key="index" @click="goHistoryList(item)">
 						{{item.name}}
 					</view>
 				</view>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-	// import {mapState} from 'vuex'
+
 	export default {
 		onLoad (options) {
 			this.tagType=options.tagName
@@ -46,7 +46,6 @@
 				tagType:'',
 			}
 		},
-		
 		methods: {
 			// 输入框改变时
 			inputChange(e){
@@ -60,11 +59,12 @@
 				})
 				this.value=''
 				uni.navigateBack({
-					delta: 1
+				  delta: 1, // 返回的页面数，这里假设返回上一个页面
 				});
 			},
 			// 点击历史记录
-			goHistoryList(){
+			goHistoryList(item){
+				this.$store.dispatch('village/setCurrentHistory',item)
 				uni.navigateBack({
 					delta: 1
 				});
@@ -74,16 +74,16 @@
 				this.$store.dispatch('village/clearHistoryList')
 			}
 		},
-		computed:{
-			historyList(){
-				// 将历史记录分块展示 仅当tagType和记录中的type相等时
-				return this.$store.state.village.historyList.filter(item=>item.type==this.tagType)
-			}
-		}
+	computed:{
+		historyList(){
+			// 将历史记录分块展示 仅当tagType和记录中的type相等时
+			return this.$store.state.village.historyList.filter(item=>item.type==this.tagType)
+		},
+	}
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	page{
 		height: 100%;
 		display: flex;

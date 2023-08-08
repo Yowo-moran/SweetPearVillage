@@ -8,16 +8,16 @@
 			<image class="settingIcon" src="../../../static/设置.png" ></image> 
 		</view>
 		<view class="upopup">
-		<u-popup :show="show"  :safeAreaInsetBottom="false" @click.native="closePopup"  style="padding-bottom: 0;  " v-if="tagName=='悬赏'">
+		<u-popup :show="show"  :safeAreaInsetBottom="false"   style="padding-bottom: 0;  " v-if="tagName=='悬赏'">
 			<view class="chooseTag" >
 				<view class="title">分类</view>
 				<view class="contentOne">
-					<view v-for="item,index in tags" @click="chooseTag(index)" :style="{color:(currentTags.indexOf(index)!=-1 ? '#6F876F': '#fff')}">{{item}}</view>
+					<view v-for="item,index in tags" :key="index" @click="chooseTag(index,item)" :style="{color:(currentTags.indexOf(index)!=-1 ? '#6F876F': '#fff')}">{{item}}</view>
 				</view>
-				<button @click="show=false">确定</button>
+				<button @click="submit">确定</button>
 			</view>
 		</u-popup>
-		<u-popup :show="show" :safeAreaInsetBottom="false" @click.native="closePopup"  style="padding-bottom: 0; " v-else-if="tagName=='书籍'">
+		<u-popup :show="show" :safeAreaInsetBottom="false"   style="padding-bottom: 0; " v-else-if="tagName=='书籍'">
 			<view class="chooseTag">
 				<view class="title">分类</view>
 				<view class="contentTwo">
@@ -29,20 +29,24 @@
 			</view>
 		</u-popup>
 		</view>
-		<u-action-sheet
+	   <u-picker
 		  :show="collegeShow"
-		  :actions="colleges"
+		  :columns="colleges"
 		  title="请选择学院"
-		  @close="collegeShow = false"
-		  @select="collegeSelect">
-		</u-action-sheet>
-		<u-action-sheet
+		  @cancel="collegeShow = false"
+		  @confirm="collegeSelect"
+		  :closeOnClickOverlay="true"
+		  @close="collegeShow = false">
+		</u-picker>
+		<u-picker
 		  :show="majorityShow"
-		  :actions="majoritys"
-		  title="请选择学院"
-		  @close="majorityShow = false"
-		  @select="majorityelect">
-		</u-action-sheet>
+		  :columns="majors[majorIndex]"
+		  title="请选择专业"
+		  @cancel="majorityShow = false"
+		  @confirm="majorSelect"
+		  :closeOnClickOverlay="true"
+		  @close="majorityShow = false">
+		</u-picker>
 		<u-action-sheet
 		  :show="gradeShow"
 		  :actions="grades"
@@ -65,37 +69,292 @@
 			return {
 				 show:false,
 				 tags:['北区快递','南区快递','邮政快递','一食堂','二食堂','南区超市','南区小吃街',
-				 '北区超市','北区水果店','南区水果店','南区打印店','北区打印店','蜜雪冰城'
-				 ],
+				 '北区超市','北区水果店','南区水果店','南区打印店','北区打印店','蜜雪冰城'],
+				 keyword:[],
 				 currentTags:[],
 				collegeShow: false,
 				collegeValue:'请选择学院',
 				majorityShow: false,
-				majorityValue:'请选择专业',
+				  majorIndex: 0,
+				majorityValue:'请选择学院',
 				gradeShow: false,
 				gradeValue:'请选择年级',
 				colleges: [
-				  {
-				    name: "计算机科学与工程学院",
-				  },
-				  {
-				    name: "社会发展学院",
-				  },
-				  {
-					name:'默认'
-				  }
+				  [
+				    "机械工程学院",
+				    "材料科学与工程学院",
+				    "自动化学院",
+				    "化学化工学院",
+				    "海运学院",
+				    "管理学院",
+				    "外国语学院",
+				    "艺术学院",
+				    "环境科学与安全工程学院",
+				    "理学院",
+				    "聋人工学院",
+				    "华信软件学院",
+				    "电气电子工程学院",
+				    "计算机科学与工程学院",
+				    "社会发展学院",
+				    "语言文化学院",
+				    "集成电路科学与工程学院",
+				    "电气工程与自动化学院",
+				  ],
 				],
-				majoritys: [
-				  {
-				    name: "计算机科学与技术",
-				  },
-				  {
-				    name: "数据科学与大数据技术",
-				  },
-				  {
-					name:'默认'
-				  }
-				],
+				majors: [
+					[["请先选择学院"]],
+					[
+					  [
+						"机械工程及自动化",
+						"过程装备与控制工程",
+						"工业设计(造型设计)",
+						"机械电子工程",
+						"机械工程及自动化(卓越班)",
+						"机械工程",
+						"机械工程（卓越）",
+						"过程装备与控制工程（国际教育）",
+						"能源动力系统及自动化",
+						"热能与动力工程",
+						"能源与动力工程",
+						"新能源科学与工程",
+						"机械工程(国际教育)",
+						"机器人工程",
+						"智能制造工程",
+						"机械类",
+						"能源动力类",
+					  ],
+					],
+					[
+					  [
+						"材料科学与工程",
+						"材料成型及控制工程",
+						"材料物理",
+						"材料化学",
+						"功能材料",
+						"材料成型及控制工程（卓越）",
+						"材料科学与工程（卓越）",
+						"新能源材料与器件",
+						"功能材料（明理卓越创新班）",
+						"材料科学类",
+						"材料类",
+					  ],
+					],
+					[
+					  [
+						"光信息科学与技术",
+						"电子信息工程",
+						"电子科学与技术",
+						"电子信息科学与技术",
+						"集成电路设计与集成系统",
+						"光电信息科学与工程",
+						"电子信息工程（卓越）",
+						"集成电路设计与集成系统（卓越）",
+						"电波传播与天线",
+						"微电子科学与工程",
+						"电子信息类",
+					  ],
+					],
+					[
+					  [
+						"应用化学(理)",
+						"化学工程与工艺",
+						"制药工程",
+						"生物工程",
+						"应用化学(工)",
+						"药学",
+						"应用化学（卓越）",
+						"化学工程与工艺（卓越）",
+						"化学工程与工艺（国际教育）",
+						"制药工程（国际教育）",
+						"化工与制药类",
+					  ],
+					],
+					[
+					  [
+						"航海技术",
+						"轮机工程",
+						"轮机工程",
+						"船舶电子电气工程",
+						"航海技术（卓越）",
+						"轮机工程（卓越）",
+						"轮机工程（国际教育）",
+						"土木、水利与海洋工程",
+						"交通运输",
+					  ],
+					],
+					[
+					  [
+						"信息管理与信息系统",
+						"工业工程",
+						"工商管理",
+						"工程管理",
+						"保险",
+						"工程造价",
+						"广告学",
+						"物流管理",
+						"财务管理",
+						"市场营销",
+						"保险学",
+						"工商管理（国际教育2+2）",
+						"财务管理（国际教育）",
+						"工业工程（国际教育）",
+						"物流管理（国际教育）",
+						"工商管理（国际教育）",
+						"工业工程（中外合作办学）",
+						"工商管理（中外合作办学）",
+						"工商管理（3+1）",
+						"大数据管理与应用",
+						"工商管理（高水平运动队）",
+						"管理科学与工程类",
+						"工商管理类",
+						"工业工程类",
+						"物流管理与工程类",
+						"工商管理(国际教育学院)",
+						"物流管理(国际教育学院)",
+						"财务管理(国际教育学院)",
+						"工商管理(国际教育学院)",
+						"工程管理(国际教育学院)",
+						"工商管理（辅修）",
+					  ],
+					],
+					[
+					  [
+						"英语",
+						"日语",
+						"英语（国际教育）",
+						"英语（辅修）",
+						"日语（辅修）",
+					  ],
+					],
+					[
+					  [
+						"艺术设计",
+						"工业设计",
+						"装饰艺术",
+						"摄影",
+						"动画",
+						"动画(中加)",
+						"视觉传达设计",
+						"环境设计",
+						"产品设计",
+						"环境设计（国际教育）",
+						"视觉传达设计（国际教育）",
+					  ],
+					],
+					[
+					  [
+						"环境工程",
+						"安全工程",
+						"环境科学",
+						"资源环境与城乡规划管理",
+						"自然地理与资源环境",
+						"资源循环科学与工程",
+						"环境工程（卓越）",
+						"安全工程（卓越）",
+						"应急技术与管理",
+						"环境与安全类",
+						"环境科学与工程类",
+						"安全科学与工程类",
+					  ],
+					],
+					[["应用物理学", "数学与应用数学"]],
+					[
+					  [
+						"计算机科学与技术(聋工)",
+						"艺术设计",
+						"艺术设计",
+						"产品设计",
+						"服装与服饰设计",
+						"自动化(聋工全纳)",
+						"电子信息工程(聋工全纳)",
+						"工程造价(聋工全纳)",
+						"财务管理(聋工全纳)",
+						"网络工程（聋工）",
+						"环境设计（聋工全纳）",
+						"数据科学与大数据技术（聋工）",
+						"计算机类",
+						"设计学类",
+					  ],
+					],
+					[["软件工程", "计算机科学与技术(专科起点)", "软件工程(专科起点)"]],
+					[
+					  [
+						"自动化",
+						"电气工程及其自动化",
+						"测控技术与仪器",
+						"电子信息科学与技术",
+						"通信工程",
+						"电子信息科学与技术",
+						"电子科学与技术",
+						"集成电路设计与集成系统",
+						"微电子科学与工程",
+						"光电信息科学与工程",
+						"通信工程",
+						"电子信息科学与技术",
+						"集成电路设计与集成系统",
+						"数据科学与大数据技术",
+						"通信工程()国际教育）",
+						"电子信息工程（卓越）",
+						"自动化",
+						"通信工程（国际教育）",
+						"通信工程",
+						"电子信息工程（卓越）",
+						"集成电路设计与集成系统",
+						"集成电路设计与集成系统（卓越）",
+						"仪器类",
+						"电子信息类",
+					  ],
+					],
+					[
+					  [
+						"计算机科学与技术",
+						"信息安全",
+						"网络工程",
+						"物联网工程",
+						"计算机科学与技术（中加）",
+						"数据科学与大数据技术",
+						"计算机科学与技术（国际教育）",
+						"信息安全（国际教育）",
+					  ],
+					],
+					[["社会工作", "社会学", "老年学"]],
+					[
+					  [
+						"英语",
+						"日语",
+						"汉语言文学",
+						"汉语言文学（国际教育）",
+						"预科",
+						"英语（国际教育）",
+					  ],
+					],
+					[
+					  [
+						"通信工程",
+						"电子科学与技术",
+						"集成电路设计与集成系统",
+						"微电子科学与工程",
+						"光电信息科学与工程",
+						"电波传播与天线",
+						"电子信息工程",
+						"通信工程（国际教育）",
+						"电子信息工程（卓越）",
+						"集成电路设计与集成系统（卓越）",
+						"电子信息类",
+					  ],
+					],
+					[
+					  [
+						"自动化",
+						"电气工程及其自动化",
+						"测控技术与仪器",
+						"人工智能",
+						"电气工程及其自动化（国际教育）",
+						"自动化卓越",
+						"电气工程及其自动化（卓越）",
+					  ],
+					],
+				  ],
 				grades: [
 				  {
 				    name: "大一",
@@ -105,16 +364,21 @@
 				  },
 				  {
 					name:'大三'
+				  },
+				  {
+					name:'大四'
 				  }
-				],
+				]
 			}
 		},
 		methods: {
-			chooseTag(index){
+			chooseTag(index,item){
 				console.log(index);
+				// 判断选中还是取消
 				const oldIndex=this.currentTags.indexOf(index)
 				if(oldIndex==-1){
 					this.currentTags.push(index)
+					this.keyword.push(item)
 				}else{
 					this.currentTags.splice(oldIndex,1)
 				}
@@ -125,20 +389,32 @@
 			},
 			// 选择框选择之后
 			collegeSelect(e){
-				this.collegeValue=e.name
+				console.log(e.value);
+				this.collegeValue=e.value[0]
+				this.majorIndex = e.indexs[0];
+				this.collegeShow=false
 			},
-			majorityelect(e){
-				this.majorityValue=e.name
+			majorSelect(e){
+				if (e.value[0] !== "请先选择学院") {
+				 	this.majorityValue=e.value[0]
+				}
+				this.majorityShow = false;
 			},
 			gradeSelect(e){
 				this.gradeValue=e.name
+			},
+			// 点击确定
+			submit(){
+				// console.log(this.keyword);
+				this.$store.dispatch('village/setKetWordTag',this.keyword)
+				this.show=false
 			}
-		}
-		}
+		},
+	
+	}
 </script>
 
-<style lang="scss">
-	
+<style lang="scss" scoped>
 	.searchBar{
 		display: flex;
 		position: relative;
@@ -146,7 +422,7 @@
 		align-items: center;
 		padding: 0 10rpx;
 		width: 100%;
-		height: 90rpx;
+		height: 91rpx;
 		background-color: #fff;
 		box-sizing: border-box;
 		.search{

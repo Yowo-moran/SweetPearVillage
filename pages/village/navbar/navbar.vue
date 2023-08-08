@@ -43,7 +43,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.navbar{
 		width:100%;
 		height: 80rpx;

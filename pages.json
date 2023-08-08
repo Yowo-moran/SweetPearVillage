@@ -2,7 +2,7 @@
 	"easycom": {
 		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
 	},
-	"pages": [ 
+	"pages": [
 		{
 			"path": "pages/massage/massage",
 			"style": {
@@ -80,128 +80,107 @@
 				"navigationBarTitleText": "搜索",
 				"enablePullDownRefresh": false
 			}
+		},
+		{
+			"path": "pages/massage/notice/notice",
+			"style": {
+				"navigationBarTitleText": "通知",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/publish/reward/reward",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "black"
+			}
+		},
+		{
+			"path": "pages/publish/goods/goods",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "black"
+			}
+		},
+		{
+			"path": "pages/publish/post/post",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "black"
+			}
+		},
+		{
+			"path": "pages/publish/book/book",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "black"
+			}
+		},
+		{
+			"path": "pages/mine/myBook",
+			"style": {
+				"navigationBarTitleText": "我的书籍",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/mine/myPost",
+			"style": {
+				"navigationBarTitleText": "我的帖子",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/mine/imparityClause",
+			"style": {
+				"navigationBarTitleText": "服务条款",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/massage/chat/other/other",
+			"style": {
+				"navigationBarTitleText": "个人主页",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/massage/chat/other/otherBook",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/massage/chat/other/otherIdle",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/massage/chat/other/otherPost",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/massage/chat/other/otherReward",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
 		}
-	    ,{
-            "path" : "pages/massage/notice/notice",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "通知",
-                "enablePullDownRefresh": false
-            }
-            
-        },
-		{
-		    "path" : "pages/publish/reward/reward",
-		    "style" :                                                                                    
-		    {
-		       "navigationBarTitleText": "",
-		       "enablePullDownRefresh": false,
-		        "navigationStyle": "custom" ,
-		        "navigationBarTextStyle": "black" 
-		        	
-		    }
-		    
-		},
-		{
-		    "path" : "pages/publish/goods/goods",
-		    "style" :                                                                                    
-		    {
-		       "navigationBarTitleText": "",
-		       "enablePullDownRefresh": false,
-		        "navigationStyle": "custom" ,
-		        "navigationBarTextStyle": "black" 
-		        	
-		    }
-		    
-		},
-		{
-		    "path" : "pages/publish/post/post",
-		    "style" :                                                                                    
-		    {
-		       "navigationBarTitleText": "",
-		       "enablePullDownRefresh": false,
-		        "navigationStyle": "custom" ,
-		        "navigationBarTextStyle": "black" 
-		        	
-		    }
-		    
-		},
-		{
-		    "path" : "pages/publish/book/book",
-		    "style" :                                                                                    
-		    {
-		       "navigationBarTitleText": "",
-		       "enablePullDownRefresh": false,
-		        "navigationStyle": "custom" ,
-		        "navigationBarTextStyle": "black" 
-		        	
-		    }
-		    
-		}
-        ,{
-            "path" : "pages/mine/myBook",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "我的书籍",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/mine/myPost",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "我的帖子",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/massage/chat/other/other",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "个人主页",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/massage/chat/other/otherBook",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/massage/chat/other/otherIdle",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/massage/chat/other/otherPost",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/massage/chat/other/otherReward",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
