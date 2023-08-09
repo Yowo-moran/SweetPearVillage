@@ -9,15 +9,15 @@
 				<scroll-view scroll-y="true" class="demo-scroll-block" @scrolltolower="upper">
 					<!-- 先判断后循环 v-if和v-for一起使用会造成性能问题 -->
 					<view v-if="tagName==='悬赏'">
-						<listCardReward  v-for="item in rewardInfo" :key="item.id" :rewardInfo="item"></listCardReward>
+						<listCardReward  v-for="item,index in rewardInfo" :key="index" :rewardInfo="item"></listCardReward>
 						<u-loadmore :status="rewardstatus" />
 					</view>
 					<view v-else-if="tagName==='书籍'">
-						<listCardBook v-for="item in bookInfo" :key="item.userId" :bookInfo="item"></listCardBook>
+						<listCardBook v-for="item,index in bookInfo" :key="index" :bookInfo="item"></listCardBook>
 						<u-loadmore :status="bookstatus" />
 					</view>
 					<view  v-else-if="tagName==='闲置'">
-						<listCardLeave v-for="item in leaveInfo" :key="item.id" :leaveInfo="item"></listCardLeave>
+						<listCardLeave v-for="item,index in leaveInfo" :key="index" :leaveInfo="item"></listCardLeave>
 						<u-loadmore :status="leavestatus" />
 					</view>
 				</scroll-view>

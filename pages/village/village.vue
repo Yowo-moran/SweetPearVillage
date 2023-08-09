@@ -9,11 +9,10 @@
 		<!-- 将内容撑开 -->
 		<view style="height: 160rpx;"></view>
 		 <!-- 滑动区 -->
-<<<<<<< HEAD
+
 		<listScroll @skipChange="skipChange" :activeIndex="activeIndex" :tagName="tagName" :rewardKeywords="rewardKeywords" :leaveKeywords="leaveKeywords"></listScroll>
-=======
+
 		<listScroll @skipChange="skipChange" :activeIndex="activeIndex" :tagName="tagName" style="flex-grow: 1;"></listScroll>
->>>>>>> c63bf54864de816540e1eb89ea6bdf6fdeb2c0eb
 	</view>
 </template>
 
