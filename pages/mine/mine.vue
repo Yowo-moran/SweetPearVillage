@@ -2,7 +2,11 @@
   <view class="allMine">
     <view class="header">
       <view class="headportrait">
-        <button open-type="chooseAvatar" @chooseavatar="editAvatar" :disabled="!logined">
+        <button
+          open-type="chooseAvatar"
+          @chooseavatar="editAvatar"
+          :disabled="!logined"
+        >
           <u--image
             :src="personalDetails.avatar"
             :lazyLoad="false"
@@ -127,7 +131,7 @@ export default {
                   college,
                   major,
                   wechatNumber,
-                  openId
+                  openId,
                 } = res.data.data;
                 const details = {
                   id,
@@ -137,7 +141,7 @@ export default {
                   college,
                   major,
                   wechatNumber,
-                  openId
+                  openId,
                 };
                 uni.setStorage({
                   key: "details",
@@ -182,14 +186,12 @@ export default {
     },
     async editAvatar(e) {
       const that = this;
-      console.log(e.detail.avatarUrl);
-      const token = wx.getStorageSync("token");
       await uni.uploadFile({
         url: "https://101.43.254.115:7115/avatar",
         filePath: e.detail.avatarUrl,
         name: "avatar",
         header: {
-          Authorization: token,
+          Authorization: wx.getStorageSync("token"),
         },
         success(res) {
           let data = JSON.parse(res.data);

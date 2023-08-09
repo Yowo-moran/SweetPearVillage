@@ -59,7 +59,7 @@
 <script>
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 export default {
-  onShow() {
+  onLoad() {
     this.getIdle(this.idleId);
   },
   data() {
@@ -97,13 +97,12 @@ export default {
       this.$refs.editfrom
         .validate()
         .then((res) => {
-          this.getImage();
+          this.edit();
           uni.$u.toast("校验通过");
         })
         .catch((errors) => {
           uni.$u.toast("校验失败");
         });
-      uni.navigateBack();
     },
     // 删除图片
     deletePic(event) {
@@ -113,31 +112,16 @@ export default {
     async afterRead(event) {
       // 当设置 multiple 为 true 时, file 为数组格式，否则为对象格式
       let lists = [].concat(event.file);
-      let fileListLen = this[`fileList${event.name}`].length;
       lists.map((item) => {
         this[`fileList${event.name}`].push({
           ...item,
         });
       });
-      for (let i = 0; i < lists.length; i++) {
-        const result = await this.uploadFilePromise(lists[i].url);
-        let item = this[`fileList${event.name}`][fileListLen];
-        this[`fileList${event.name}`].splice(
-          fileListLen,
-          1,
-          Object.assign(item, {
-            status: "success",
-            message: "",
-            url: result,
-          })
-        );
-        fileListLen++;
-      }
     },
-    getIdle(id) {
+    async getIdle(id) {
       const that = this;
       const token = wx.getStorageSync("token");
-      wx.request({
+      await wx.request({
         method: "GET",
         url: "https://101.43.254.115:7115/item/" + id,
         header: {
@@ -155,36 +139,38 @@ export default {
         },
       });
     },
-    async getImage() {
-      const that = this;
-      const token = wx.getStorageSync("token");
-      await uni.uploadFile({
-        url: "https://101.43.254.115:7115/item/image",
-        filePath: that.fileList1[0].url,
-        name: "image",
-        header: {
-          Authorization: token,
-        },
-        success(res) {
-          // let data = JSON.parse(res.data);
-          if (data.code !== "00000") {
-            console.log("获取失败！");
-            return;
-          }
-          console.log(res);
-          that.edit(res.data.data.image);
-        },
+    uploadFilePromise(url) {
+      return new Promise((resolve, reject) => {
+        let a = uni.uploadFile({
+          url: "https://101.43.254.115:7115/item/image",
+          filePath: url,
+          name: "image",
+          header: {
+            Authorization: wx.getStorageSync("token"),
+          },
+          success: (res) => {
+            setTimeout(() => {
+              // console.log(data.message);
+              resolve(JSON.parse(res.data).message);
+            }, 1000);
+          },
+        });
       });
     },
-    async edit(url) {
+    async edit() {
+      const that = this;
+      const result = await this.uploadFilePromise(that.fileList1[0].url);
       await wx.request({
         method: "PUT",
         url: "https://101.43.254.115:7115/item",
         data: {
           id: that.editIdle.id,
           description: that.editIdle.description,
-          image: url,
+          image: result,
           price: that.editIdle.price,
+        },
+        header: {
+          Authorization: wx.getStorageSync("token"),
         },
         success(res) {
           if (res.data.code !== "00000") {
@@ -192,6 +178,7 @@ export default {
             return;
           }
           console.log(res);
+          uni.navigateBack();
           console.log("修改成功");
         },
       });
@@ -218,7 +205,6 @@ export default {
   position: absolute;
   bottom: 10%;
   right: 7%;
-
   button {
     background-color: rgb(214, 215, 185);
     width: 150rpx;

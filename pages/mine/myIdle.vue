@@ -5,7 +5,7 @@
       v-for="(item, index) in idleList"
       :key="index"
       :item="item"
-      :child-index="index"
+      :childIndex="index"
       :deleteIdle="deleteIdle"
       :editIdle="editIdle"
       :soldIdle="soldIdle"
@@ -25,45 +25,18 @@ export default {
   },
   data() {
     return {
-      idleList: [
-        {
-          id: "1",
-          image:
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          avatar:
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          description:
-            "每数儿最始更调明场号老身列林学很从。事你大细间容已相适称打气安型。只光员口段学关受书性造特工。头物斗西写子线组养日专先不斗极。没政强说能位题广然三军史断龙书度报又。",
-          price: "250",
-          nickName: "moran",
-          sold: true,
-        },
-        {
-          id: "2",
-          image:
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          avatar:
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          description:
-            "每数儿最始更调明场号老身列林学很从。事你大细间容已相适称打气安型。只光员口段学关受书性造特工。头物斗西写子线组养日专先不斗极。没政强说能位题广然三军史断龙书度报又。",
-          price: "250",
-          nickName: "moran",
-          sold: false,
-        },
-      ],
+      idleList: [],
     };
   },
   methods: {
     deleteIdle(index) {
       // console.log(index);
       const that = this;
-      const token = wx.getStorageSync("token");
-      const id = that.item.id;
       wx.request({
         method: "DELETE",
-        url: "https://101.43.254.115:7115/item/" + id,
+        url: "https://101.43.254.115:7115/item/" + that.item.id,
         header: {
-          Authorization: token,
+          Authorization: wx.getStorageSync("token"),
         },
         success(res) {
           if (res.data.code !== "00000") {
@@ -76,21 +49,19 @@ export default {
       });
     },
     editIdle(index) {
-      console.log(index);
+      // console.log(index);
       uni.navigateTo({
         url: "/pages/mine/editIdle",
       });
     },
-    soldIdle(index) {
+    async soldIdle(index) {
       // console.log(index);
       const that = this;
-      const token = wx.getStorageSync("token");
-      const id = that.item.id;
-      wx.request({
+      await wx.request({
         method: "PUT",
-        url: "https://101.43.254.115:7115/item/sold?itemId=" + id,
+        url: "https://101.43.254.115:7115/item/sold?itemId=" + that.item.id,
         header: {
-          Authorization: token,
+          Authorization: wx.getStorageSync("token"),
         },
         success(res) {
           if (res.data.code !== "00000") {
@@ -104,11 +75,10 @@ export default {
     },
     async getIdleList() {
       const that = this;
-      const token = wx.getStorageSync("token");
       await wx.request({
         url: "https://101.43.254.115:7115/item/my",
         header: {
-          Authorization: token,
+          Authorization: wx.getStorageSync("token"),
         },
         success(res) {
           if (res.data.code !== "00000") {

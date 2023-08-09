@@ -38,9 +38,6 @@
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 export default {
   name: "MyIdle",
-  mounted() {
-    this.showOverlay = this.item.sold;
-  },
   props: {
     item: {
       type: Object,
@@ -77,7 +74,7 @@ export default {
     ...mapMutations("mine", ["setIdle"]),
   },
   computed: {
-    ...mapState("mine", ["idle"]),
+    ...mapState("mine", ["idleId"]),
   },
 };
 </script>
@@ -101,7 +98,7 @@ export default {
       width: 100%;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.5);
-      z-index: 1000;
+      z-index: 2;
     }
     .content {
       font-size: 24rpx;
