@@ -1,5 +1,5 @@
 <template>
-  <view>
+  <view style="display: flex; flex-direction: column;">
     <inform-vc v-if="isShow"></inform-vc>
     <view class="notice">
       <view class="left">
@@ -18,7 +18,7 @@
       >
         <view
           class="scrollItem"
-          @click="jump(item.receiverOpenId)"
+          @click="jump(item.receiverOpenId, item.receiverName)"
           v-for="item in chatList"
           :key="item.receiverOpenId"
         >
@@ -66,7 +66,7 @@ export default {
     ...mapState("message", ["chatList"]),
   },
   methods: {
-    jump(openId) {
+    jump(openId, name) {
       uni.navigateTo({
         url: `/pages/massage/chat/chat?openId=${openId}`,
       });
@@ -84,7 +84,11 @@ export default {
     }, 1000); */
   },
   onShow() {
+    console.log("messageShow");
     this.getChatList();
+  },
+  onHide() {
+    console.log("message hide");
   },
 };
 </script>
@@ -120,7 +124,7 @@ export default {
   }
 }
 .inform {
-  height: 90vh;
+	flex-grow: 1;
   .scroll {
     height: 100%;
     .scrollItem {

@@ -1,5 +1,5 @@
 <template>
-	<view style="height: 100vh;">
+	<view style="height: 100vh; display: flex; flex-direction: column;">
 		<!-- 头部 -->
 		<view class="header">
 			<!-- 自定义导航栏 -->
@@ -9,7 +9,7 @@
 		<!-- 将内容撑开 -->
 		<view style="height: 160rpx;"></view>
 		 <!-- 滑动区 -->
-		<listScroll @skipChange="skipChange" :activeIndex="activeIndex" :tagName="tagName"></listScroll>
+		<listScroll @skipChange="skipChange" :activeIndex="activeIndex" :tagName="tagName" style="flex-grow: 1;"></listScroll>
 	</view>
 </template>
 

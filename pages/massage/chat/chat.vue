@@ -1,8 +1,7 @@
 <template>
   <view @tap="showFooter = false">
     <view class="topBar" :style="{ height: topBarHeight + 'px' }"> </view>
-    <uni-nav-bar :title="receiveNickname" left-icon="left" @clickLeft="back">
-    </uni-nav-bar>
+    <uni-nav-bar left-icon="left" @clickLeft="back"> </uni-nav-bar>
 
     <view class="box" :style="{ height: safeArea + 'px' }">
       <scroll-view
@@ -46,17 +45,17 @@
             ></image>
 
             <view
-              v-if="item.msgType === 3"
+              v-else-if="parseInt(item.msgType / 100) === 3"
               class="voice-content"
               @tap="play(item.message)"
             >
-              {{ item.length }}
+              {{ item.msgType % 300 }}
               <image
                 src="../../../static/icon/wave.png"
                 mode="scaleToFill"
                 class="voice-img"
                 :lazy-load="true"
-                :style="{ width: message.length + 20 + 'px' }"
+                :style="{ width: (item.msgType % 300) + 20 + 'px' }"
               ></image>
             </view>
           </view>
@@ -204,7 +203,6 @@ export default {
       systemInfo.windowHeight - this.topBarHeight - systemInfo.safeArea.height;
     this.safeArea =
       systemInfo.windowHeight - this.topBarHeight - 44 - this.safeBottom;
-    this.toBottom();
     uni.getSetting({
       success: (res) => {
         console.log(res.authSetting["scope.record"]);
@@ -220,21 +218,38 @@ export default {
     console.log(options);
     this.openId = options.openId;
     this.avatar = wx.getStorageSync("details").avatar;
-  },
-  onShow() {
+    this.myId = wx.getStorageSync("details").openId;
     this.getInform(this.openId);
   },
-  onHide() {},
+  onShow() {
+    console.log("@myId", this.myId);
+  },
+  onUnload() {
+    console.log("bye");
+    wx.request({
+      url: "https://101.43.254.115:7115/chat-page/quit",
+      method: "POST",
+      header: {
+        Authorization: wx.getStorageSync("token"),
+      },
+    });
+  },
   methods: {
-    ...mapActions("message", ["getInform", "sendMine"]),
+    ...mapActions("message", ["getInform", "sendMine", "getHistory"]),
     ...mapMutations("message", ["ADD_NEWCHAT"]),
     back() {
       uni.navigateBack();
     },
-    getChat(e) {
-      console.log(e);
+    getChat() {
       console.log("到顶了");
-      this.scrollIntoIndex = "first";
+      const index = this.chatHistoryList[0].msgId;
+      const time = this.chatHistoryList[0].sendTime;
+      this.getHistory({
+        msgId: index,
+        that: this,
+        openId: this.openId,
+        time: time,
+      });
     },
     changeShow() {
       this.showFooter = !this.showFooter;
@@ -247,13 +262,13 @@ export default {
           sendTime: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
           msgType: 1,
           message: this.inform.trim(),
-          senderOpenId: "",
+          senderOpenId: this.myId,
           receiverOpenId: this.openId,
         };
         this.ADD_NEWCHAT(temp);
         this.sendMine({
-          sender: "",
-          receiver: this.openId,
+          sender: temp.senderOpenId,
+          receiver: temp.receiverOpenId,
           sendTime: temp.sendTime,
           message: temp.message,
         });
@@ -266,22 +281,35 @@ export default {
         sendTime: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
         msgType: 2,
         message: this.inform,
-        senderOpenId: "",
+        senderOpenId: this.myId,
         receiverOpenId: this.openId,
       };
       this.ADD_NEWCHAT(temp);
+      console.log("upload");
       wx.uploadFile({
         url: "https://101.43.254.115:7115/chat/file",
         filePath: temp.message,
+        name: "file",
+        header: {
+          Authorization: wx.getStorageSync("token"),
+        },
         formData: {
-          sender: "",
+          sender: temp.senderOpenId,
           receiver: temp.receiverOpenId,
           sendTime: temp.sendTime,
-          msg_type: 2,
+          msgType: 2,
+          voiceLen: 0,
+        },
+        success(res) {
+          console.log(res);
+        },
+        fail(res) {
+          console.log(res);
         },
       });
       this.inform = "";
       this.showFooter = false;
+      this.toBottom();
     },
     chooseImage() {
       uni.chooseMedia({
@@ -291,7 +319,6 @@ export default {
           console.log(res.tempFiles);
           this.inform = res.tempFiles[0].tempFilePath;
           this.sendImage();
-          this.toBottom();
         }.bind(this),
       });
     },
@@ -358,25 +385,31 @@ export default {
         return;
       }
       this.recorder.onStop((res) => {
-        const message = {
-          sendTime: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-          msgType: 3,
-          message: res.tempFilePath,
-          length: this.length,
-          senderOepnId: "",
-          receiverOpenId: this.openId,
-        };
-        console.log(message);
+        console.log(res);
         if (!this.cancel && this.length >= 1) {
-          this.ADD_NEWCHAT(message);
-          wx.uploadFile({
+          const temp = {
+            sendTime: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+            msgType: 300 + this.length,
+            message: res.tempFilePath,
+            length: this.length,
+            senderOepnId: this.myId,
+            receiverOpenId: this.openId,
+          };
+          console.log(temp.message);
+          this.ADD_NEWCHAT(temp);
+          uni.uploadFile({
             url: "https://101.43.254.115:7115/chat/file",
             filePath: temp.message,
+            name: "file",
+            header: {
+              Authorization: wx.getStorageSync("token"),
+            },
             formData: {
-              sender: "",
+              sender: temp.senderOepnId,
               receiver: temp.receiverOpenId,
               sendTime: temp.sendTime,
-              msg_type: 3,
+              msgType: 3,
+              voiceLen: temp.length,
             },
           });
         }
@@ -421,7 +454,6 @@ export default {
         });
     },
     recordHeight(e) {
-      console.log(e);
       this.newTop = e.detail.scrollTop;
     },
   },
@@ -437,6 +469,14 @@ export default {
     count: {
       handler() {
         this.scrollTop = this.newTop;
+      },
+    },
+    chatHistoryList: {
+      handler(newVal, oldVal) {
+        console.log("@handler", newVal, oldVal);
+        if (newVal[newVal.length - 1].msgId) {
+          this.toBottom();
+        }
       },
     },
   },

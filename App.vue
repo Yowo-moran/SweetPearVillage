@@ -1,5 +1,5 @@
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 export default {
   onLaunch: function () {
     console.log("App Launch");
@@ -10,9 +10,10 @@ export default {
   },
   onHide: function () {
     console.log("App Hide");
+    this.closeWeb();
   },
   methods: {
-    ...mapActions("message", ["connectWebSocket"]),
+    ...mapActions("message", ["connectWebSocket", "closeWeb"]),
   },
 };
 </script>
