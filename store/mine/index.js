@@ -11,7 +11,8 @@ const state = {
         wechatNumber: "",
         openId: ''
     },
-    idleId:'',
+    rewardId: '',
+    reward: {}
 }
 const mutations = {
     setLogined(state, value) {
@@ -22,6 +23,9 @@ const mutations = {
     },
     setIdle(state, value) {
         state.idleId = value;
+    },
+    setReward(state, value) {
+        state.reward = value;
     }
 }
 const actions = {

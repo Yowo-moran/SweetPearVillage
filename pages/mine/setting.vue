@@ -434,7 +434,6 @@ export default {
     },
     async edit() {
       const that = this;
-      const token = wx.getStorageSync("token");
       // const token = uni.getStorage({
       //   key: "storage_key",
       // });
@@ -449,7 +448,7 @@ export default {
           newWechatNumber: that.editDetails.wechatNumber,
         },
         header: {
-          Authorization: token,
+          Authorization: wx.getStorageSync("token"),
         },
         success(res) {
           if (res.data.code === "D0400") {
