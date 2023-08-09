@@ -4,12 +4,12 @@
 		<view class="header">
 			<!-- 自定义导航栏 -->
 			<navbar @changeTagNum="changeTagNum" :tabIndex="tabIndex" u></navbar>
-			<searchbox :tagName="tagName"></searchbox>
+			<searchbox :tagName="tagName" @rewardKeyword="rewardKeyword" @leaveKeyword="leaveKeyword"></searchbox>
 		</view>
 		<!-- 将内容撑开 -->
 		<view style="height: 160rpx;"></view>
 		 <!-- 滑动区 -->
-		<listScroll @skipChange="skipChange" :activeIndex="activeIndex" :tagName="tagName"></listScroll>
+		<listScroll @skipChange="skipChange" :activeIndex="activeIndex" :tagName="tagName" :rewardKeywords="rewardKeywords" :leaveKeywords="leaveKeywords"></listScroll>
 	</view>
 </template>
 
@@ -26,7 +26,9 @@
 				// 改变的标签值
 				activeIndex:0,
 				// 当前标签名称
-				tagName:'悬赏'
+				tagName:'悬赏',
+				rewardKeywords:[],
+				leaveKeywords:{}
 			};
 		},
 		methods:{
@@ -38,6 +40,13 @@
 			skipChange(cur){
 				this.tabIndex=cur
 			},
+			// 子传父 组件传值 悬赏页标签
+			rewardKeyword(item){
+				this.rewardKeywords=item
+			},
+			leaveKeyword(obj){
+				this.leaveKeywords=obj
+			}
 		}
 	}
 </script>
