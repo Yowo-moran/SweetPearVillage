@@ -2,15 +2,15 @@
 	<!-- 纵向卡片 书籍 -->	
 	<view class="verListItem"  @click="jump">
 		<view class="bookPhoto">
-			<image src="../../../static/111.jpg"></image>
+			<image :src="bookInfo.image"></image>
 		</view>
 		<view class="listItemContent">
-			<view class="price">￥ 20</view>
-			<view class="listItemTitle">高等数学 第七版 上册 高等数学 </view>
+			<view class="price">￥ {{bookInfo.price}}</view>
+			<view class="listItemTitle">{{bookInfo.bookName}} </view>
 			<!-- 描述信息 -->
 			<view class="litsItemDec">
-				<view class="college"><view style="width: 30%">学院：</view><view style="width: 70%;">集成电路与工程学院</view></view>
-				<view class="majority"><view  style="width: 30%;">专业：</view><view style="width: 70%;">电子信息工程</view></view>
+				<view class="college"><view style="width: 30%">学院：</view><view style="width: 70%;">{{bookInfo.college}}</view></view>
+				<view class="majority"><view  style="width: 30%;">专业：</view><view style="width: 70%;">{{bookInfo.major}}</view></view>
 			</view>
 		</view>
 	</view>
@@ -18,6 +18,12 @@
 
 <script>
 	export default {
+		props:{
+			bookInfo:{
+				type:Object,
+				default:{}
+			}
+		},
 		data() {
 			return {
 				
@@ -36,7 +42,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .verListItem{
     display: inline-block;
     margin: 15rpx 18.75rpx;

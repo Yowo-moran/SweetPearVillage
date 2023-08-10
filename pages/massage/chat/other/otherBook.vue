@@ -1,6 +1,5 @@
 <template>
   <view class="allBook">
-    <u-navbar leftText="我的书籍" :autoBack="true" placeholder> </u-navbar>
     <Waterfall v-model="bookList">
       <template v-slot:left="{ leftList }">
         <Book :list="leftList"></Book>

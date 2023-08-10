@@ -2,14 +2,14 @@
 	<!-- 横向卡片 闲置 -->
 	<view class="rowlistItem"  @click="jump">
 		<view class="listItemImage">
-			<image src="../../../static/111.jpg"></image>
+			<image :src="leaveInfo.avatar"></image>
 		</view>
 		<view class="listContent">
-			<view class="listDes">珠珠就爱就爱就爱吃猪猪珠珠就爱吃猪猪珠珠就爱吃猪猪</view>
+			<view class="listDes">{{leaveInfo.description}}</view>
 			<view class="user">
 				<image class="userAvatar" src="../../../static/bochi.png"></image>
-				<text class="userName">珠珠就爱吃猪猪</text>
-				<text class="price">￥ 20</text>
+				<view class="userName">{{leaveInfo.nickName}}</view>
+				<view class="price">￥ {{leaveInfo.price}}</view>
 			</view>
 		</view>
 	</view>
@@ -17,6 +17,12 @@
 
 <script>
 	export default {
+		props:{
+			leaveInfo:{
+				type:Object,
+				default:{}
+			}
+		},
 		data() {
 			return {
 				
@@ -35,11 +41,10 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .rowlistItem{
 	display: flex;
 	justify-content: space-around;
-	height: 180rpx;
 	margin: 20rpx;
 	padding: 15rpx 30rpx;
 	border-radius: 10rpx;
@@ -62,10 +67,9 @@
 		flex-direction: column;
 		justify-content: space-between;
 		width: 70%;
-		height: 100%;
 		font-size: 32rpx;
 		.listDes{
-			height:55%;
+			height:85rpx;
 			width: 80%;
 			overflow: hidden;
 			text-overflow: ellipsis;
@@ -75,21 +79,29 @@
 			-webkit-box-orient: vertical;
 		}
 		.user{
-			height: 20%;
-			margin-bottom: 10rpx;
+			padding-top: 30rpx;
+			padding-bottom: 5rpx;
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
 			.userAvatar{
-				height: 100%;
+				height: 36rpx;
 				width: 30rpx;
 				border-radius: 10rpx;
 				background-color: blueviolet;
 			}
 			.userName{
+				display: inline-block;
+				vertical-align:middle;
 				margin:0 20rpx;
+				margin-right: 80rpx;
 				font-size: 30rpx;
 			}
 			.price{
-				margin-left: 60rpx;
-				font-size: 40rpx;
+				display: inline-block;
+				vertical-align:middle;
+				margin-top: 3rpx;
+				font-size: 32rpx;
 				color: #b38f8f;
 			}
 		}

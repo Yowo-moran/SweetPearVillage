@@ -1,6 +1,5 @@
 <template>
   <view class="allPost">
-    <u-navbar leftText="我的帖子" :autoBack="true" placeholder> </u-navbar>
     <Post :list="postList" />
   </view>
 </template>

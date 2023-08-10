@@ -1,30 +1,46 @@
 <template>
 	<view class="search">
+		<!-- 搜索框 -->
 		<view class="searchInput">
 			<view class="searchIcon">
 				<image src="../../../static/搜索-黑.png"></image>
 			</view>
-			<input  placeholder="请输入搜索内容" v-model="value" @input="inputChange" />
+			<input class="input" placeholder="请输入搜索内容" v-model="value"></input>
 			<view class="searchButton" @click="goSearch">搜索</view>
 		</view>
-	
-		<view class="search-list">
-			<view v-if="is_histroy" class="label-box">
+		<!-- 搜索历史 -->
+		<view class="search-list" v-if="is_histroy">
+			<view  class="label-box">
 				<view class="label-header">
 					<text class="label-title">搜索历史</text>
 					<text class="label-clear" @click="clearHistroy">清空</text>
 				</view>
 				<!-- 历史标签 -->
 				<view v-if="historyList.length>0" class="label-content">
-					<view class="label-content__item" v-for="(item,index) in  historyList"  :key="index" @click="goHistoryList">
+					<view class="label-content__item" v-for="(item,index) in  historyList"  :key="index" @click="goHistoryList(item)">
 						{{item.name}}
 					</view>
 				</view>
 				<view v-else class="no-data">
 					没有搜索历史
 				</view>
-			</view>
-			<view  class="no-data">
+			</view>	
+		</view>
+		<!-- 搜索结果 -->
+		<view class="scroll" v-else>
+			<scroll-view  :scroll-y="true" @scrolltolower="upper" class="demo-scroll-block" v-if="has_history">
+				<view v-if="tagType=='悬赏'">
+					<listCardReward v-for="item,index in rewardSearchInfo" :key="index" :rewardInfo="item"></listCardReward>
+					<u-loadmore :status="status1" />
+				</view>
+				<view v-else-if="tagType=='闲置'">
+					<listCardLeave></listCardLeave>
+				</view>
+				<view v-else-if="tagType=='书籍'">
+					<listCardBook></listCardBook>
+				</view>
+			</scroll-view>
+			<view  class="no-data" v-else>
 				没有搜索到相关数据
 			</view>
 		</view>
@@ -32,8 +48,12 @@
 </template>
 
 <script>
-	// import {mapState} from 'vuex'
+	import listCardReward from '../components/listcardReward.vue';
+	import listCardBook from '../components/listCardBook.vue';
+	import listCardLeave from '../components/listcardLeave.vue';
+	import { callWithErrorHandling } from "vue";
 	export default {
+		components:{listCardReward,listCardBook,listCardLeave},
 		onLoad (options) {
 			this.tagType=options.tagName
 			},
@@ -44,9 +64,12 @@
 				searchList: [],
 				loading:false,
 				tagType:'',
+				rewardSearchInfo:[],
+				has_history:true,
+				rewardPageNum:1,
+				status1:'loading'
 			}
 		},
-		
 		methods: {
 			// 输入框改变时
 			inputChange(e){
@@ -54,45 +77,115 @@
 			},
 			// 点击搜索
 			goSearch(){
-				this.$store.dispatch('village/setHistoryList',{
-					name:this.value,
-					type:this.tagType
-				})
-				this.value=''
-				uni.navigateBack({
-					delta: 1
-				});
+				if(this.tagType=='悬赏'){
+					if(this.value.trim()!=''){
+						this.$store.dispatch('village/setHistoryList',{
+							name:this.value.trim(),
+							type:this.tagType
+						})
+						this.is_histroy=false
+						this.rewardSearchInfo=[]
+						this.searchReward({keyword:this.value.trim(),pageNum:this.rewardPageNum})
+					}
+				}
 			},
 			// 点击历史记录
-			goHistoryList(){
-				uni.navigateBack({
-					delta: 1
-				});
+			goHistoryList(item){
+				this.value=item.name
+				this.is_histroy=false
+				this.rewardSearchInfo=[]
+				if(this.tagType=='悬赏'){
+					this.status1='loading'
+					this.searchReward({keyword:item.name})
+				}
 			},
 			//清除历史记录
 			clearHistroy(){
 				this.$store.dispatch('village/clearHistoryList')
+			},
+			// 搜索悬赏
+			searchReward(options={}){
+				const {pageSize=6,pageNum=1,keyword='',sortBy='amount_desc'}=options
+				console.log(keyword);
+				uni.request({
+					method:'GET',
+					url:'https://101.43.254.115:7115/rewards',
+					data:{
+						pageSize,
+						pageNum,
+						keyword,
+						sortBy,
+						types:''
+					},
+					header:{
+						'Authorization':uni.getStorageSync('token')
+					},
+					success:res=>{
+						console.log(res);
+						// 如果成功返回数据
+						if(res.statusCode==200&&res.data.data.total!=0){
+							// 判断数据是否合并
+							if(this.rewardSearchInfo.length==0){
+								this.rewardSearchInfo=res.data.data.rewards
+							}else{
+								this.rewardSearchInfo=[...res.data.data.rewards,...this.rewardSearchInfo]
+							}
+							if(res.data.data.total<6){
+								this.status1='nomore'
+							}
+							this.has_history=true
+						}else if(res.statusCode==200&&res.data.data.total==0){
+							// 如果第一次请求就没数据 即数据长度为0
+							if(this.rewardSearchInfo.length==0){
+								this.has_history=false
+							}else{
+								// 再发送请求，但返回的数据为0
+								this.status1='nomore'
+							}	
+						}else{
+							this.has_history=false
+						}
+					},
+					fail:res=>{
+						this.has_history=false
+					}
+				})
+			},
+			// 下拉
+			upper(){
+				if(this.tagType=='悬赏'&&this.status1=='loading'){
+					this.rewardPageNum++;
+					this.searchReward({pageNum:this.rewardPageNum,keyword:this.value})
+				}
 			}
 		},
-		computed:{
-			historyList(){
-				// 将历史记录分块展示 仅当tagType和记录中的type相等时
-				return this.$store.state.village.historyList.filter(item=>item.type==this.tagType)
+	computed:{
+		historyList(){
+			// 将历史记录分块展示 仅当tagType和记录中的type相等时
+			return this.$store.state.village.historyList.filter(item=>item.type==this.tagType)
+		},
+	},
+	watch:{
+		value(){
+			if(this.value===''){
+				this.is_histroy=true
+				this.rewardSearchInfo=[]
 			}
 		}
 	}
+}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	page{
-		height: 100%;
+		height: 100vh;
 		display: flex;
 		background-color: #f5f5f5;
 	}
 	.search {
+		height: 100%;
 		display: flex;
 		flex-direction: column;
-		flex: 1;
 		.searchInput{
 			display: flex;
 			width: 100%;
@@ -111,7 +204,7 @@
 					height: 100%;
 				}
 			}
-			input{
+			.input{
 				border-top-right-radius: 20rpx;
 				border-bottom-right-radius: 20rpx;
 				font-size: 30rpx;
@@ -168,14 +261,21 @@
 				}
 			}
 		}
-	}
-
-	.no-data {
-		height: 200px;
-		line-height: 200px;
-		width: 100%;
-		text-align: center;
-		font-size: 12px;
-		color: #666;
+		.scroll{
+			flex:1;
+			.demo-scroll-block{
+				width: 100%;
+				height: 90vh;
+				display: flex;
+			}
+		}
+		.no-data {
+			height: 200px;
+			line-height: 200px;
+			width: 100%;
+			text-align: center;
+			font-size: 12px;
+			color: #666;
+		}
 	}
 </style>
