@@ -19,7 +19,6 @@
 			
 			<u-form-item label="赏金:" prop="userInfo.price">
 				<u--input placeholder="请输入金额" 
-				type="number"
 				border="none"
 				v-model="model1.userInfo.price"></u--input>
 			</u-form-item>
@@ -58,6 +57,8 @@
 		<view class="bottom">
 			<button @click="finish">发布</button>
 		</view>
+		<!-- 信息提示 -->
+		<u-modal :show="show"  :content='content' width="550rpx" @confirm=" show=false;"></u-modal>
 		
 	</view>
 </template>
@@ -66,6 +67,8 @@
 	export default {
 		data() {
 			return {
+				show:false,
+				content:'请确认信息全部填写完毕',
 				bgColor:"#d6d7b9",
 				showPlace:false,
 				labelStyle:{
@@ -99,14 +102,40 @@
 			};
 		},
 		 methods:{
+			 
 		      placeSelect(e){
 				  this.model1.userInfo.place=e.name
 			  },
 			  finish(){
-				  // uni.request({
-				  	
-				  // })
-				 uni.navigateBack()
+				  if(this.model1.userInfo.content!==''&&this.model1.userInfo.price!==''){
+					  uni.request({
+					  	url:'http://127.0.0.1:4523/m1/3091110-0-default/rewards',
+					  		method:'post',
+					  		data:{
+								rewardContent:this.model1.userInfo.content,
+								rewardAmount:this.model1.userInfo.price,
+								senderAddress:this.model1.userInfo.place,
+								deliveryAddress:this.model1.userInfo.getPlace,
+					  		},
+					  		header: {
+					  			'Authorization': '',
+					  		},
+					  		success:(res)=>{
+					  			console.log(res);
+					  			console.log("发送成功");
+								
+					  			uni.navigateBack();
+					  		},
+					  		fail:(res)=>{
+					  			console.log(res);
+					  			console.log("发送失败");
+					  		}
+					  })
+				  }else{
+					  this.show=true;
+				  }
+				  
+				 
 			  }
 		    }
 	}

@@ -61,21 +61,27 @@
 				></u-icon>
 			</u-form-item>
 		</u-form>
-		<u-action-sheet
+		<u-picker
+			closeOnClickOverlay
 			:show="showCollege"
-			:actions="college"
+			:columns="college"
+			@cancel="showCollege = false"
+			@confirm="collegeSelect"
 			title="请选择学院"		
 			@close="showCollege = false"
-			@select="collegeSelect"
+			
 				>
-		</u-action-sheet>
-		<u-action-sheet
+		</u-picker>
+		<u-picker
+			closeOnClickOverlay
 			:show="showMajor"
-			:actions="major"
+			:columns="major[majorIndex]"
+			@cancel="showMajor = false"
+			@confirm="majorSelect"
 			title="请选择专业"		
 			@close="showMajor = false"
-			@select="majorSelect">
-		</u-action-sheet>
+			>
+		</u-picker>
 		<u-action-sheet
 			:show="showGrade"
 			:actions="grade"
@@ -95,6 +101,10 @@
 		<view class="bottom">
 			<button @click="finish">发布</button>
 		</view>
+		
+		<!-- 信息提示 -->
+		<u-modal :show="show"  :content='content' width="550rpx" @confirm=" show=false;"></u-modal>
+		
 	</view>
 </template>
 
@@ -102,6 +112,8 @@
 	export default {
 		data() {
 			return {
+				show:false,
+				content:"请确认信息全部填写完毕",
 				bgColor:"#d6d7b9",
 				showCollege:false,
 				showMajor:false,
@@ -120,52 +132,295 @@
 						grade:'',
 					},
 				},
-				college:[{
-					name:"计算机技术与工程学院"
-				},
-				{
-					name:"机械工程学院"
-				}
-				],
-				major:[{
-					name:"计算机科学与技术"
-				},
-				{
-					name:"大数据"
-				}
-				],
-				grade:[{
-					name:"大一"
-				},
-				{
-					name:"大二"
-				},
-				{
-					name:"大三"
-				},
-				{
-					name:"大四"
-				}
-				],
+				college:[
+        ["非专业书籍",
+          "机械工程学院",
+          "材料科学与工程学院",
+          "化学化工学院",
+          "海运学院",
+          "管理学院",
+          "艺术学院",
+          "环境科学与安全工程学院",
+          "理学院",
+          "聋人工学院",
+          "华信软件学院",
+          "计算机科学与工程学院",
+          "社会发展学院",
+          "语言文化学院",
+          "集成电路科学与工程学院",
+          "电气工程与自动化学院",
+		  
+        ],
+      ],
+		major:
+		[[[]],
+			[["请先选择学院"]],
+        [
+          [
+            "机械工程及自动化",
+            "过程装备与控制工程",
+            "工业设计(造型设计)",
+            "机械电子工程",
+            "机械工程及自动化(卓越班)",
+            "机械工程",
+            "机械工程（卓越）",
+            "过程装备与控制工程（国际教育）",
+            "能源动力系统及自动化",
+            "热能与动力工程",
+            "能源与动力工程",
+            "新能源科学与工程",
+            "机械工程(国际教育)",
+            "机器人工程",
+            "智能制造工程",
+            "机械类",
+            "能源动力类",
+          ],
+        ],
+        [
+          [
+            "材料科学与工程",
+            "材料成型及控制工程",
+            "材料物理",
+            "材料化学",
+            "功能材料",
+            "材料成型及控制工程（卓越）",
+            "材料科学与工程（卓越）",
+            "新能源材料与器件",
+            "功能材料（明理卓越创新班）",
+            "材料科学类",
+            "材料类",
+          ],
+        ],
+        [
+          [
+            "应用化学(理)",
+            "化学工程与工艺",
+            "制药工程",
+            "生物工程",
+            "应用化学(工)",
+            "药学",
+            "应用化学（卓越）",
+            "化学工程与工艺（卓越）",
+            "化学工程与工艺（国际教育）",
+            "制药工程（国际教育）",
+            "化工与制药类",
+          ],
+        ],
+        [
+          [
+            "航海技术",
+            "轮机工程",
+            "轮机工程",
+            "船舶电子电气工程",
+            "航海技术（卓越）",
+            "轮机工程（卓越）",
+            "轮机工程（国际教育）",
+            "土木、水利与海洋工程",
+            "交通运输",
+          ],
+        ],
+        [
+          [
+            "信息管理与信息系统",
+            "工业工程",
+            "工商管理",
+            "工程管理",
+            "保险",
+            "工程造价",
+            "广告学",
+            "物流管理",
+            "财务管理",
+            "市场营销",
+            "保险学",
+            "工商管理（国际教育2+2）",
+            "财务管理（国际教育）",
+            "工业工程（国际教育）",
+            "物流管理（国际教育）",
+            "工商管理（国际教育）",
+            "工业工程（中外合作办学）",
+            "工商管理（中外合作办学）",
+            "工商管理（3+1）",
+            "大数据管理与应用",
+            "工商管理（高水平运动队）",
+            "管理科学与工程类",
+            "工商管理类",
+            "工业工程类",
+            "物流管理与工程类",
+            "工商管理(国际教育学院)",
+            "物流管理(国际教育学院)",
+            "财务管理(国际教育学院)",
+            "工商管理(国际教育学院)",
+            "工程管理(国际教育学院)",
+            "工商管理（辅修）",
+          ],
+        ],
+        [
+          [
+            "艺术设计",
+            "工业设计",
+            "装饰艺术",
+            "摄影",
+            "动画",
+            "动画(中加)",
+            "视觉传达设计",
+            "环境设计",
+            "产品设计",
+            "环境设计（国际教育）",
+            "视觉传达设计（国际教育）",
+          ],
+        ],
+        [
+          [
+            "环境工程",
+            "安全工程",
+            "环境科学",
+            "资源环境与城乡规划管理",
+            "自然地理与资源环境",
+            "资源循环科学与工程",
+            "环境工程（卓越）",
+            "安全工程（卓越）",
+            "应急技术与管理",
+            "环境与安全类",
+            "环境科学与工程类",
+            "安全科学与工程类",
+          ],
+        ],
+        [["应用物理学", "数学与应用数学"]],
+        [
+          [
+            "计算机科学与技术(聋工)",
+            "艺术设计",
+            "艺术设计",
+            "产品设计",
+            "服装与服饰设计",
+            "自动化(聋工全纳)",
+            "电子信息工程(聋工全纳)",
+            "工程造价(聋工全纳)",
+            "财务管理(聋工全纳)",
+            "网络工程（聋工）",
+            "环境设计（聋工全纳）",
+            "数据科学与大数据技术（聋工）",
+            "计算机类",
+            "设计学类",
+          ],
+        ],
+        [["软件工程", "计算机科学与技术(专科起点)", "软件工程(专科起点)"]],
+        [
+          [
+            "信息与计算科学",
+            "计算机科学与技术",
+            "信息安全",
+            "网络工程",
+            "物联网工程",
+            "计算机科学与技术（中加）",
+            "数据科学与大数据技术",
+            "计算机科学与技术（国际教育）",
+            "信息安全（国际教育）",
+          ],
+        ],
+        [["社会工作", "社会学", "老年学"]],
+        [
+          [
+            "英语",
+            "日语",
+            "汉语言文学",
+            "汉语言文学（国际教育）",
+            "预科",
+            "英语（国际教育）",
+          ],
+        ],
+        [
+          [
+            "通信工程",
+            "电子科学与技术",
+            "集成电路设计与集成系统",
+            "微电子科学与工程",
+            "光电信息科学与工程",
+            "电波传播与天线",
+            "电子信息工程",
+            "通信工程（国际教育）",
+            "电子信息工程（卓越）",
+            "集成电路设计与集成系统（卓越）",
+            "电子信息类",
+          ],
+        ],
+        [
+          [
+            "自动化",
+            "电气工程及其自动化",
+            "测控技术与仪器",
+            "人工智能",
+            "电气工程及其自动化（国际教育）",
+            "自动化卓越",
+            "电气工程及其自动化（卓越）",
+          ],
+        ],
+      ],
 				fileList1: [],
+				majorIndex:0,
+				images:[],
 			};
 		},
 		methods:{
 			collegeSelect(e){
-				this.model1.userInfo.college = e.name
+				console.log(e)
+				this.model1.userInfo.college = e.value[0];
+				this.majorIndex=e.indexs[0]+1;
+				
+				// this.model1.userInfo.major = "请选择专业";
+				if (this.model1.userInfo.college=== "非专业书籍") {
+				  this.model1.userInfo.major = "非专业书籍"
+				}
+				this.showCollege=false;
 			},
 			majorSelect(e){
-				this.model1.userInfo.major = e.name
+				console.log(e)
+				if (e.value[0] !== "请先选择学院") {
+				  this.model1.userInfo.major = e.value
+				}
+				this.showMajor=false;
 			},
 			gradeSelect(e){
 				this.model1.userInfo.grade= e.name
 			},
 			finish(){
-							  // uni.request({
-							  	
-							  // })
-							 uni.navigateBack()
+				
+					if(this.model1.userInfo.name!==''&&this.model1.userInfo.price!==''&&this.model1.userInfo.college!==''&&this.model1.userInfo.major!==''&&this.model1.userInfo.grade!==''&&this.fileList1.length!=0){
+						  uni.request({
+							url:'http://127.0.0.1:4523/m1/3091110-0-default/user/book',
+							method:'post',
+					  		data:{
+								name:this.model1.userInfo.name,
+								price:this.model1.userInfo.price,
+								college:this.model1.userInfo.college,
+								grade:this.model1.userInfo.grade,
+								major:this.model1.userInfo.major,
+								iamge:this.images,
+							},
+							header: {
+					  			Authorization: '',
+					  		},
+					 		success:(res)=>{
+						  		console.log(res);
+								console.log(this.fileList1);
+								console.log("发送成功");				
+								uni.navigateBack();
+					  		},
+							fail:(res)=>{
+								console.log(res);
+								console.log("发送失败");
+								
+					  		}
+						 })
+					 }else{
+						 this.show=true;
+					  }
+									
+									 
+			
 			},
+			
+			
 			// 删除图片
 			deletePic(event) {
 				this[`fileList${event.name}`].splice(event.index, 1)
@@ -197,15 +452,22 @@
 			uploadFilePromise(url) {
 				return new Promise((resolve, reject) => {
 					let a = uni.uploadFile({
-						url: 'http://192.168.2.21:7001/upload', // 仅为示例，非真实的接口地址
+						url: 'http://127.0.0.1:4523/m1/3091110-0-default/user/book/image', 
 						filePath: url,
 						name: 'file',
 						formData: {
 							user: 'test'
 						},
 						success: (res) => {
+							
 							setTimeout(() => {
-								resolve(res.data.data)
+								console.log(this.fileList1)
+								var index=this.fileList1.length
+								var i;
+								for( i=0;i<index;i++){
+									this.images[i]=this.fileList1[i].thumb;
+								}
+								resolve(res.data)
 							}, 1000)
 						}
 					});
