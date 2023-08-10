@@ -29,10 +29,10 @@ export default {
     };
   },
   methods: {
-    deleteIdle(index) {
+    async deleteIdle(index) {
       // console.log(index);
       const that = this;
-      wx.request({
+      await wx.request({
         method: "DELETE",
         url: "https://101.43.254.115:7115/item/" + that.item.id,
         header: {

@@ -25,16 +25,7 @@ export default {
   },
   data() {
     return {
-      rewardList: [
-        {
-          id: "1",
-          rewardContent: "啊啊啊！怎么会有人看错文档？我是呆逼！！",
-          rewardAmount: "250",
-          senderAddress: "一食堂",
-          deliveryAddress: "28号楼",
-          status: false,
-        },
-      ],
+      rewardList: [],
     };
   },
   methods: {
