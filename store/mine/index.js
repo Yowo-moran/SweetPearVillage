@@ -11,8 +11,9 @@ const state = {
         wechatNumber: "",
         openId: ''
     },
-    rewardId: '',
-    reward: {}
+    idleId: '',
+    reward: {},
+    book: {}
 }
 const mutations = {
     setLogined(state, value) {
@@ -26,7 +27,10 @@ const mutations = {
     },
     setReward(state, value) {
         state.reward = value;
-    }
+    },
+    setBook(state, value) {
+        state.book = value;
+    },
 }
 const actions = {
     async getToken({ commit }) {

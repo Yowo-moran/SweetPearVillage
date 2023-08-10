@@ -19,7 +19,7 @@
           border="none"
           ref="textarea"
           height="200rpx"
-		  style="font-size:30rpx;"
+          style="font-size: 30rpx"
         ></u--textarea>
       </u-form-item>
 
@@ -70,6 +70,7 @@ import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 export default {
   onLoad() {
     this.editRewardForm = this.reward;
+    console.log(this.editRewardForm);
   },
   data() {
     return {
@@ -118,7 +119,7 @@ export default {
   },
   methods: {
     placeSelect(e) {
-      this.model1.userInfo.place = e.name;
+      this.editRewardForm.senderAddress = e.name;
     },
     finish() {
       this.$refs.editRewardForm
@@ -135,7 +136,9 @@ export default {
       const that = this;
       await wx.request({
         method: "PUT",
-        url: "https://101.43.254.115:7115/users/me/rewards/" + that.editRewardForm.id,
+        url:
+          "https://101.43.254.115:7115/users/me/rewards/" +
+          that.editRewardForm.id,
         data: {
           rewardContent: that.editRewardForm.rewardContent,
           rewardAmount: that.editRewardForm.rewardAmount,
