@@ -96,7 +96,6 @@
 				margin:0 20rpx;
 				margin-right: 80rpx;
 				font-size: 30rpx;
-				background-color: pink;
 			}
 			.price{
 				display: inline-block;

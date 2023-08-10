@@ -70,17 +70,21 @@
 				 show:false,
 				 tags:['北区快递','南区快递','邮政快递','一食堂','二食堂','南区超市','南区小吃街',
 				 '北区超市','北区水果店','南区水果店','南区打印店','北区打印店','蜜雪冰城'],
+				 // 悬赏页关键字
 				 rewardkeyword:[],
 				 currentTags:[],
+				 // 书籍页关键字
+				 collegekeyword:{},
 				collegeShow: false,
-				collegeValue:'请选择学院',
+				collegeValue:'',
 				majorityShow: false,
 				majorIndex: 0,
-				majorityValue:'请选择专业',
+				majorityValue:'',
 				gradeShow: false,
-				gradeValue:'请选择年级',
+				gradeValue:'',
 				colleges: [
 				  [
+					"默认",
 				    "机械工程学院",
 				    "材料科学与工程学院",
 				    "自动化学院",
@@ -103,6 +107,7 @@
 				],
 				majors: [
 					[["请先选择学院"]],
+					[["默认"]],
 					[
 					  [
 						"机械工程及自动化",
@@ -389,9 +394,8 @@
 			},
 			// 选择框选择之后
 			collegeSelect(e){
-				console.log(e.value);
 				this.collegeValue=e.value[0]
-				this.majorIndex = e.indexs[0];
+				this.majorIndex = e.indexs[0]+1;
 				this.collegeShow=false
 			},
 			majorSelect(e){
@@ -405,12 +409,15 @@
 			},
 			// 点击确定
 			submit(){
+				// 将数组深拷贝过去
+				this.$emit('rewardKeyword',JSON.parse(JSON.stringify(this.rewardkeyword)))
 				// 将选中的标签传给父组件
-				this.$emit('rewardKeyword',this.rewardkeyword)
 				this.show=false
 			},
 			bookSubmit(){
-				this.$emit('leaveKeyword',{college:this.collegeValue,major:this.majorityValue,grade:this.gradeValue})
+				const{collegeValue,majorityValue,gradeValue}=this
+				this.collegekeyword={collegeValue,majorityValue,gradeValue}
+				this.$emit('bookKeyword',JSON.parse(JSON.stringify(this.collegekeyword)))
 				this.show=false
 			}
 		},

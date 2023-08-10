@@ -47,7 +47,7 @@
 				type:Array,
 				default:[]
 			},
-			leaveKeywords:{
+			bookkeywords:{
 				type:Object,
 				default:{}
 			}
@@ -56,7 +56,11 @@
 			return {
 				rewardpage:1,
 				bookpage:1,
-				leavepage:1
+				leavepage:1,
+				// 书籍页关键字
+				college:'',
+				major:'',
+				grade:''
 			}
 		},
 		mounted(){
@@ -72,11 +76,12 @@
 				if(this.tagName=='悬赏'&&this.rewardstatus=='loading'){
 					this.rewardpage++;
 					console.log(this.rewardpage);
-					this.$store.dispatch('village/getRewardInfo',{pageNum:this.rewardpage,pageSize:6})
+					this.$store.dispatch('village/getRewardInfo',{pageNum:this.rewardpage,pageSize:6,types:this.rewardKeywords})
 				}else if(this.tagName=='书籍'&&this.bookstatus=='loading'){
 					this.bookpage++
-					console.log(this.bookpage);
-					this.$store.dispatch('village/getBookInfo',{page:this.bookpage,pageSize:6})
+					const {college,major,grade}=this
+					console.log(college,major,grade);
+					this.$store.dispatch('village/getBookInfo',{page:this.bookpage,pageSize:6,college,major,grade})
 				}else if(this.tagName=='闲置'&&this.leavestatus=='loading'){
 					this.leavepage++
 					console.log(this.leavepage);
@@ -125,9 +130,9 @@
 				}
 				this.$store.dispatch('village/getRewardInfo',{types:this.rewardKeywords,isSearch:true})
 			},
-			leaveKeywords(){
-				const {college,major,grade}=this.leaveKeywords
-				this.$store.dispatch('village/getBookInfo',{college,major,grade,isSearch:true})
+			bookkeywords(){
+				const {college,major,grade}=this.bookkeywords
+				this.$store.dispatch('village/getBookInfo',{college:this.bookkeywords.collegeValue,major:this.bookkeywords.gradeValue,grade:this.bookkeywords.majorityValue,isSearch:true})
 			}
 		}
 }

@@ -10,7 +10,7 @@ const state={
 	// 是否没有数据
 	rewardstatus:'loading',
 	bookstatus:'loading',
-	leavestatus:'loading'
+	leavestatus:'loading',
 }
 const mutations={
 	// 设置历史记录
@@ -36,7 +36,7 @@ const mutations={
 	},
 	// 书籍主页面展示
 	GETBOOKINFO(state,info){
-		console.log(info);
+		// console.log(info);
 		if(info.length<6){
 			state.bookstatus='nomore'
 		}
@@ -50,7 +50,7 @@ const mutations={
 	},
 	// 闲置主页面展示
 	GETLEAVEINFO(state,info){
-		console.log(info);
+		// console.log(info);
 		if(info.length<6){
 			state.leavestatus='nomore'
 		}
@@ -60,7 +60,7 @@ const mutations={
 			const infos=[...state.leaveInfo,...info]
 			state.leaveInfo=infos
 		}
-	}
+	},
 }
 const actions={
 	 setHistoryList({commit,state},history){
@@ -77,7 +77,7 @@ const actions={
 		 if(isSearch){
 			 state.rewardInfo=[]
 		 }
-		 console.log(pageSize,pageNum,sortBy,types,'ah');
+		 // console.log(types,'ah');
 		 uni.request({
 		 	method:'GET',
 			url:'https://101.43.254.115:7115/rewards',
@@ -92,6 +92,7 @@ const actions={
 				'Authorization':uni.getStorageSync('token')
 			},
 			success:res=>{
+				console.log(res);
 				if(res.statusCode==200&&res.data.data.total!=0){
 					commit('GETREWARDINFO',res.data.data.rewards)
 					state.rewardstatus='loading'
@@ -134,10 +135,11 @@ const actions={
 	 // 书籍请求
 	 getBookInfo({commit,state},options={}){
 		 const {college='',major='',grade='',page=1,pageSize=6,isSearch=false}=options
+		 console.log(college,major,grade,'参数');
 		 if(isSearch){
 		 	 state.bookInfo=[]
 		 }
-		 console.log('page',page,'pageSize',pageSize,college,major,grade);
+		 // console.log('page',page,'pageSize',pageSize,college,major,grade);
 		 uni.request({
 		 	method:'GET',
 		 	url:'https://101.43.254.115:7115/user/book/page',
@@ -153,20 +155,20 @@ const actions={
 				'Authorization':uni.getStorageSync('token')
 			},
 			success:res=>{
-
+			// console.log(res);
 				if(res.statusCode==200&&res.data.data.total!=0){
+					state.bookstatus='loading'
 					commit('GETBOOKINFO',res.data.data.records)
-					state.rewardstatus='loading'
 				}else{
-					state.rewardstatus='nomore'
+					state.bookstatus='nomore'
 				}
 			},
 			fail:res=>{
 				console.log(res);
-				state.rewardstatus='nomore'
+				state.bookstatus='nomore'
 			}
 		 })
-	 }
+	 },
 }
 const getters={}
 export default{

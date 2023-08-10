@@ -4,15 +4,15 @@
 		<view class="header">
 			<!-- 自定义导航栏 -->
 			<navbar @changeTagNum="changeTagNum" :tabIndex="tabIndex" u></navbar>
-			<searchbox :tagName="tagName" @rewardKeyword="rewardKeyword" @leaveKeyword="leaveKeyword"></searchbox>
+			<searchbox :tagName="tagName" @rewardKeyword="rewardKeyword" @bookKeyword="bookKeyword"></searchbox>
 		</view>
 		<!-- 将内容撑开 -->
 		<view style="height: 160rpx;"></view>
 		 <!-- 滑动区 -->
 
-		<listScroll @skipChange="skipChange" :activeIndex="activeIndex" :tagName="tagName" :rewardKeywords="rewardKeywords" :leaveKeywords="leaveKeywords"></listScroll>
+		<listScroll @skipChange="skipChange" :activeIndex="activeIndex" :tagName="tagName" :rewardKeywords="rewardKeywords" :bookkeywords="bookkeywords" style="flex-grow: 1;"></listScroll>
 
-		<listScroll @skipChange="skipChange" :activeIndex="activeIndex" :tagName="tagName" style="flex-grow: 1;"></listScroll>
+<!-- 		<listScroll @skipChange="skipChange" :activeIndex="activeIndex" :tagName="tagName" ></listScroll> -->
 	</view>
 </template>
 
@@ -31,7 +31,7 @@
 				// 当前标签名称
 				tagName:'悬赏',
 				rewardKeywords:[],
-				leaveKeywords:{}
+				bookkeywords:{}
 			};
 		},
 		methods:{
@@ -47,8 +47,8 @@
 			rewardKeyword(item){
 				this.rewardKeywords=item
 			},
-			leaveKeyword(obj){
-				this.leaveKeywords=obj
+			bookKeyword(obj){
+				this.bookkeywords=obj
 			}
 		}
 	}
