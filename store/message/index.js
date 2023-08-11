@@ -187,9 +187,9 @@ const mutations = {
 	// 处理ws连接发过来的数据
 	GET_NEWCHAT(state, res) {
 		console.log(res);
+		state.newChat = res
 		if (!res.inChatView) {
 			console.log('当前不在聊天页')
-			state.newChat = res
 			const index = state.chatList.findIndex(item => {
 				return item.receiverOpenId === res.senderOpenId
 			})
@@ -239,7 +239,23 @@ const mutations = {
 	ADD_OLDCHAT(state, { data, that, time }) {
 		console.log(data, that, time);
 		state.chatHistoryList.unshift(...data);
-		that.scrollIntoIndex = time
+		that.$nextTick(()=>{
+			that.query = uni.createSelectorQuery().in(that);
+			that.query.selectAll(".message")
+			  .boundingClientRect((data) => {
+			    const elements = Array.from(data);
+			    console.log(elements);
+			    let index = state.chatHistoryList.findLastIndex(item => {
+					console.log('finding',time)
+					return item.sendTime === time
+				})
+				console.log(index)
+				that.scrollTop = elements[index].top - elements[0].top
+				console.log( that.scrollTop)
+			  })
+			  .exec();
+			  that.query = null;
+		})
 	}
 }
 

@@ -1,12 +1,14 @@
 <script>
-import { mapActions, mapMutations } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 export default {
   onLaunch: function () {
     console.log("App Launch");
   },
   onShow: function () {
     console.log("App Show");
-    this.connectWebSocket();
+    if (wx.getStorageSync("token")) {
+      this.connectWebSocket();
+    }
   },
   onHide: function () {
     console.log("App Hide");
@@ -14,6 +16,16 @@ export default {
   },
   methods: {
     ...mapActions("message", ["connectWebSocket", "closeWeb"]),
+  },
+  computed: {
+    ...mapState("mine", ["logined"]),
+  },
+  watch: {
+    logined: {
+      handler() {
+        this.connectWebSocket();
+      },
+    },
   },
 };
 </script>
