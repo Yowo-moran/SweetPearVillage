@@ -1,6 +1,16 @@
 <template>
   <view class="allIdle">
-    <Idle :list="idleList" />
+    <u-navbar leftText="我的闲置" :autoBack="true" placeholder> </u-navbar>
+    <Idle
+      v-for="(item, index) in idleList"
+      :key="index"
+      :item="item"
+      :childIndex="index"
+      :deleteIdle="deleteIdle"
+      :editIdle="editIdle"
+      :soldIdle="soldIdle"
+      @getIdleList="getIdleList"
+    />
   </view>
 </template>
 
@@ -10,27 +20,76 @@ export default {
   components: {
     Idle,
   },
+  onShow() {
+    this.getIdleList();
+  },
   data() {
     return {
-      idleList: [
-        {
-          img: "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          profilePhoto:
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          article: "啊啊啊！怎么会有人看错文档？我是呆逼！！",
-          price: "250",
-          name: "moran",
-        },
-        {
-          img: "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          profilePhoto:
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          article: "啊啊啊！怎么会有人看错文档？我是呆逼！！",
-          price: "250",
-          name: "moran",
-        },
-      ],
+      idleList: [],
     };
+  },
+  methods: {
+    async deleteIdle(index) {
+      // console.log(index);
+      const that = this;
+      await wx.request({
+        method: "DELETE",
+        url: "https://101.43.254.115:7115/item/" + that.item.id,
+        header: {
+          Authorization: wx.getStorageSync("token"),
+        },
+        success(res) {
+          if (res.data.code !== "00000") {
+            console.log(res.data.message);
+            return;
+          }
+          that.$emit("getIdleList");
+          // console.log(res);
+        },
+      });
+    },
+    editIdle(index) {
+      // console.log(index);
+      uni.navigateTo({
+        url: "/pages/mine/editIdle",
+      });
+    },
+    async soldIdle(index) {
+      // console.log(index);
+      const that = this;
+      await wx.request({
+        method: "PUT",
+        url: "https://101.43.254.115:7115/item/sold?itemId=" + that.item.id,
+        header: {
+          Authorization: wx.getStorageSync("token"),
+        },
+        success(res) {
+          if (res.data.code !== "00000") {
+            console.log(res.data.message);
+            return;
+          }
+          that.$emit("getIdleList");
+          // console.log(res);
+        },
+      });
+    },
+    async getIdleList() {
+      const that = this;
+      await wx.request({
+        url: "https://101.43.254.115:7115/item/my",
+        header: {
+          Authorization: wx.getStorageSync("token"),
+        },
+        success(res) {
+          if (res.data.code !== "00000") {
+            console.log(res.data.message);
+            return;
+          }
+          console.log(res);
+          that.idleList = res.data.data.items;
+        },
+      });
+    },
   },
 };
 </script>

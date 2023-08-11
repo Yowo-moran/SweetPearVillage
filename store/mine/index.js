@@ -9,7 +9,11 @@ const state = {
         college: "请选择学院",
         major: "请选择专业",
         wechatNumber: "",
-    }
+        openId: ''
+    },
+    idleId: '',
+    reward: {},
+    book: {}
 }
 const mutations = {
     setLogined(state, value) {
@@ -17,10 +21,19 @@ const mutations = {
     },
     setPersonalDetails(state, value) {
         state.personalDetails = Object.assign(state.personalDetails, value);
-    }
+    },
+    setIdle(state, value) {
+        state.idleId = value;
+    },
+    setReward(state, value) {
+        state.reward = value;
+    },
+    setBook(state, value) {
+        state.book = value;
+    },
 }
 const actions = {
-    async login({ commit }) {
+    async getToken({ commit }) {
         await wx.login({
             success(res) {
                 if (res.code) {
@@ -36,9 +49,7 @@ const actions = {
                                 key: "token",
                                 data: res.data.data.token,
                                 success: function () {
-                                    console.log("success");
                                     commit('setLogined', true);
-                                    // that.setLogined(true);
                                 },
                             });
                             const {
@@ -48,8 +59,8 @@ const actions = {
                                 sex,
                                 college,
                                 major,
-                                phoneNumber,
                                 wechatNumber,
+                                openId
                             } = res.data.data;
                             const details = {
                                 id,
@@ -58,9 +69,13 @@ const actions = {
                                 sex,
                                 college,
                                 major,
-                                phoneNumber,
                                 wechatNumber,
+                                openId
                             };
+                            uni.setStorage({
+                                key: "details",
+                                data: details,
+                            });
                             commit('setPersonalDetails', details)
                             // that.setPersonalDetails(details);
                         },
@@ -73,16 +88,6 @@ const actions = {
     },
 }
 const getters = {
-    getSex(state) {
-        if (state.personalDetails.sex === 0) {
-            return '男';
-        } else if (state.personalDetails.sex === 1) {
-            return '女';
-        }
-        else {
-            return '请选择性别';
-        }
-    }
 }
 export default {
     namespaced: true,

@@ -34,6 +34,10 @@
 		<view class="bottom">
 			<button @click="finish">发布</button>
 		</view>
+		
+		<!-- 信息提示 -->
+		<u-modal :show="show"  :content="content" width="550rpx" @confirm=" show=false;"></u-modal>
+		
 	</view>
 </template>
 
@@ -41,6 +45,8 @@
 	export default {
 		data() {
 			return {
+				show:false,
+				content:"请确认信息全部填写完毕",
 				model1:{
 					user:{
 						describe:"",
@@ -57,14 +63,38 @@
 				},
 				
 				capture:['album', 'camera'],
+				images:[],
 			};
 		},
 		methods:{
 			finish(){
-				  // uni.request({
-		  	
-				  // })
-					uni.navigateBack()
+				  if(this.model1.user.describe!==''&&this.model1.user.price!==''&&this.fileList1.length!=0){
+				  	  uni.request({
+				  		url:'http://127.0.0.1:4523/m2/3091110-0-default/100490088',
+				  		method:'post',
+				    		data:{
+				  			description:this.model1.user.describe,
+				  			price:this.model1.user.price,
+				  			image:this.images,
+				  		},
+				  		header: {
+				    			Authorization: '',
+				    		},
+				   		success:(res)=>{
+				  	  		console.log(res);
+				  			console.log("发送成功");				
+				  			uni.navigateBack();
+				    		},
+				  		fail:(res)=>{
+				  			console.log(res);
+				  			console.log("发送失败");
+				    		}
+				  	 })
+				   }else{
+				  	 this.show=true;
+				    }
+				  				
+				  				 
 			},
 			
 			// 删除图片
@@ -98,7 +128,7 @@
 			uploadFilePromise(url) {
 				return new Promise((resolve, reject) => {
 					let a = uni.uploadFile({
-						url:"", 
+						url:"http://127.0.0.1:4523/m1/3091110-0-default/item/image", 
 						filePath: url,
 						name: 'file',
 						formData: {
@@ -106,7 +136,12 @@
 						},
 						success: (res) => {
 							setTimeout(() => {
-								resolve(res.data.data)
+								var index=this.fileList1.length
+								var i;
+								for( i=0;i<index;i++){
+									this.images[i]=this.fileList1[i].thumb;
+								}
+								resolve(res.data)
 							}, 1000)
 						}
 					});

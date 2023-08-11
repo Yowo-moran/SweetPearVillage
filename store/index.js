@@ -4,11 +4,13 @@ import Vuex from 'vuex'
 import village from './village'
 import mine from './mine/index'
 import wall from './wall/index'
+import message from './message/index'
 Vue.use(Vuex)
 export default new Vuex.Store({
     modules: {
         mine,
         village,
+        message,
         wall,
     }
 })
