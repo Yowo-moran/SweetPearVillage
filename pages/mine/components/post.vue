@@ -2,36 +2,43 @@
   <view>
     <view class="post-item" v-for="(item, index) in list" :key="index">
       <u-image
-        :src="item.profilePhoto"
+        :src="item.avatar"
         :lazy-load="true"
         radius="10rpx"
         width="90rpx"
         height="90rpx"
       ></u-image>
       <view class="content">
-        <view class="name">{{ item.name }}</view>
+        <view class="name">{{ item.nickName }}</view>
         <view>{{ item.content }}</view>
-        <view class="photos">
+        <view
+          class="photos"
+          :style="
+            item.images.length !== 4
+              ? ''
+              : 'width:380rpx;grid-template-columns: 1fr 1fr;'
+          "
+        >
           <u-image
             v-for="(photo, it) in item.images"
             :key="it"
-            :src="photo"
+            :src="photo.image"
             :lazy-load="true"
             radius="0"
-            width="200rpx"
-            height="200rpx"
+            width="180rpx"
+            height="180rpx"
           ></u-image>
         </view>
         <view class="content-bottom">
-          <view class="time">{{ item.time }}</view>
+          <view class="time">{{ Time(item.createTime) }}</view>
           <view style="width: 340rpx; display: flex">
             <view class="likes">
-              <button>删除</button>
-              <text style="margin-right: 20rpx">{{ item.lisks }}</text>
+              <button @click="deletePost(item.id)">删除</button>
+              <text style="margin-right: 20rpx">{{ item.praiseCnt }}</text>
               <u-icon name="thumb-up" color="#b9ba88" size="50rpx"></u-icon>
             </view>
             <view class="comments" style="margin-left: 20rpx">
-              <text style="margin-right: 20rpx">{{ item.comments }}</text>
+              <text style="margin-right: 20rpx">{{ item.commentCnt }}</text>
               <u-icon name="chat" color="#b9ba88" size="50rpx"></u-icon>
             </view>
           </view>
@@ -42,6 +49,7 @@
 </template>
 
 <script>
+import moment from "moment";
 export default {
   name: "MyPost",
   props: {
@@ -52,6 +60,30 @@ export default {
   },
   data() {
     return {};
+  },
+  methods: {
+    Time(e) {
+      //处理时间
+      return moment(parseInt(e)).format("MM-DD HH:mm");
+    },
+    async deletePost(id) {
+      const that = this;
+      await wx.request({
+        method: "DELETE",
+        url: "https://101.43.254.115:7115/post/" + id,
+        header: {
+          Authorization: wx.getStorageSync("token"),
+        },
+        success(res) {
+          if (res.data.code !== "00000") {
+            console.log(res.data.message);
+            return;
+          }
+          console.log(res);
+          that.$emit("getPostList");
+        },
+      });
+    },
   },
 };
 </script>
@@ -77,6 +109,11 @@ export default {
     }
     .photos {
       margin-top: 20rpx;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      // grid-template-columns: 1fr;
+      grid-row-gap: 10rpx;
+      grid-column-gap: 5rpx;
     }
     .content-bottom {
       width: 100%;

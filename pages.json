@@ -208,7 +208,18 @@
 				"navigationBarTextStyle": "black"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/mine/editBook",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "black"
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

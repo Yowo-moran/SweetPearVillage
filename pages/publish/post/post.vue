@@ -27,6 +27,9 @@
 		<view class="bottom">
 			<button @click="finish">发布</button>
 		</view>
+		
+		<u-modal :show="show" :content='message' width="550rpx" @confirm=" show=false;"></u-modal>
+		
 	</view>
 </template>
 
@@ -34,6 +37,8 @@
 	export default {
 		data() {
 			return {
+				show:false,
+				message:'请确认信息全部填写完毕',
 				model1:{
 					user:{
 						content:"",
@@ -43,15 +48,44 @@
 				bgColor:"#d6d7b9",
 				content:'',
 				fileList1: [],
+				images:[],
+				imagesObj:{
+					pos:"",
+					image:"",
+				}
 			};
 		},
 		methods:{
 			finish(){
-							  // uni.request({
-							  	
-							  // })
-							 uni.navigateBack()
+					if(this.model1.user.content!==''||this.fileList1.length!=0){
+						
+						  uni.request({
+						  	url:'http://127.0.0.1:4523/m1/3091110-0-default/post/',
+						  		method:'post',
+						  		data:{
+									content:this.model1.user.content,
+									images:this.images,
+						  		},
+						  		header: {
+						  			Authorization: '',
+						  		},
+						  		success:(res)=>{
+						  			console.log(res);
+						  			console.log("发送成功");
+									
+						  			uni.navigateBack();
+						  		},
+						  		fail:(res)=>{
+						  			console.log(res);
+						  			console.log("发送失败");
+						  		}
+						  })
+				}else{
+						this.show=true;
+				}
 			},
+			
+			
 			// 删除图片
 			deletePic(event) {
 				this[`fileList${event.name}`].splice(event.index, 1)
@@ -83,7 +117,7 @@
 			uploadFilePromise(url) {
 				return new Promise((resolve, reject) => {
 					let a = uni.uploadFile({
-						url: 'http://192.168.2.21:7001/upload', // 仅为示例，非真实的接口地址
+						url: 'http://127.0.0.1:4523/m1/3091110-0-default/post/image', 
 						filePath: url,
 						name: 'file',
 						formData: {
@@ -91,7 +125,18 @@
 						},
 						success: (res) => {
 							setTimeout(() => {
-								resolve(res.data.data)
+								console.log(this.fileList1)
+							var index=this.fileList1.length
+							var i;
+							for( i=0;i<index;i++){
+								this.imagesObj.pos=i+1;
+								
+								this.imagesObj.image=this.fileList1[i].thumb;
+								
+								this.images[i]=this.imagesObj;
+								console.log(images)
+								}
+								resolve(res.data)
 							}, 1000)
 						}
 					});

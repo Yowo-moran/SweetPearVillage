@@ -1,20 +1,29 @@
 <template>
 	<!-- 横向卡片 悬赏-->
 	<view class=listItem  @click="jump"> 
-		<view class="listItemContent">猪猪不爱吃猪猪，猪猪不爱吃猪猪，猪猪不爱吃猪猪猪猪不爱吃猪猪猪猪不爱吃猪猪猪猪不爱吃猪猪，猪猪不爱吃猪猪，猪猪不爱吃猪猪</view>
+		<view class="listItemContent">
+			<view>{{rewardInfo.deliveryAddress}}代取，送至{{rewardInfo.senderAddress}}</view>
+			<view>{{rewardInfo.rewardContent}}</view>
+		</view>
 		<view class="userInfo">
 			<!-- 用户头像 -->
 			<image class="userAvatar" src="../../../static/bochi.png"></image>
 			<!-- 用户名称 -->
-			<view class="userName">猪猪不爱吃珠珠猪猪不爱吃</view>
+			<view class="userName">猪猪吃珠珠</view>
 			<!-- 价格 -->
-			<view class="price">￥ 20</view>
+			<view class="price">￥ {{rewardInfo.rewardAmount}}</view>
 		</view>
 	</view>
 </template>
 
 <script>
 	export default {
+		props:{
+			rewardInfo:{
+				type:Object,
+				default:{}
+			}
+		},
 		data() {
 			return {
 			}
@@ -69,7 +78,7 @@
         }
         .userName{
             margin-left: 20rpx;
-            width: 70%;
+            width: 60%;
             overflow: hidden;
             /* 溢出用省略号隐藏 */
             text-overflow: ellipsis;
@@ -79,7 +88,8 @@
             -webkit-box-orient: vertical;
         }
         .price{
-            margin-right: 10rpx;
+			// width: 250rpx;
+            // margin-right: 10rpx;
 			font-size: 40rpx;
 			color: #b38f8f;
         }

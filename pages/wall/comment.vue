@@ -3,18 +3,27 @@
     <view class="main">
         <!-- 昵称 -->
         <view class="userName">
-            阿为喵：
+            {{ info.commentUser }}:
         </view>
         <!-- 评论内容 -->
         <view class="content">
-            呜呜呜呜呜，我的外卖，刚接到电话就下楼了，结果还是晚到了一步，我的蛋糕啊~~！
+            {{ info.comment }}
         </view>
     </view>
 </template>
 
 <script>
 export default {
-
+    props:["info"],
+    data() {
+        return {
+            
+        }
+    },
+    onLoad(){
+        console.log("aaa");
+        console.log(this.info);
+    }
 }
 </script>
 

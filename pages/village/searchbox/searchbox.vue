@@ -25,7 +25,7 @@
 					<view class="options">专业<view class="selector" @click="majorityShow=true">{{majorityValue}}</view></view>
 					<view class="options">年级<view class="selector" @click="gradeShow=true">{{gradeValue}}</view></view>
 				</view>
-				<button @click="show=false">确定</button>
+				<button @click="bookSubmit">确定</button>
 			</view>
 		</u-popup>
 		</view>
@@ -70,17 +70,21 @@
 				 show:false,
 				 tags:['北区快递','南区快递','邮政快递','一食堂','二食堂','南区超市','南区小吃街',
 				 '北区超市','北区水果店','南区水果店','南区打印店','北区打印店','蜜雪冰城'],
-				 keyword:[],
+				 // 悬赏页关键字
+				 rewardkeyword:[],
 				 currentTags:[],
+				 // 书籍页关键字
+				 collegekeyword:{},
 				collegeShow: false,
-				collegeValue:'请选择学院',
+				collegeValue:'',
 				majorityShow: false,
-				  majorIndex: 0,
-				majorityValue:'请选择学院',
+				majorIndex: 0,
+				majorityValue:'',
 				gradeShow: false,
-				gradeValue:'请选择年级',
+				gradeValue:'',
 				colleges: [
 				  [
+					"默认",
 				    "机械工程学院",
 				    "材料科学与工程学院",
 				    "自动化学院",
@@ -103,6 +107,7 @@
 				],
 				majors: [
 					[["请先选择学院"]],
+					[["默认"]],
 					[
 					  [
 						"机械工程及自动化",
@@ -373,14 +378,14 @@
 		},
 		methods: {
 			chooseTag(index,item){
-				console.log(index);
 				// 判断选中还是取消
 				const oldIndex=this.currentTags.indexOf(index)
 				if(oldIndex==-1){
 					this.currentTags.push(index)
-					this.keyword.push(item)
+					this.rewardkeyword.push(item)
 				}else{
 					this.currentTags.splice(oldIndex,1)
+					this.rewardkeyword.splice(oldIndex,1)
 				}
 			},
 			//关闭遮罩层
@@ -389,9 +394,8 @@
 			},
 			// 选择框选择之后
 			collegeSelect(e){
-				console.log(e.value);
 				this.collegeValue=e.value[0]
-				this.majorIndex = e.indexs[0];
+				this.majorIndex = e.indexs[0]+1;
 				this.collegeShow=false
 			},
 			majorSelect(e){
@@ -405,13 +409,28 @@
 			},
 			// 点击确定
 			submit(){
-				// console.log(this.keyword);
-				this.$store.dispatch('village/setKetWordTag',this.keyword)
+				// 将数组深拷贝过去
+				this.$emit('rewardKeyword',JSON.parse(JSON.stringify(this.rewardkeyword)))
+				// 将选中的标签传给父组件
+				this.show=false
+			},
+			bookSubmit(){
+				const{collegeValue,majorityValue,gradeValue}=this
+				this.collegekeyword={collegeValue,majorityValue,gradeValue}
+				this.$emit('bookKeyword',JSON.parse(JSON.stringify(this.collegekeyword)))
 				this.show=false
 			}
 		},
-	
-	}
+		watch:{
+			tagName(){
+				this.currentTags=[]
+				this.rewardkeyword=[]
+				this.collegeValue=''
+				this.majorityValue=''
+				this.gradeValue=''
+			}
+		}
+}
 </script>
 
 <style lang="scss" scoped>

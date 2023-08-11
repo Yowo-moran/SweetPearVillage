@@ -6,12 +6,22 @@
 
 <script>
 import topicList from './topicList.vue';
+import { mapActions } from "vuex";
 export default {
 	components:{ topicList },
 	data() {
 		return {
 			
 		}
+	},
+	computed:{
+
+	},
+	methods:{
+		...mapActions("wall" , ['getList']),
+	},
+	onLoad(){
+		this.getList();
 	},
 }
 </script>
