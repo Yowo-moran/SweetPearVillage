@@ -9,14 +9,16 @@
         <!-- 右侧（昵称+文本内容+点赞评论） -->
         <view class="right">
             <view class="userName">
-                <span>Awayer</span>
+                <span>{{ selfInfo.nickName }}</span>
             </view>
             <!-- 文本和图片 -->
             <view class="content">
                 <view class="text">
-                    家人们，谁懂啊？怎么总有虾头男偷外卖，我真的是一个大无语，这种人能不能似一似啊!
+                    {{ selfInfo.content }}
                 </view>
                 <view class="pics">
+                    <!-- <view class="pic" wx:for="{{ imageArr }}" wx:key="index"> -->
+                        <!-- <image src="{{ item.image }}"></image> -->
                     <view class="pic"><img src="../../static/bochi.png" ></view>
                     <view class="pic"><img src="../../static/bochi.png" ></view>
                     <view class="pic"><img src="../../static/bochi.png" ></view>
@@ -25,17 +27,17 @@
             </view>
             <!-- 时间、点赞、评论 -->
             <view class="info">
-                <view class="time">今天 11:54</view>
+                <view class="time">{{ selfInfo.updateTime }}</view>
                 <view class="star">
-                    <view class="starNum">{{ starNum }}</view>
+                    <view class="starNum">{{ selfInfo.praiseCnt }}</view>
                     <view class="icon1">
-                        <img src="../../static/点赞.png" @click="addStar()">
+                        <img :src="praiseSrc" @click="like(selfInfo.id)">
                     </view>
                 </view>
                 <view class="comment">
-                    <view class="commentNum">{{ commentNum }}</view>
+                    <view class="commentNum">{{ selfInfo.commentCnt }}</view>
                     <view class="icon2">
-                        <img src="../../static/评论.png" @click="jump()">
+                        <img src="../../static/评论.png" @click="jump(selfInfo.id)">
                     </view>
                 </view>
             </view>
@@ -44,24 +46,85 @@
 </template>
 
 <script>
-
 export default {
-
+    props:["info" , "index"],
     data() {
         return {
-            starNum:233,
-            commentNum:233
+            likeStatus:false,
         }
     },
     methods:{
-        addStar() {
-            this.starNum++;
-        },
-        jump(){
+        jump(id){
             uni.navigateTo({
-                url:"topicDetail"
+                url:`topicDetail?id=${id}`
             })
+        },
+        async checkLikeStatus(pid){
+            const url = `https://101.43.254.115:7115/post/like/${pid}`;
+            const that = this;
+            await wx.request({
+                url: url,
+                method: "GET",
+                header: {
+                    Authorization: wx.getStorageSync('token')
+                },
+                success(res) {
+                    console.log(res.data);
+                    if(res.data.message == "true"){
+                        that.likeStatus = true;
+                    } else {
+                        that.likeStatus = false;
+                    }
+                    
+                }
+            });
+        },
+        async like(pid){
+            const url = `https://101.43.254.115:7115/post/like/${pid}`;
+            const that = this;
+            await wx.request({
+                url: url,
+                method: "POST",
+                header: {
+                    Authorization: wx.getStorageSync('token')
+                },
+                success(res) {
+                    console.log(res.data.message);
+                    if (res.data.message == "点赞成功") {
+                        that.selfInfo.praiseCnt += 1;
+                    } else {
+                        that.selfInfo.praiseCnt -= 1;
+                    }
+                    console.log("index:" , that.index);
+                    // console.log(that.$store.state.wall.topicList[that.index]);
+                    that.$store.state.wall.topicList[that.index] = that.info
+                    that.checkLikeStatus(pid);
+                }
+            });
         }
+    },
+    computed:{
+        selfInfo(){
+            let val = this.info
+            return val
+        },
+        imageArr(){
+            let val = this.info.images;
+            return val
+        },
+        praiseSrc(){
+            if(this.likeStatus){
+                return "../../static/已点赞.png"
+            } else {
+                return "../../static/未点赞.png"
+            }
+        }
+    },  
+    watch:{
+
+    },
+    onLoad(){
+        console.log(imageArr);
     }
 }
 </script>
@@ -160,7 +223,7 @@ export default {
                 align-items: center;
                 margin-bottom: 10rpx;
                 .time {
-                    width: 200rpx;
+                    width: 150rpx;
                     font-size: 25rpx;
                     color: #878864;
                 }
@@ -168,15 +231,16 @@ export default {
                     // border: 1px solid skyblue;
                     width: 100rpx;
                     height: 40rpx;
-                    margin-left: 220rpx;
+                    margin-left: 250rpx;
                     display: flex;
                     align-items: center;
-                    justify-content: space-around;
+                    justify-content: center;
                     .starNum {
                         color: #878864;
                         font-size: 25rpx;
+                        margin-right: 10rpx;
                         // height: 40rpx;
-                        width: 50rpx;
+                        // width: 50rpx;
                         margin-top: 7rpx;
                     }
                     .icon1 {
@@ -192,17 +256,18 @@ export default {
                     // border: 1px solid skyblue;
                     width: 100rpx;
                     height: 40rpx;
-                    margin-left: 20rpx;
+                    margin-left: 5rpx;
                     margin-right: 5rpx;
                     display: flex;
                     align-items: center;
-                    justify-content: space-around;
+                    justify-content: center;
                     .commentNum {
                         color: #878864;
                         margin-bottom: 0rpx;
                         font-size: 25rpx;
+                        margin-right: 10rpx;
                         // height: 40rpx;
-                        width: 50rpx;
+                        // width: 50rpx;
                     }
                     .icon2 {
                         height: 35rpx;

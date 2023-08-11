@@ -1,6 +1,6 @@
 <template>
     <view class="main">
-        <topic></topic>
+        <topic :info="info"></topic>
         <view class="commentArea">
             <comment-list></comment-list>
         </view>
@@ -10,12 +10,25 @@
 <script>
 import commentList from './commentList.vue';
 import topic from './topic.vue';
+import { mapState , mapActions } from 'vuex'
 export default {
     components:{ topic , commentList },
     data() {
         return {
-            
+            id:0,
         }
+    },
+    methods:{
+        ...mapActions("wall" , ['getTopicDetail' , 'getCommentList']),
+    },
+    computed:{
+        ...mapState("wall" , ['info'])
+    },
+    onLoad(options) {
+        this.id = options.id;
+        console.log(this.id);
+        this.getTopicDetail(this.id);
+        this.getCommentList(this.id);
     },
 }
 </script>
