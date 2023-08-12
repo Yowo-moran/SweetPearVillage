@@ -1,11 +1,12 @@
 <template>
   <view class="allPost">
     <u-navbar leftText="我的帖子" :autoBack="true" placeholder> </u-navbar>
-    <Post :list="postList" @getPostList="getPostList"/>
+    <Post :list="postList" @getPostList="getPostList" />
   </view>
 </template>
 
 <script>
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import Post from "./components/post.vue";
 export default {
   components: {
@@ -28,6 +29,10 @@ export default {
           Authorization: wx.getStorageSync("token"),
         },
         success(res) {
+          if (res.data.code === "D0400") {
+            that.getToken(); //刷新token
+            that.getPostList(); //重新执行用户操作
+          }
           if (res.data.code !== "00000") {
             console.log(res.data.message);
             return;
@@ -38,6 +43,7 @@ export default {
       });
     },
   },
+  ...mapActions("mine", ["getToken"]),
 };
 </script>
 
