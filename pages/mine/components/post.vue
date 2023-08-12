@@ -10,8 +10,8 @@
       ></u-image>
       <view class="content">
         <view class="name">{{ item.nickName }}</view>
-        <view>{{ item.content }}</view>
-        <view
+        <view style="margin-bottom:20rpx">{{ item.content }}</view>
+        <!-- <view
           class="photos"
           :style="
             item.images.length !== 4
@@ -28,7 +28,15 @@
             width="180rpx"
             height="180rpx"
           ></u-image>
-        </view>
+        </view> -->
+        <u-album
+          :urls="item.images"
+          keyName="image"
+          multipleSize="180rpx"
+          singleSize="360rpx"
+          space="10rpx"
+          :rowCount="item.images.length !== 4 ? 3 : 2"
+        ></u-album>
         <view class="content-bottom">
           <view class="time">{{ Time(item.createTime) }}</view>
           <view style="width: 340rpx; display: flex">

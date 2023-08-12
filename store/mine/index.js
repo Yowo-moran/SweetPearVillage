@@ -49,34 +49,9 @@ const actions = {
                                 key: "token",
                                 data: res.data.data.token,
                                 success: function () {
-                                    commit('setLogined', true);
+                                    console.log("更新成功")
                                 },
                             });
-                            const {
-                                id,
-                                avatar,
-                                nickName,
-                                sex,
-                                college,
-                                major,
-                                wechatNumber,
-                                openId
-                            } = res.data.data;
-                            const details = {
-                                id,
-                                avatar,
-                                nickName,
-                                sex,
-                                college,
-                                major,
-                                wechatNumber,
-                                openId
-                            };
-                            uni.setStorage({
-                                key: "details",
-                                data: details,
-                            });
-                            commit('setPersonalDetails', details)
                             // that.setPersonalDetails(details);
                         },
                     });
