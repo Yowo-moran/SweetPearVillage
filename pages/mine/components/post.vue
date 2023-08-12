@@ -1,6 +1,6 @@
 <template>
   <view>
-    <view class="post-item" v-for="(item, index) in list" :key="index">
+    <view class="post-item" v-for="(item, index) in list" :key="index" @click="jump(item.id)">
       <u-image
         :src="item.avatar"
         :lazy-load="true"
@@ -10,7 +10,7 @@
       ></u-image>
       <view class="content">
         <view class="name">{{ item.nickName }}</view>
-        <view style="margin-bottom:20rpx">{{ item.content }}</view>
+        <view style="margin-bottom: 20rpx">{{ item.content }}</view>
         <!-- <view
           class="photos"
           :style="
@@ -90,6 +90,11 @@ export default {
           console.log(res);
           that.$emit("getPostList");
         },
+      });
+    },
+    jump(id) {
+      uni.navigateTo({
+        url: `topicDetail?id=${id}`,
       });
     },
   },
