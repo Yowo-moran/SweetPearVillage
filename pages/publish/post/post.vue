@@ -49,16 +49,37 @@
 				content:'',
 				fileList1: [],
 				images:[],
-				imagesObj:{
-					pos:"",
-					image:"",
-				}
+				
 			};
 		},
 		methods:{
 			finish(){
 					if(this.model1.user.content!==''||this.fileList1.length!=0){
+						// var index=this.fileList1.length
 						
+						var i=0;
+						// while(i<index){
+						// 	this.imagesObj.pos=i+1;
+							
+						// 	this.imagesObj.image=this.fileList1[i].thumb;
+						// 	console.log(this.fileList1)
+						// 	this.images[i]=this.imagesObj;
+						// 	console.log(this.images)
+						// 	i++;
+						// }
+						while(i<this.fileList1.length){
+							var imagesObj={
+								pos:"",
+								image:"",
+							}
+							// this.images[i]=this.fileList1[i].thumb
+							imagesObj.pos=i+1;
+							imagesObj.image=this.fileList1[i].thumb;
+							// console.log(this.imagesObj.image)
+							this.images[i]=imagesObj;
+							console.log(this.images)
+							i++;
+						}
 						  uni.request({
 						  	url:'http://127.0.0.1:4523/m1/3091110-0-default/post/',
 						  		method:'post',
@@ -104,6 +125,7 @@
 				})
 				for (let i = 0; i < lists.length; i++) {
 					const result = await this.uploadFilePromise(lists[i].url)
+					
 					let item = this[`fileList${event.name}`][fileListLen]
 					this[`fileList${event.name}`].splice(fileListLen, 1, Object.assign(item, {
 					status: 'success',
@@ -125,18 +147,8 @@
 						},
 						success: (res) => {
 							setTimeout(() => {
-								console.log(this.fileList1)
-							var index=this.fileList1.length
-							var i;
-							for( i=0;i<index;i++){
-								this.imagesObj.pos=i+1;
 								
-								this.imagesObj.image=this.fileList1[i].thumb;
-								
-								this.images[i]=this.imagesObj;
-								console.log(images)
-								}
-								resolve(res.data)
+								resolve(res)
 							}, 1000)
 						}
 					});
