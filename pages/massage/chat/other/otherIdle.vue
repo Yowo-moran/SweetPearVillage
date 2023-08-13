@@ -1,6 +1,11 @@
 <template>
   <view class="allIdle">
-    <Idle :list="idleList" />
+    <Idle
+      v-for="(item, index) in idleList"
+      :key="index"
+      :item="item"
+      @getIdleList="getIdleList"
+    />
   </view>
 </template>
 
@@ -12,25 +17,30 @@ export default {
   },
   data() {
     return {
-      idleList: [
-        {
-          img: "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          profilePhoto:
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          article: "啊啊啊！怎么会有人看错文档？我是呆逼！！",
-          price: "250",
-          name: "moran",
-        },
-        {
-          img: "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          profilePhoto:
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          article: "啊啊啊！怎么会有人看错文档？我是呆逼！！",
-          price: "250",
-          name: "moran",
-        },
-      ],
+      idleList: [],
     };
+  },
+  onShow() {
+    this.getIdleList();
+  },
+  methods: {
+    async getIdleList() {
+      const that = this;
+      await wx.request({
+        url: "https://101.43.254.115:7115/item/my",
+        header: {
+          Authorization: wx.getStorageSync("token"),
+        },
+        success(res) {
+          if (res.data.code !== "00000") {
+            console.log(res.data.message);
+            return;
+          }
+          console.log(res);
+          that.idleList = res.data.data.items;
+        },
+      });
+    },
   },
 };
 </script>

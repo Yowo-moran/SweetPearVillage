@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import Reward from "./components/reward.vue";
 export default {
   components: {
@@ -25,16 +26,7 @@ export default {
   },
   data() {
     return {
-      rewardList: [
-        {
-          id: "1",
-          rewardContent: "啊啊啊！怎么会有人看错文档？我是呆逼！！",
-          rewardAmount: "250",
-          senderAddress: "一食堂",
-          deliveryAddress: "28号楼",
-          status: false,
-        },
-      ],
+      rewardList: [],
     };
   },
   methods: {
@@ -93,6 +85,10 @@ export default {
           Authorization: wx.getStorageSync("token"),
         },
         success(res) {
+          if (res.data.code === "D0400") {
+            that.getToken(); //刷新token
+            that.getRewardList(); //重新执行用户操作
+          }
           if (res.data.code !== "00000") {
             console.log(res.data.message);
             return;
@@ -102,6 +98,7 @@ export default {
         },
       });
     },
+    ...mapActions("mine", ["getToken"]),
   },
 };
 </script>

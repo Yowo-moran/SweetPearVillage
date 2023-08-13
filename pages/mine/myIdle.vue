@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import Idle from "./components/idle.vue";
 export default {
   components: {
@@ -29,10 +30,10 @@ export default {
     };
   },
   methods: {
-    deleteIdle(index) {
+    async deleteIdle(index) {
       // console.log(index);
       const that = this;
-      wx.request({
+      await wx.request({
         method: "DELETE",
         url: "https://101.43.254.115:7115/item/" + that.item.id,
         header: {
@@ -81,6 +82,10 @@ export default {
           Authorization: wx.getStorageSync("token"),
         },
         success(res) {
+          if (res.data.code === "D0400") {
+            that.getToken(); //刷新token
+            that.getIdleList(); //重新执行用户操作
+          }
           if (res.data.code !== "00000") {
             console.log(res.data.message);
             return;
@@ -90,6 +95,7 @@ export default {
         },
       });
     },
+    ...mapActions("mine", ["getToken"]),
   },
 };
 </script>

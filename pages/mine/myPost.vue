@@ -1,46 +1,49 @@
 <template>
   <view class="allPost">
     <u-navbar leftText="我的帖子" :autoBack="true" placeholder> </u-navbar>
-    <Post :list="postList" />
+    <Post :list="postList" @getPostList="getPostList" />
   </view>
 </template>
 
 <script>
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import Post from "./components/post.vue";
 export default {
   components: {
     Post,
   },
+  onShow() {
+    this.getPostList();
+  },
   data() {
     return {
-      postList: [
-        {
-          profilePhoto:
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          name: "Yowo_moran",
-          content: "啊啊啊！怎么会有人看错文档？我是呆逼！！",
-          images: [
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          ],
-          time: "今天 17:00",
-          lisks: "666",
-          comments: "12",
-        },
-        {
-          profilePhoto:
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          name: "Yowo_moran",
-          content: "啊啊啊！怎么会有人看错文档？我是呆逼！！",
-          images: [
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          ],
-          time: "今天 17:00",
-          lisks: "666",
-          comments: "12",
-        },
-      ],
+      postList: [],
     };
   },
+  methods: {
+    async getPostList() {
+      const that = this;
+      await wx.request({
+        url: "https://101.43.254.115:7115/post/my",
+        header: {
+          Authorization: wx.getStorageSync("token"),
+        },
+        success(res) {
+          if (res.data.code === "D0400") {
+            that.getToken(); //刷新token
+            that.getPostList(); //重新执行用户操作
+          }
+          if (res.data.code !== "00000") {
+            console.log(res.data.message);
+            return;
+          }
+          console.log(res);
+          that.postList = res.data.data.posts;
+        },
+      });
+    },
+  },
+  ...mapActions("mine", ["getToken"]),
 };
 </script>
 

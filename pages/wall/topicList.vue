@@ -1,14 +1,26 @@
 <template>
     <view class="list">
-        <!-- 报错不用管 -->
-        <topic v-for="item in 6"></topic>
+        <!-- <topic v-for="item in list" :key="item.id" :pid="item.id"></topic> -->
+        <topic v-for="(item,index) in list" :key="item.id" :info="item" :index="index"></topic>
+        
     </view>
 </template>
 
 <script>
 import topic from './topic.vue';
+
 export default {
-    components: { topic }
+    components: { topic },
+    data() {
+        return {
+            
+        }
+    },
+    computed:{
+        list(){
+            return this.$store.state.wall.topicList
+        }
+    }    
 }
 </script>
 

@@ -1,7 +1,9 @@
 <template>
   <view @tap="showFooter = false">
     <view class="topBar" :style="{ height: topBarHeight + 'px' }"> </view>
-    <uni-nav-bar left-icon="left" @clickLeft="back"> </uni-nav-bar>
+    <uni-nav-bar left-icon="left" @clickLeft="back">
+      <view class="title">{{ title }}</view></uni-nav-bar
+    >
 
     <view class="box" :style="{ height: safeArea + 'px' }">
       <scroll-view
@@ -9,8 +11,8 @@
         class="message-container"
         scroll-y
         @scrolltoupper="getChat"
-        :scroll-into-view="scrollIntoIndex"
         @scroll="recordHeight"
+		scroll-with-animation
       >
         <view
           class="message"
@@ -19,11 +21,7 @@
           :class="item.senderOpenId === openId ? 'other' : 'self'"
           :id="item.sendTime"
         >
-          <view
-            class="avatar"
-            @tap="goTo(item.senderOepnId)"
-            v-if="item.sendTime !== ''"
-          >
+          <view class="avatar" @tap="goTo(item)" v-if="item.sendTime !== ''">
             <image
               :src="item.senderOpenId === openId ? receiverAvatar : avatar"
               mode="aspectFill"
@@ -144,17 +142,11 @@
             </view>
             <view class="text">相册</view>
           </view>
-          <view class="btn">
+          <view class="btn" @tap="sendWeChat">
             <view class="icon">
               <u-icon name="weixin-fill" size="50" color="#fff"></u-icon>
             </view>
             <view class="text">发送微信号</view>
-          </view>
-          <view class="btn">
-            <view class="icon">
-              <u-icon name="phone" size="50" color="#fff"></u-icon>
-            </view>
-            <view class="text">发送手机号</view>
           </view>
         </view>
       </view>
@@ -187,12 +179,13 @@ export default {
       innerAudioContext: null,
       isPlay: false,
       startY: 0,
-      scrollIntoIndex: "",
       time: "0:00",
       newHeight: 0,
       openId: "",
       myId: "",
       newTop: 0,
+      isChat: false,
+	  isFirst:true,
     };
   },
   onLoad(options) {
@@ -217,6 +210,7 @@ export default {
     console.log(this.innerAudioContext);
     console.log(options);
     this.openId = options.openId;
+    this.title = options.title;
     this.avatar = wx.getStorageSync("details").avatar;
     this.myId = wx.getStorageSync("details").openId;
     this.getInform(this.openId);
@@ -444,7 +438,7 @@ export default {
     },
     goTo(sender) {
       console.log(sender);
-      if (sender === "2375697969077461446034904154")
+      if (sender.senderOpenId === this.openId)
         uni.navigateTo({
           url: `/pages/massage/chat/other/other?key=${sender}`,
         });
@@ -455,6 +449,10 @@ export default {
     },
     recordHeight(e) {
       this.newTop = e.detail.scrollTop;
+    },
+    sendWeChat() {
+      this.inform = wx.getStorageSync("details").wechatNumber;
+      this.sendMessage();
     },
   },
   computed: {
@@ -468,15 +466,19 @@ export default {
   watch: {
     count: {
       handler() {
+		console.log('@count_handler')
         this.scrollTop = this.newTop;
       },
     },
     chatHistoryList: {
       handler(newVal, oldVal) {
-        console.log("@handler", newVal, oldVal);
-        if (newVal[newVal.length - 1].msgId) {
-          this.toBottom();
-        }
+        if(this.isFirst){
+			console.log("@handler", newVal, oldVal);
+			  this.toBottom();
+			  this.isFirst = false
+			
+		}
+		
       },
     },
   },
@@ -484,6 +486,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  font-size: 32rpx;
+}
 .box {
   display: flex;
   flex-direction: column;
@@ -493,10 +502,12 @@ export default {
     flex-grow: 1;
     box-sizing: border-box;
     overflow: hidden;
+	overflow-anchor: false;
     .message {
       display: flex;
       align-items: center;
       padding: 20rpx 0;
+	  box-sizing: border-box;
 
       .avatar {
         width: 80rpx;

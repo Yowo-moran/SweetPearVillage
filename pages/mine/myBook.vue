@@ -3,16 +3,17 @@
     <u-navbar leftText="我的书籍" :autoBack="true" placeholder> </u-navbar>
     <Waterfall v-model="bookList">
       <template v-slot:left="{ leftList }">
-        <Book :list="leftList"></Book>
+        <Book :list="leftList" @getBookList="getBookList"></Book>
       </template>
       <template v-slot:right="{ rightList }">
-        <Book :list="rightList"></Book>
+        <Book :list="rightList" @getBookList="getBookList"></Book>
       </template>
     </Waterfall>
   </view>
 </template>
 
 <script>
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import Waterfall from "./components/Waterfall.vue";
 import Book from "./components/Book.vue";
 export default {
@@ -20,76 +21,43 @@ export default {
     Waterfall,
     Book,
   },
+  onShow() {
+    this.getBookList();
+  },
   data() {
     return {
       flowList: [],
-      bookList: [
-        {
-          image:
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          title: "啊啊啊！怎么会有人看错文档？我是呆逼！！",
-          price: "120",
-          college: "机械工程学院",
-          major: "机械电子工程",
-        },
-        {
-          image:
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          title: "啊啊啊！怎么会有人看错文档？我是呆逼！！",
-          price: "120",
-          college: "机械工程学院",
-          major: "机械电子工程",
-        },
-        {
-          image:
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          title: "啊啊啊！怎么会有人看错文档？我是呆逼！！",
-          price: "120",
-          college: "机械工程学院",
-          major: "机械电子工程",
-        },
-        {
-          image:
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          title: "啊啊啊！怎么会有人看错文档？我是呆逼！！",
-          price: "120",
-          college: "机械工程学院",
-          major: "机械电子工程",
-        },
-        {
-          image:
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          title: "啊啊啊！怎么会有人看错文档？我是呆逼！！",
-          price: "120",
-          college: "机械工程学院",
-          major: "机械电子工程",
-        },
-        {
-          image:
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          title: "啊啊啊！怎么会有人看错文档？我是呆逼！！",
-          price: "120",
-          college: "机械工程学院",
-          major: "机械电子工程",
-        },
-        {
-          image:
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          title: "啊啊啊！怎么会有人看错文档？我是呆逼！！",
-          price: "120",
-          college: "机械工程学院",
-          major: "机械电子工程",
-        },
-        {
-          image:
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          title: "啊啊啊！怎么会有人看错文档？我是呆逼！！",
-          price: "120",
-          college: "机械工程学院",
-          major: "机械电子工程",
-        },
-      ],
+      bookList: [],
     };
+  },
+  methods: {
+    async getBookList() {
+      const that = this;
+      this.bookList = [];
+      await wx.request({
+        url: "https://101.43.254.115:7115/user/book",
+        data: {
+          page: 1,
+          pageSize: 200,
+        },
+        header: {
+          Authorization: wx.getStorageSync("token"),
+        },
+        success(res) {
+          if (res.data.code === "D0400") {
+            that.getToken(); //刷新token
+            that.getBookList(); //重新执行用户操作
+          }
+          if (res.data.code !== "00000") {
+            console.log(res.data.message);
+            return;
+          }
+          console.log(res);
+          that.bookList = res.data.data.records;
+        },
+      });
+    },
+    ...mapActions("mine", ["getToken"]),
   },
 };
 </script>

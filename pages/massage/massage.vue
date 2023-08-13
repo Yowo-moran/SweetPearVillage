@@ -1,5 +1,5 @@
 <template>
-  <view style="display: flex; flex-direction: column;">
+  <view style="display: flex; flex-direction: column">
     <inform-vc v-if="isShow"></inform-vc>
     <view class="notice">
       <view class="left">
@@ -68,7 +68,7 @@ export default {
   methods: {
     jump(openId, name) {
       uni.navigateTo({
-        url: `/pages/massage/chat/chat?openId=${openId}`,
+        url: `/pages/massage/chat/chat?openId=${openId}&title=${name}`,
       });
     },
     toNotice() {
@@ -79,9 +79,13 @@ export default {
     ...mapActions("message", ["getChatList"]),
   },
   onLoad() {
-    /* setTimeout(() => {
+    /* 
+    setTimeout(() => {
       this.isShow = true;
-    }, 1000); */
+    }, 1000);
+	setTimeout(()=>{
+		this.isShow = false;
+	},5000) */
   },
   onShow() {
     console.log("messageShow");
@@ -124,7 +128,7 @@ export default {
   }
 }
 .inform {
-	flex-grow: 1;
+  flex-grow: 1;
   .scroll {
     height: 100%;
     .scrollItem {
