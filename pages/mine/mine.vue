@@ -1,5 +1,6 @@
 <template>
   <view class="allMine">
+    <InformVc v-if="isShow"></InformVc>
     <view class="header">
       <view class="headportrait">
         <button
@@ -86,8 +87,10 @@
 </template>
 
 <script>
+import InformVc from "@/components/InformVc.vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 export default {
+  components: { InformVc },
   onLoad() {
     const details = wx.getStorageSync("details");
     if (details) {
@@ -98,6 +101,7 @@ export default {
   data() {
     return {
       loginPopup: false,
+      isShow: false,
     };
   },
   methods: {
@@ -212,6 +216,7 @@ export default {
   },
   computed: {
     ...mapState("mine", ["logined", "personalDetails"]),
+    ...mapState("message", ["chatList"]),
   },
 };
 </script>

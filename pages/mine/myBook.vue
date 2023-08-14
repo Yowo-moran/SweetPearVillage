@@ -1,5 +1,6 @@
 <template>
   <view class="allBook">
+    <InformVc v-if="isShow"></InformVc>
     <u-navbar leftText="我的书籍" :autoBack="true" placeholder> </u-navbar>
     <Waterfall v-model="bookList">
       <template v-slot:left="{ leftList }">
@@ -13,6 +14,7 @@
 </template>
 
 <script>
+import InformVc from "@/components/InformVc.vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import Waterfall from "./components/Waterfall.vue";
 import Book from "./components/Book.vue";
@@ -20,6 +22,7 @@ export default {
   components: {
     Waterfall,
     Book,
+    InformVc
   },
   onShow() {
     this.getBookList();
@@ -28,6 +31,7 @@ export default {
     return {
       flowList: [],
       bookList: [],
+      isShow: false,
     };
   },
   methods: {
@@ -58,6 +62,9 @@ export default {
       });
     },
     ...mapActions("mine", ["getToken"]),
+  },
+  computed: {
+    ...mapState("message", ["chatList"]),
   },
 };
 </script>

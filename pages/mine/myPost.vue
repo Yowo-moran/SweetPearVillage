@@ -1,16 +1,19 @@
 <template>
   <view class="allPost">
+    <InformVc v-if="isShow"></InformVc>
     <u-navbar leftText="我的帖子" :autoBack="true" placeholder> </u-navbar>
     <Post :list="postList" @getPostList="getPostList" />
   </view>
 </template>
 
 <script>
+import InformVc from "@/components/InformVc.vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import Post from "./components/post.vue";
 export default {
   components: {
     Post,
+    InformVc,
   },
   onShow() {
     this.getPostList();
@@ -18,6 +21,7 @@ export default {
   data() {
     return {
       postList: [],
+      isShow: false,
     };
   },
   methods: {
