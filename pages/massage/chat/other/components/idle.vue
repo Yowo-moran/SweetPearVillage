@@ -25,9 +25,6 @@
         </view>
       </view>
       <view class="threeButton">
-        <button @click="idleDelete">删除</button>
-        <button @click="idleEdit">编辑</button>
-        <button @click="idleSold">已出</button>
         <text>￥{{ item.price }}</text>
       </view>
     </view>

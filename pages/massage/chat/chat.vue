@@ -8,18 +8,18 @@
     <view class="box" :style="{ height: safeArea + 'px' }">
       <scroll-view
         :scroll-top="scrollTop"
+        :scroll-into-view="scrollInex"
         class="message-container"
         scroll-y
         @scrolltoupper="getChat"
         @scroll="recordHeight"
-		scroll-with-animation
       >
         <view
           class="message"
           v-for="item in chatHistoryList"
           :key="item.sendTime"
           :class="item.senderOpenId === openId ? 'other' : 'self'"
-          :id="item.sendTime"
+          :id="'msg' + item.msgId"
         >
           <view class="avatar" @tap="goTo(item)" v-if="item.sendTime !== ''">
             <image
@@ -185,7 +185,7 @@ export default {
       myId: "",
       newTop: 0,
       isChat: false,
-	  isFirst:true,
+      isFirst: true,
     };
   },
   onLoad(options) {
@@ -217,6 +217,9 @@ export default {
   },
   onShow() {
     console.log("@myId", this.myId);
+  },
+  onHide() {
+    this.isFirst = true;
   },
   onUnload() {
     console.log("bye");
@@ -440,7 +443,7 @@ export default {
       console.log(sender);
       if (sender.senderOpenId === this.openId)
         uni.navigateTo({
-          url: `/pages/massage/chat/other/other?key=${sender}`,
+          url: `/pages/massage/chat/other/other?openId=${sender.senderOpenId}`,
         });
       else
         uni.switchTab({
@@ -466,19 +469,17 @@ export default {
   watch: {
     count: {
       handler() {
-		console.log('@count_handler')
+        console.log("@count_handler");
         this.scrollTop = this.newTop;
       },
     },
     chatHistoryList: {
       handler(newVal, oldVal) {
-        if(this.isFirst){
-			console.log("@handler", newVal, oldVal);
-			  this.toBottom();
-			  this.isFirst = false
-			
-		}
-		
+        if (this.isFirst) {
+          console.log("@handler", newVal, oldVal);
+          this.toBottom();
+          this.isFirst = false;
+        }
       },
     },
   },
@@ -502,12 +503,12 @@ export default {
     flex-grow: 1;
     box-sizing: border-box;
     overflow: hidden;
-	overflow-anchor: false;
+    overflow-anchor: false;
     .message {
       display: flex;
       align-items: center;
       padding: 20rpx 0;
-	  box-sizing: border-box;
+      box-sizing: border-box;
 
       .avatar {
         width: 80rpx;

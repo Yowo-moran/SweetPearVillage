@@ -26,7 +26,7 @@
         专业：{{ item.major }}
       </view>
       <view class="box-item-title" style="font-weight: lighter">
-        专业：{{ item.grade }}
+        年级：{{ item.grade }}
       </view>
       <view class="box-item-button">
         <button @click="deleteBook(item.id)">删除</button>
@@ -88,9 +88,9 @@ export default {
         },
       });
     },
-    editBook(item){
+    editBook(item) {
       this.setBook(item);
-      console.log(item)
+      console.log(item);
       uni.navigateTo({
         url: "/pages/mine/editBook",
       });

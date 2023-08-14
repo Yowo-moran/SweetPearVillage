@@ -51,43 +51,36 @@ const actions = {
 	connectWebSocket({ commit }) {
 		const token = wx.getStorageSync('token')
 		// const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvcGVuaWQiOiIyMzc1Njk3OTY5MDc3NDYxNDQ2MDM0OTA0MTU0IiwiaWQiOjEsImV4cCI6MTY5MjY5MDI0NX0.nfYhj4tjKmDKIHp4eH15_HjS64urMazIhM1tsSINR1U'
-		const socket = wx.connectSocket({
-			url: `wss://silentdragon.pro:7115/private-chat/{${token}}`
-		})
-		socket.onOpen(() => {
-			console.log('WebSocket connection established')
-		})
-		socket.onMessage((res) => {
-			const data = JSON.parse(res.data)
-			if (data.code) {
-				console.log(data.message);
-			} else
-				commit('GET_NEWCHAT', data)
-		})
-		socket.onClose((res) => {
-			console.log(res)
-			if (res.code !== 1000) {
-				console.log('尝试重连');
-				setTimeout(() => {
-					const socket = wx.connectSocket({
-						url: `wss://silentdragon.pro:7115/private-chat/{${token}}`
-					})
-					commit('SET_SOCKET', socket);
-				}, 2000)
-			} else {
-				console.log('连接已关闭');
-			}
-		})
-		socket.onError((res) => {
-			console.log(res);
-			setTimeout(() => {
-				const socket = wx.connectSocket({
-					url: `wss://silentdragon.pro:7115/private-chat/{${token}}`
-				})
-				commit('SET_SOCKET', socket);
-			}, 2000)
-		})
-		commit('SET_SOCKET', socket);
+		function creatSocket(){
+			const socket = wx.connectSocket({
+				url: `wss://silentdragon.pro:7115/private-chat/{${token}}`
+			})
+			socket.onOpen(() => {
+				console.log('WebSocket connection established')
+				
+			})
+			socket.onMessage((res) => {
+				const data = JSON.parse(res.data)
+				if (data.code) {
+					console.log(data.message);
+				} else
+					commit('GET_NEWCHAT', data)
+			})
+			socket.onClose((res) => {
+				console.log(res)
+				if (res.code !== 1000) {
+					console.log('尝试重连');
+					setTimeout(() => {
+						creatSocket()
+					}, 5000)
+				} else {
+					console.log('连接已关闭');
+				}
+			})
+			commit('SET_SOCKET', socket);
+		}
+		
+		creatSocket();
 	},
 
 	closeWeb({ commit }) {
@@ -239,23 +232,12 @@ const mutations = {
 	ADD_OLDCHAT(state, { data, that, time }) {
 		console.log(data, that, time);
 		state.chatHistoryList.unshift(...data);
-		that.$nextTick(()=>{
-			that.query = uni.createSelectorQuery().in(that);
-			that.query.selectAll(".message")
-			  .boundingClientRect((data) => {
-			    const elements = Array.from(data);
-			    console.log(elements);
-			    let index = state.chatHistoryList.findLastIndex(item => {
-					console.log('finding',time)
-					return item.sendTime === time
-				})
-				console.log(index)
-				that.scrollTop = elements[index].top - elements[0].top
-				console.log( that.scrollTop)
-			  })
-			  .exec();
-			  that.query = null;
+		let index = state.chatHistoryList.findLastIndex(item => {
+			console.log('finding', time)
+			return item.sendTime === time
 		})
+		console.log(index)
+
 	}
 }
 

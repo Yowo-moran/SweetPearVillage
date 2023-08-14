@@ -10,21 +10,19 @@
       ></u-image>
       <view class="box-item-price"> ￥{{ item.price }} </view>
       <view class="box-item-title">
-        {{ item.title }}
+        {{ item.name }}
       </view>
       <view
         class="box-item-title"
         style="font-weight: lighter; margin-top: 20rpx"
-        v-show="item.college != ''"
       >
         学院：{{ item.college }}
       </view>
-      <view
-        class="box-item-title"
-        style="font-weight: lighter"
-        v-show="item.major != ''"
-      >
+      <view class="box-item-title" style="font-weight: lighter">
         专业：{{ item.major }}
+      </view>
+      <view class="box-item-title" style="font-weight: lighter">
+        年级：{{ item.grade }}
       </view>
     </view>
   </view>

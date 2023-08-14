@@ -3,7 +3,7 @@
     <view class="header">
       <view class="headportrait">
         <u-image
-          :src="personalDetails.profilePhoto"
+          :src="personalDetails.avatar"
           :lazy-load="true"
           radius="50%"
           width="170rpx"
@@ -12,11 +12,16 @@
         ></u-image>
         <view class="username" style="margin-right: 130rpx">
           <text style="font-weight: bold; font-size: 36rpx; color: #818258">{{
-            personalDetails.name
+            personalDetails.nickName
           }}</text>
-          <text style="margin-top: 20rpx">{{ personalDetails.gender }}</text>
+          <text style="margin-top: 20rpx">{{
+            personalDetails.sex === 0
+              ? "暂未设定"
+              : personalDetails.sex === 1
+              ? "男"
+              : "女"
+          }}</text>
         </view>
-
       </view>
       <view class="usermajor">
         <text>学院： {{ personalDetails.college }}</text>
@@ -26,20 +31,22 @@
       </view>
     </view>
     <view class="main">
-      <navigator url="/pages/massage/chat/other/otherReward"
+      <navigator :url="`/pages/massage/chat/other/otherReward?openId=${openId}`"
         ><view class="options"
-          ><text>我的悬赏</text><img src="../../../../static/箭头.png" alt="" /></view
+          ><text>我的悬赏</text
+          ><img src="../../../../static/箭头.png" alt="" /></view
       ></navigator>
-      <navigator url="/pages/massage/chat/other/otherBook"
+      <navigator :url="`/pages/massage/chat/other/otherBook?openId=${openId}`"
         ><view class="options"
           ><text>我出售的书籍</text
           ><img src="../../../../static/箭头.png" alt="" /></view
       ></navigator>
-      <navigator url="/pages/massage/chat/other/otherIdle"
+      <navigator :url="`/pages/massage/chat/other/otherIdle?openId=${openId}`"
         ><view class="options"
-          ><text>我的闲置</text><img src="../../../../static/箭头.png" alt="" /></view
+          ><text>我的闲置</text
+          ><img src="../../../../static/箭头.png" alt="" /></view
       ></navigator>
-      <navigator url="/pages/massage/chat/other/otherPost">
+      <navigator :url="`/pages/massage/chat/other/otherPost?openId=${openId}`">
         <view class="options"
           ><text>我的帖子</text><img src="../../../../static/箭头.png" alt=""
         /></view>
@@ -53,18 +60,33 @@ export default {
   data() {
     return {
       personalDetails: {
-        profilePhoto:
-          "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-        name: "Yowo_moran",
-        gender: "男",
-        college: "机械工程学院",
-        major: "机械电子工程",
+        nickName: "",
+        openId: "",
+        sex: 0,
+        college: "",
+        major: "",
+        wechatNumber: "",
+        avatar: "",
       },
+      openId: "",
     };
   },
   onLoad(option) {
-  	console.log(option)
-  }
+    console.log(option);
+    const openId = option.openId;
+    this.openId = openId;
+    const that = this;
+    wx.request({
+      url: `https://101.43.254.115:7115/user-info/${openId}`,
+      header: {
+        Authorization: wx.getStorageSync("token"),
+      },
+      method: "GET",
+      success(res) {
+        that.personalDetails = res.data.data;
+      },
+    });
+  },
 };
 </script>
 
@@ -93,7 +115,7 @@ export default {
       justify-content: flex-start;
       align-items: center;
       .username {
-		margin-left: 20rpx;
+        margin-left: 20rpx;
         display: flex;
         flex-direction: column;
         justify-content: space-around;

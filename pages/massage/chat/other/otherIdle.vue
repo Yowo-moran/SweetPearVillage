@@ -18,7 +18,11 @@ export default {
   data() {
     return {
       idleList: [],
+	  openId:''
     };
+  },
+  onLoad(option){
+	  this.openId = option.openId
   },
   onShow() {
     this.getIdleList();
@@ -27,10 +31,7 @@ export default {
     async getIdleList() {
       const that = this;
       await wx.request({
-        url: "https://101.43.254.115:7115/item/my",
-        header: {
-          Authorization: wx.getStorageSync("token"),
-        },
+        url: `https://101.43.254.115:7115/item/user/${that.openId}`,
         success(res) {
           if (res.data.code !== "00000") {
             console.log(res.data.message);

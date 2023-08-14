@@ -34,6 +34,8 @@ export default {
 		copyFlowList(nVal, oVal) {
 			let startIndex = Array.isArray(oVal) && oVal.length > 0 ? oVal.length : 0;
 			this.tempList = this.tempList.concat(this.cloneData(nVal.slice(startIndex)));
+			this.leftList = [];
+			this.rightList = [];
 			this.splitData();
 		}
 	},
