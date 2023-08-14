@@ -32,19 +32,17 @@ export default {
         border: 2px solid #c5c870;
         padding: 10rpx;
         width: 600rpx;
-        // height: 100rpx;
         display: flex;
         margin-bottom: 10rpx;
         border-radius: 10rpx;
         .userName {
-            // border: 2px solid orange;
-            width: 130rpx;
+            // width: 130rpx;
             height: 30rpx;
             color: #757805;
-            white-space:nowrap;
+            white-space:wrap;
+            margin-right: 20rpx;
         }
         .content {
-            // border: 2px solid orange;
             width: 450rpx;
             color: #5d5d56;
         }

@@ -68,14 +68,20 @@
 		},
 		methods:{
 			finish(){
+				var index=this.fileList1.length
+				var i;
+				for( i=0;i<index;i++){
+					this.images[i]=this.fileList1[i].thumb;
+				}
 				  if(this.model1.user.describe!==''&&this.model1.user.price!==''&&this.fileList1.length!=0){
 				  	  uni.request({
 				  		url:'http://127.0.0.1:4523/m2/3091110-0-default/100490088',
 				  		method:'post',
-				    		data:{
+				    	data:{
 				  			description:this.model1.user.describe,
+							image:this.images,
 				  			price:this.model1.user.price,
-				  			image:this.images,
+				  			
 				  		},
 				  		header: {
 				    			Authorization: '',
@@ -136,11 +142,7 @@
 						},
 						success: (res) => {
 							setTimeout(() => {
-								var index=this.fileList1.length
-								var i;
-								for( i=0;i<index;i++){
-									this.images[i]=this.fileList1[i].thumb;
-								}
+								
 								resolve(res.data)
 							}, 1000)
 						}

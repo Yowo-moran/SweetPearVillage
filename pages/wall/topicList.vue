@@ -2,6 +2,7 @@
     <view class="list">
         <!-- <topic v-for="item in list" :key="item.id" :pid="item.id"></topic> -->
         <topic v-for="(item,index) in list" :key="item.id" :info="item" :index="index"></topic>
+        
     </view>
 </template>
 

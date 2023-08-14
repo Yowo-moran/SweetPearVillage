@@ -31,6 +31,14 @@ const mutations = {
         state.info.imageArr = val.image
         state.info.avatar = val.avatar
     },
+    addComment(state , val){
+        console.log(val);
+        let ret = {
+            commentUser:val.nickName,
+            comment:val.comment,
+        }
+        state.commentList.unshift(ret)
+    }
 }
 const actions = {
     getList({ commit }){
@@ -83,6 +91,24 @@ const actions = {
             },
         })
     },
+    addComment({ commit } , val){
+        wx.request({
+            method:"POST",
+            url: 'https://101.43.254.115:7115/post/comment',
+            data:val,
+            header:{
+                Authorization: wx.getStorageSync('token')
+            },
+            success(res) {
+                console.log("评论成功！");
+                console.log(res.data);
+                commit('addComment' , val)
+            },
+            fail(err){  
+                console.log('评论失败！' + err)
+            },
+        })
+    }
 }
 const getters = {
 

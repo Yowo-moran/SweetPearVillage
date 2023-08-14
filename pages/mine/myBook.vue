@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import Waterfall from "./components/Waterfall.vue";
 import Book from "./components/Book.vue";
 export default {
@@ -43,6 +44,10 @@ export default {
           Authorization: wx.getStorageSync("token"),
         },
         success(res) {
+          if (res.data.code === "D0400") {
+            that.getToken(); //刷新token
+            that.getBookList(); //重新执行用户操作
+          }
           if (res.data.code !== "00000") {
             console.log(res.data.message);
             return;
@@ -52,6 +57,7 @@ export default {
         },
       });
     },
+    ...mapActions("mine", ["getToken"]),
   },
 };
 </script>
