@@ -1,6 +1,7 @@
 <template>
   <view class="allPost">
-    <Post :list="postList" />
+    <u-navbar leftText="我的帖子" :autoBack="true" placeholder> </u-navbar>
+    <Post :list="postList" @getPostList="getPostList" />
   </view>
 </template>
 
@@ -10,36 +11,35 @@ export default {
   components: {
     Post,
   },
+  onLoad(option) {
+  	this.openId = option.openId
+  },
+  onShow(){
+	  this.getPostList()
+  },
   data() {
     return {
       postList: [
-        {
-          profilePhoto:
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          name: "Yowo_moran",
-          content: "啊啊啊！怎么会有人看错文档？我是呆逼！！",
-          images: [
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          ],
-          time: "今天 17:00",
-          lisks: "666",
-          comments: "12",
-        },
-        {
-          profilePhoto:
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          name: "Yowo_moran",
-          content: "啊啊啊！怎么会有人看错文档？我是呆逼！！",
-          images: [
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          ],
-          time: "今天 17:00",
-          lisks: "666",
-          comments: "12",
-        },
       ],
+	  openId:'',
     };
   },
+  methods:{
+	  async getPostList(){
+		const that = this;
+		await wx.request({
+		  url: `https://101.43.254.115:7115/post/user/${that.openId}`,
+		  success(res) {
+		    if (res.data.code !== "00000") {
+		      console.log(res.data.message);
+		      return;
+		    }
+		    console.log(res);
+		    that.postList = res.data.data.posts;
+		  },
+		});  
+	  }
+  }
 };
 </script>
 

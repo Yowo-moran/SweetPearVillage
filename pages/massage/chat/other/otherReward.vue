@@ -1,6 +1,12 @@
 <template>
   <view class="allReward">
-    <Reward :list="rewardList" />
+    <Reward
+      v-for="(item, index) in rewardList"
+      :key="index"
+      :item="item"
+      :childIndex="index"
+      @getRewardList="getRewardList"
+    />
   </view>
 </template>
 
@@ -10,28 +16,39 @@ export default {
   components: {
     Reward,
   },
+  onLoad(option) {
+  	this.openId = option.openId
+  },
+  onShow() {
+  	this.getRewardList();
+  },
   data() {
     return {
       rewardList: [
-        {
-          profilePhoto:
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          article: "啊啊啊！怎么会有人看错文档？我是呆逼！！",
-          price: "250",
-          name: "moran",
-          time: "上午",
-        },
-        {
-          profilePhoto:
-            "https://pic2.zhimg.com/v2-fbfd76ad09fd529970c0e8a29107df35_r.jpg",
-          time: "下午",
-          article: "啊啊啊！怎么会有人看错文档？我是呆逼！！",
-          price: "250",
-          name: "moran",
-        },
+        
       ],
+	  openId:''
     };
   },
+  methods:{
+	  async getRewardList() {
+	    const that = this;
+	    await wx.request({
+	      url: `https://101.43.254.115:7115/users/${that.openId}/rewards`,
+	      header: {
+	        Authorization: wx.getStorageSync("token"),
+	      },
+	      success(res) {
+	        if (res.data.code !== "00000") {
+	          console.log(res.data.message);
+	          return;
+	        }
+	        console.log(res);
+	        that.rewardList = res.data.data.rewards;
+	      },
+	    });
+	  },
+  }
 };
 </script>
 

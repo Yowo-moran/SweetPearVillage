@@ -28,8 +28,9 @@ export default {
   methods: {
     jump() {
       const openId = newChat.senderOpenId;
+	  const title = newChat.senderNickName
       uni.navigateTo({
-        url: `/pages/massage/chat/chat?openId=${openId}`,
+        url: `/pages/massage/chat/chat?openId=${openId}&title=${title}`,
       });
     },
   },
