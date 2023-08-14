@@ -1,5 +1,6 @@
 <template>
   <view class="allReward">
+    <InformVc v-if="isShow"></InformVc>
     <u-navbar leftText="我的悬赏" :autoBack="true" placeholder></u-navbar>
     <Reward
       v-for="(item, index) in rewardList"
@@ -15,11 +16,13 @@
 </template>
 
 <script>
+import InformVc from "@/components/InformVc.vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import Reward from "./components/reward.vue";
 export default {
   components: {
     Reward,
+    InformVc,
   },
   onShow() {
     this.getRewardList();
@@ -27,6 +30,7 @@ export default {
   data() {
     return {
       rewardList: [],
+      isShow: false,
     };
   },
   methods: {

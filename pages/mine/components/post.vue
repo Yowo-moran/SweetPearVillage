@@ -94,7 +94,7 @@ export default {
     },
     jump(id) {
       uni.navigateTo({
-        url: `topicDetail?id=${id}`,
+        url: `/pages/wall/topicDetail?id=${id}`,
       });
     },
   },

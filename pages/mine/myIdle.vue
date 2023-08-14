@@ -1,5 +1,6 @@
 <template>
   <view class="allIdle">
+    <InformVc v-if="isShow"></InformVc>
     <u-navbar leftText="我的闲置" :autoBack="true" placeholder> </u-navbar>
     <Idle
       v-for="(item, index) in idleList"
@@ -15,11 +16,13 @@
 </template>
 
 <script>
+import InformVc from "@/components/InformVc.vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import Idle from "./components/idle.vue";
 export default {
   components: {
     Idle,
+    InformVc
   },
   onShow() {
     this.getIdleList();
@@ -27,6 +30,7 @@ export default {
   data() {
     return {
       idleList: [],
+      isShow: false,
     };
   },
   methods: {
