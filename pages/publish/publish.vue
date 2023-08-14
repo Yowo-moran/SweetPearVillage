@@ -1,5 +1,6 @@
 <template>
 	<view class="body">
+		<InformVc v-show="mesShow"></InformVc>
 		<view class="pic">
 			<image src="../../static/发布页图片.png" mode="aspectFill"></image>
 			
@@ -47,11 +48,30 @@
 </template>
 
 <script>
+	import InformVc from '../../components/InformVc.vue';
 	export default {
+		components:{InformVc},
 		data() {
 			return {
-				
+				mesShow:false,
 			};
+		},
+		computed:{
+			Data(){
+				return this.$store.state.newChat;
+			},
+		},
+		watch:{
+			Data:{
+				handler(newValue,oldValue){
+					this.mesShow=true;
+					setTimeout(()=>{
+						this.mesShow=false;
+					},2000)
+				},
+				deep:true,
+				
+			},
 		},
 		methods:{
 			goReward(){
