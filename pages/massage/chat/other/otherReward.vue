@@ -1,5 +1,6 @@
 <template>
   <view class="allReward">
+	  <u-navbar leftText="我的悬赏" :autoBack="true" placeholder></u-navbar>
     <Reward
       v-for="(item, index) in rewardList"
       :key="index"

@@ -8,7 +8,6 @@
     <view class="box" :style="{ height: safeArea + 'px' }">
       <scroll-view
         :scroll-top="scrollTop"
-        :scroll-into-view="scrollInex"
         class="message-container"
         scroll-y
         @scrolltoupper="getChat"

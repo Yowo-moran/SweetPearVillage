@@ -237,7 +237,15 @@ const mutations = {
 			return item.sendTime === time
 		})
 		console.log(index)
-
+		that.$nextTick(()=>{
+			that.query = uni.createSelectorQuery().in(that);
+			that.query.selectAll('.message').boundingClientRect((data)=>{
+				const elements = Array.from(data);
+				console.log(elements);
+				if(!elements.length) return;
+				that.scrollTop = elements[index].top - elements[0].top
+			}).exec()
+		})
 	}
 }
 
