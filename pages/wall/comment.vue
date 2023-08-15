@@ -3,7 +3,7 @@
     <view class="main">
         <!-- 昵称 -->
         <view class="userName">
-            {{ info.commentUser }}:
+            {{ info.nickName }}:
         </view>
         <!-- 评论内容 -->
         <view class="content">
