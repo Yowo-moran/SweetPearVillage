@@ -3,7 +3,7 @@
         <!-- 左侧头像 -->
         <view class="left">
             <view class="portrait">
-                <img src="../../static/portrait.png">
+                <img src="../../static/portrait.png" @click="jump">
             </view>
         </view>
         <!-- 右侧（昵称+文本内容+点赞评论） -->
@@ -55,9 +55,13 @@ export default {
     },
     methods:{
         jump(id){
-            uni.navigateTo({
-                url:`topicDetail?id=${id}`
-            })
+            let thisPage = getCurrentPages();
+            // console.log(thisPage);
+            if(thisPage[thisPage.length - 1].route == 'pages/wall/wall'){
+                uni.navigateTo({
+                    url:`topicDetail?id=${id}`
+                })
+            }
         },
         async checkLikeStatus(pid){
             const url = `https://101.43.254.115:7115/post/like/${pid}`;
@@ -216,22 +220,24 @@ export default {
             }
             .info {
                 // border: 2px solid orange;
-                width: 570rpx;
+                // width: 570rpx;
                 // height: 60rpx;
                 padding-left: 10rpx;
                 display: flex;
                 align-items: center;
-                margin-bottom: 10rpx;
+                // margin-bottom: 10rpx;
                 .time {
-                    width: 150rpx;
+                    // border:2px solid red;
+                    // width: rpx;
                     font-size: 25rpx;
                     color: #878864;
+                    margin-right: 120rpx;
                 }
                 .star {
                     // border: 1px solid skyblue;
                     width: 100rpx;
                     height: 40rpx;
-                    margin-left: 250rpx;
+                    // margin-left: 200rpx;
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -256,14 +262,14 @@ export default {
                     // border: 1px solid skyblue;
                     width: 100rpx;
                     height: 40rpx;
-                    margin-left: 5rpx;
+                    margin-left: 10rpx;
                     margin-right: 5rpx;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     .commentNum {
                         color: #878864;
-                        margin-bottom: 0rpx;
+                        // margin-bottom: 0rpx;
                         font-size: 25rpx;
                         margin-right: 10rpx;
                         // height: 40rpx;
