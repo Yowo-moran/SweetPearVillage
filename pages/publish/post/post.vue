@@ -1,10 +1,15 @@
 <template>
 	<view>
+		<InformVc v-show="mesShow"></InformVc>
+		
+		
+		
 		<u-navbar leftText="帖子"
 		:autoBack="true" 
 		:bgColor="bgColor" 
 		placeholder>
 		 </u-navbar>
+		 
 		 <u-form :model="model1">
 			 <u-form-item prop="user.content">
 				<u--textarea v-model="model1.user.content" 
@@ -34,9 +39,13 @@
 </template>
 
 <script>
+	
+	import InformVc from '../../../components/InformVc.vue';
 	export default {
+		components:{InformVc},
 		data() {
 			return {
+				mesShow:false,
 				show:false,
 				message:'请确认信息全部填写完毕',
 				model1:{
@@ -51,6 +60,23 @@
 				images:[],
 				
 			};
+		},
+		computed:{
+			Data(){
+				return this.$store.state.newChat;
+			},
+		},
+		watch:{
+			Data:{
+				handler(newValue,oldValue){
+					this.mesShow=true;
+					setTimeout(()=>{
+						this.mesShow=false;
+					},2000)
+				},
+				deep:true,
+				
+			},
 		},
 		methods:{
 			finish(){

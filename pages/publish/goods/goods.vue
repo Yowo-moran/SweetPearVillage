@@ -1,6 +1,6 @@
 <template>
 	<view>
-		
+		<InformVc v-show="mesShow"></InformVc>
 		<u-navbar leftText="闲置" 
 		:autoBack="true" 
 		:bgColor="bgColor" 
@@ -42,9 +42,12 @@
 </template>
 
 <script>
+	import InformVc from '../../../components/InformVc.vue';
 	export default {
+		components:{InformVc},
 		data() {
 			return {
+				mesShow:false,
 				show:false,
 				content:"请确认信息全部填写完毕",
 				model1:{
@@ -65,6 +68,23 @@
 				capture:['album', 'camera'],
 				images:[],
 			};
+		},
+		computed:{
+			Data(){
+				return this.$store.state.newChat;
+			},
+		},
+		watch:{
+			Data:{
+				handler(newValue,oldValue){
+					this.mesShow=true;
+					setTimeout(()=>{
+						this.mesShow=false;
+					},2000)
+				},
+				deep:true,
+				
+			},
 		},
 		methods:{
 			finish(){
