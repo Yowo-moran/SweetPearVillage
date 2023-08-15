@@ -28,7 +28,8 @@
 			"path": "pages/village/village",
 			"style": {
 				"navigationBarTitleText": "村村",
-				"enablePullDownRefresh": false
+				// 下拉刷新
+				"enablePullDownRefresh": true //当前页
 			}
 		},
 		{

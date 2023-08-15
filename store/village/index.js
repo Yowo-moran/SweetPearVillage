@@ -73,8 +73,9 @@ const actions={
 	 },
 	 // 悬赏请求
 	 getRewardInfo({commit,state},options={}){
-		 const {pageNum=1,pageSize=6,types='',isSearch=false,sortBy='amount_asc'}=options
-		 if(isSearch){
+		 const {pageNum=1,pageSize=6,types='',isClear=false,sortBy='amount_asc'}=options
+		 console.log(sortBy);
+		 if(isClear){
 			 state.rewardInfo=[]
 		 }
 		 // console.log(types,'ah');
@@ -109,7 +110,10 @@ const actions={
 	 },
 	 // 闲置请求
 	 getLeaveInfo({commit,state},options={}){
-		 const{pageNum=1,pageSize=6,keyWord=''}=options
+		 const{pageNum=1,pageSize=6,keyWord='',isClear=false}=options
+		 if(isClear){
+		 	state.leaveInfo=[]
+		 }
 		 uni.request({
 		 	method:"GET",
 			url:'https://101.43.254.115:7115/item',
@@ -134,11 +138,11 @@ const actions={
 	 },
 	 // 书籍请求
 	 getBookInfo({commit,state},options={}){
-		 const {college='',major='',grade='',page=1,pageSize=6,isSearch=false}=options
-		 console.log(college,major,grade,'参数');
-		 if(isSearch){
-		 	 state.bookInfo=[]
+		 const {college='',major='',grade='',page=1,pageSize=6,isClear=false,sortBy=''}=options
+		 if(isClear){
+		 	state.bookInfo=[]
 		 }
+		 console.log(college,major,grade,'参数');
 		 // console.log('page',page,'pageSize',pageSize,college,major,grade);
 		 uni.request({
 		 	method:'GET',
@@ -147,7 +151,7 @@ const actions={
 				college,
 				major,
 				grade,
-				sortBy:0,
+				sortBy,
 				page,
 				pageSize
 			},
@@ -155,7 +159,7 @@ const actions={
 				'Authorization':uni.getStorageSync('token')
 			},
 			success:res=>{
-			// console.log(res);
+			console.log(res);
 				if(res.statusCode==200&&res.data.data.total!=0){
 					state.bookstatus='loading'
 					commit('GETBOOKINFO',res.data.data.records)
