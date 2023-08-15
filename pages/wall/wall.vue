@@ -1,6 +1,7 @@
 <template>
 	<view class="wall">
 		<topic-list></topic-list>
+		<u-loadmore :status="status"></u-loadmore>
 	</view>
 </template>
 
@@ -11,7 +12,9 @@ export default {
 	components:{ topicList },
 	data() {
 		return {
-			
+			count:1,
+			// status:'loadmore'
+			status:this.$store.state.wall.status
 		}
 	},
 	computed:{
@@ -21,8 +24,14 @@ export default {
 		...mapActions("wall" , ['getList']),
 	},
 	onLoad(){
-		this.getList();
+		this.status = 'loading';
+		this.getList(0);
 	},
+	onReachBottom(){
+		this.count ++;
+		this.status = 'loading';
+        this.getList(this.count);
+    }
 }
 </script>
 
@@ -33,6 +42,7 @@ export default {
 		// border: 2px solid red;
 		width: 740rpx;
 		display: flex;
+		flex-direction: column;
 		padding-top: 10rpx;
 		justify-content: center;
 		align-items: center;

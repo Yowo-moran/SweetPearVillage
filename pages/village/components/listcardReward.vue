@@ -7,9 +7,9 @@
 		</view>
 		<view class="userInfo">
 			<!-- 用户头像 -->
-			<image class="userAvatar" src="../../../static/bochi.png"></image>
+			<image class="userAvatar" :src="rewardInfo.avatar"></image>
 			<!-- 用户名称 -->
-			<view class="userName">猪猪吃珠珠</view>
+			<view class="userName">{{rewardInfo.nickName}}</view>
 			<!-- 价格 -->
 			<view class="price">￥ {{rewardInfo.rewardAmount}}</view>
 		</view>

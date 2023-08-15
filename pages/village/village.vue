@@ -4,13 +4,13 @@
 		<view class="header">
 			<!-- 自定义导航栏 -->
 			<navbar @changeTagNum="changeTagNum" :tabIndex="tabIndex" u></navbar>
-			<searchbox :tagName="tagName" @rewardKeyword="rewardKeyword" @bookKeyword="bookKeyword"></searchbox>
+			<searchbox :tagName="tagName" :clearTags="clearTags"@rewardKeyword="rewardKeyword" @bookKeyword="bookKeyword"></searchbox>
 		</view>
 		<!-- 将内容撑开 -->
 		<view style="height: 160rpx;"></view>
 		 <!-- 滑动区 -->
 
-		<listScroll @skipChange="skipChange" :activeIndex="activeIndex" :tagName="tagName" :rewardKeywords="rewardKeywords" :bookkeywords="bookkeywords" style="flex-grow: 1;"></listScroll>
+		<listScroll @skipChange="skipChange" @clearTag="clearTag":activeIndex="activeIndex" :tagName="tagName" :rewardKeywords="rewardKeywords" :bookkeywords="bookkeywords"  style="flex-grow: 1;"></listScroll>
 
 <!-- 		<listScroll @skipChange="skipChange" :activeIndex="activeIndex" :tagName="tagName" ></listScroll> -->
 	</view>
@@ -31,7 +31,8 @@
 				// 当前标签名称
 				tagName:'悬赏',
 				rewardKeywords:[],
-				bookkeywords:{}
+				bookkeywords:{},
+				clearTags:true,
 			};
 		},
 		methods:{
@@ -45,10 +46,13 @@
 			},
 			// 子传父 组件传值 悬赏页标签
 			rewardKeyword(item){
-				this.rewardKeywords=item
+				 this.rewardKeywords=item
 			},
 			bookKeyword(obj){
 				this.bookkeywords=obj
+			},
+			clearTag(){
+				this.clearTags=!this.clearTags
 			}
 		}
 	}

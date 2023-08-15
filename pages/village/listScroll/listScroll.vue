@@ -6,9 +6,12 @@
 			<!-- listCard -->
 			<view class="scroll">
 				<!-- 添加上下滑动区 -->
-				<scroll-view scroll-y="true" class="demo-scroll-block" @scrolltolower="upper">
+				<scroll-view scroll-y="true" class="demo-scroll-block" @scrolltolower="lower"
+				refresher-enabled="true" :refresher-threshold="45" :refresher-triggered="triggered" refresher-background="#fff" 
+			 @refresherrefresh="onRefresh">
 					<!-- 先判断后循环 v-if和v-for一起使用会造成性能问题 -->
 					<view v-if="tagName==='悬赏'">
+						<u-loadmore status="loading" v-if="isLoading"/>
 						<listCardReward  v-for="item,index in rewardInfo" :key="index" :rewardInfo="item"></listCardReward>
 						<u-loadmore :status="rewardstatus" />
 					</view>
@@ -50,7 +53,7 @@
 			bookkeywords:{
 				type:Object,
 				default:{}
-			}
+			},
 		},
 		data() {
 			return {
@@ -60,7 +63,9 @@
 				// 书籍页关键字
 				college:'',
 				major:'',
-				grade:''
+				grade:'',
+				BooksortBy:'',
+				triggered:false
 			}
 		},
 		mounted(){
@@ -71,17 +76,43 @@
 				const {current}=e.detail
 				this.activeIndex=current
 			},
+			onRefresh(){
+				this.triggered= true;
+				this.$emit('clearTag')
+				if(this.tagName=='悬赏'){
+					this.rewardpage=1;
+					this.$store.dispatch('village/getRewardInfo',{isClear:true})
+				}else if(this.tagName=='书籍'){
+					this.college=''
+					this.major=''
+					this.grade=''
+					this.BooksortBy=''
+					this.bookpage=1
+					this.$store.dispatch('village/getBookInfo',{isClear:true})
+				}else if(this.tagName=='闲置'){
+					this.leavepage=1
+					this.$store.dispatch('village/getLeaveInfo',{isClear:true})
+				}
+				setTimeout(() => {
+					this.triggered = false;
+				}, 300)
+			},
 			// 触发下拉
-			upper(){
+			lower(){
 				if(this.tagName=='悬赏'&&this.rewardstatus=='loading'){
 					this.rewardpage++;
 					console.log(this.rewardpage);
-					this.$store.dispatch('village/getRewardInfo',{pageNum:this.rewardpage,pageSize:6,types:this.rewardKeywords})
+					// 这里不能改变原数组的值，否则一直执行这个函数
+					let priceSort=[...this.rewardKeywords].pop()
+					let rewardKeyword=[...this.rewardKeywords].slice(0,-1)
+					let sortBy='amount_asc'
+					priceSort==0||priceSort==1?sortBy='amount_asc':sortBy='amount_desc'
+					this.$store.dispatch('village/getRewardInfo',{pageNum:this.rewardpage,pageSize:6,types:this.rewardKeyword,sortBy})
 				}else if(this.tagName=='书籍'&&this.bookstatus=='loading'){
 					this.bookpage++
-					const {college,major,grade}=this
-					console.log(college,major,grade);
-					this.$store.dispatch('village/getBookInfo',{page:this.bookpage,pageSize:6,college,major,grade})
+					const {college,major,grade,BooksortBy}=this
+					console.log(college,major,grade,BooksortBy);
+					this.$store.dispatch('village/getBookInfo',{page:this.bookpage,pageSize:6,college,major,grade,sortBy:BooksortBy})
 				}else if(this.tagName=='闲置'&&this.leavestatus=='loading'){
 					this.leavepage++
 					console.log(this.leavepage);
@@ -125,14 +156,33 @@
 			},
 			// 悬赏页标签改变时
 			rewardKeywords(){
-				if(this.rewardKeywords.length==0){
-					this.rewardKeywords=''
-				}
-				this.$store.dispatch('village/getRewardInfo',{types:this.rewardKeywords,isSearch:true})
+				this.rewardpage=1;
+				// 这里不能改变原数组的值，否则一直执行这个函数
+				let priceSort=[...this.rewardKeywords].pop()
+				let rewardKeyword=[...this.rewardKeywords].slice(0,-1)||[]
+				let sortBy='amount_asc'
+				priceSort==0||priceSort==1?sortBy='amount_asc':sortBy='amount_desc'
+				this.$store.dispatch('village/getRewardInfo',{types:this.rewardKeyword,isClear:true,sortBy})
 			},
 			bookkeywords(){
-				const {college,major,grade}=this.bookkeywords
-				this.$store.dispatch('village/getBookInfo',{college:this.bookkeywords.collegeValue,major:this.bookkeywords.gradeValue,grade:this.bookkeywords.majorityValue,isSearch:true})
+				this.bookpage=1
+				// 若为默认，则变为空字符串
+				for (let key in this.bookkeywords) {
+				   if (this.bookkeywords.hasOwnProperty(key)) {
+				     if (this.bookkeywords[key] === '默认') {
+				       this.bookkeywords[key] = '';
+				     }
+				   }
+				 }
+				const {collegeValue,gradeValue,majorityValue,sortBys}=this.bookkeywords
+				if(sortBys==1){
+					this.BooksortBy=1
+				}else if(sortBys==2){
+					this.BooksortBy=0
+				}else{
+					this.BooksortBy=''
+				}
+			this.$store.dispatch('village/getBookInfo',{college:collegeValue,major:gradeValue,grade:majorityValue,isClear:true,sortBy:this.BooksortBy})
 			}
 		}
 }

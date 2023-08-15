@@ -14,6 +14,11 @@
 				<view class="contentOne">
 					<view v-for="item,index in tags" :key="index" @click="chooseTag(index,item)" :style="{color:(currentTags.indexOf(index)!=-1 ? '#6F876F': '#fff')}">{{item}}</view>
 				</view>
+				<view @click="rewardprice" class="price">价格 
+					<image src="../../../static/sort.png" v-if="priceSortReward==0"></image>
+					<image src="../../../static/sort-up.png"  v-if="priceSortReward==1"></image>
+					<image src="../../../static/sort-down.png"  v-if="priceSortReward==2"></image>
+				</view>
 				<button @click="submit">确定</button>
 			</view>
 		</u-popup>
@@ -24,6 +29,11 @@
 					<view class="options">学院<view class="selector" @click="collegeShow=true">{{collegeValue}}</view></view>
 					<view class="options">专业<view class="selector" @click="majorityShow=true">{{majorityValue}}</view></view>
 					<view class="options">年级<view class="selector" @click="gradeShow=true">{{gradeValue}}</view></view>
+				</view>
+				<view @click="bookprice" class="price">价格
+					<image src="../../../static/sort.png" v-if="priceSortBook==0"></image>
+					<image src="../../../static/sort-up.png"  v-if="priceSortBook==1"></image>
+					<image src="../../../static/sort-down.png"  v-if="priceSortBook==2"></image>
 				</view>
 				<button @click="bookSubmit">确定</button>
 			</view>
@@ -63,6 +73,10 @@
 			tagName:{
 				type:String,
 				default:'悬赏'
+			},
+			clearTags:{
+				type:Boolean,
+				default:true
 			}
 		},
 		data() {
@@ -362,6 +376,9 @@
 				  ],
 				grades: [
 				  {
+					  name:"默认",
+				  },
+				  {
 				    name: "大一",
 				  },
 				  {
@@ -373,7 +390,9 @@
 				  {
 					name:'大四'
 				  }
-				]
+				],
+				priceSortReward:0,
+				priceSortBook:0
 			}
 		},
 		methods: {
@@ -409,16 +428,24 @@
 			},
 			// 点击确定
 			submit(){
-				// 将数组深拷贝过去
-				this.$emit('rewardKeyword',JSON.parse(JSON.stringify(this.rewardkeyword)))
+				// 将数组深拷贝过去 并入价格排序参数
+				this.$emit('rewardKeyword',JSON.parse(JSON.stringify([...this.rewardkeyword,this.priceSortReward])))
 				// 将选中的标签传给父组件
 				this.show=false
 			},
 			bookSubmit(){
 				const{collegeValue,majorityValue,gradeValue}=this
-				this.collegekeyword={collegeValue,majorityValue,gradeValue}
+				this.collegekeyword={collegeValue,majorityValue,gradeValue,sortBys:this.priceSortBook}
 				this.$emit('bookKeyword',JSON.parse(JSON.stringify(this.collegekeyword)))
 				this.show=false
+			},
+			// 悬赏价格排序
+			rewardprice(){	
+				this.priceSortReward=(this.priceSortReward+1)%3
+			},
+			// 书籍价格排序
+			bookprice(){
+				this.priceSortBook=(this.priceSortBook+1)%3
 			}
 		},
 		watch:{
@@ -428,6 +455,15 @@
 				this.collegeValue=''
 				this.majorityValue=''
 				this.gradeValue=''
+			},
+			clearTags(){
+				this.currentTags=[]
+				this.rewardkeyword=[]
+				this.collegeValue=''
+				this.majorityValue=''
+				this.gradeValue='',
+				this.priceSortReward=0
+				this.priceSortBook=0
 			}
 		}
 }
@@ -493,7 +529,7 @@
 				justify-content: flex-start;
 				flex-wrap: wrap;
 				padding: 0 40rpx;
-				margin-bottom: 20px;
+				margin-bottom: 25px;
 				height: 80%;
 				box-sizing: border-box;
 				view{
@@ -507,6 +543,7 @@
 				}
 			}
 			.contentTwo{
+				margin-bottom: 25px;
 				.options{
 					display: flex;
 					// background-color: pink;
@@ -539,6 +576,24 @@
 					  right:10rpx;
 					}
 				}
+			}
+			.price{
+				position: absolute;
+				bottom: 10rpx;
+				left: 20rpx; 
+				height: 90rpx;
+				width: 100rpx;
+				padding: 0 28rpx;
+				text-align: center;
+				line-height: 90rpx;
+				background-color: #BFC0A2;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, .32), 0 0 6px rgba(0, 0, 0, .20);
+				image{
+					margin-left: 5rpx;
+					height: 30rpx;
+					width: 30rpx;
+				}
+			
 			}
 			button{
 				position: absolute;

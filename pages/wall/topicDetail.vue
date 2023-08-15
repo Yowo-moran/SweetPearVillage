@@ -39,6 +39,7 @@ export default {
             // console.log(this.text);
             this.addComment(this.commentInfo);
             this.getCommentList(this.id);
+            this.text = "";
         }
     },
     computed:{
@@ -79,6 +80,7 @@ export default {
             align-items: center;
             justify-content:space-around;
             padding-top: 20rpx;
+            margin-bottom: 130rpx;
         }
         .foot {
             bottom: 0;
