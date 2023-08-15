@@ -89,7 +89,7 @@ export default {
   },
   onShow() {
     console.log("messageShow");
-    this.getChatList();
+    if (wx.getStorageSync("token")) this.getChatList();
   },
   onHide() {
     console.log("message hide");

@@ -5,15 +5,6 @@ const state = {
 	socket: null,
 	// 聊天首页列表数据
 	chatList: [
-		{
-			lastTalkMsg: '',
-			lastTalkMsgType: 1,
-			lastTalkTime: '',
-			receiverAvatar: '',
-			receiverName: '',
-			receiverOpenId: '',
-			unreadMsgNum: 0
-		}
 	],
 	// 新消息
 	newChat: {
@@ -32,14 +23,6 @@ const state = {
 	},
 	// 聊天界面数据
 	chatHistoryList: [
-		{
-			message: "",
-			msgId: 1,
-			msgType: 1,
-			receiverOpenId: "",
-			senderOpenId: "",
-			sendTime: ""
-		},
 	],
 	receiverAvatar: '',
 	receiveNickname: '',
@@ -135,7 +118,8 @@ const actions = {
 		})
 	},
 	async getHistory({ commit }, { msgId, that, openId, time }) {
-		wx.request({
+		that.load = true;
+		await wx.request({
 			url: `https://101.43.254.115:7115/chat-history/${openId}`,
 			data: {
 				currentMsgId: msgId
@@ -148,6 +132,9 @@ const actions = {
 				console.log(res);
 				if (res.data.data.chatHistoryList[0]) {
 					commit('ADD_OLDCHAT', { data: res.data.data.chatHistoryList, that: that, time: time })
+				}else{
+					that.load = false
+					that.isTop = true;
 				}
 			}
 		})
@@ -244,8 +231,13 @@ const mutations = {
 				console.log(elements);
 				if(!elements.length) return;
 				that.scrollTop = elements[index].top - elements[0].top
+				that.load = false;
 			}).exec()
 		})
+	},
+	// 清除历史记录
+	CLEAR_OLDCHAT(state){
+		state.chatHistoryList = [];
 	}
 }
 
