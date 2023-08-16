@@ -62,6 +62,7 @@
 				></u-icon>
 			</u-form-item>
 		</u-form>
+		
 		<u-picker
 			closeOnClickOverlay
 			:show="showCollege"
@@ -93,11 +94,13 @@
 		<u-upload
 		:previewFullImage="true"
 		:fileList="fileList1"
+		accept="image"
 		@afterRead="afterRead"
 		@delete="deletePic"
 		name="1"
 		multiple
 		:maxCount="10"
+		
 		></u-upload>
 		<view class="bottom">
 			<button @click="finish">发布</button>
@@ -105,6 +108,7 @@
 		
 		<!-- 信息提示 -->
 		<u-modal :show="show"  :content='content' width="550rpx" @confirm=" show=false;"></u-modal>
+		
 		
 	</view>
 </template>
@@ -115,6 +119,14 @@
 		components:{InformVc},
 		data() {
 			return {
+				grade:[
+					{name:'大一'},
+					{name:'大二'},
+					{name:'大三'},
+					{name:'大四'},
+				],
+				
+				
 				mesShow:false,
 				show:false,
 				content:"请确认信息全部填写完毕",
@@ -157,7 +169,7 @@
         ],
       ],
 		major:
-		[[[]],
+		[ [["非专业书籍"]],
 			[["请先选择学院"]],
         [
           [
@@ -361,7 +373,7 @@
         ],
       ],
 				fileList1: [],
-				majorIndex:0,
+				majorIndex:1,
 				images:[],
 			};
 		},
@@ -383,29 +395,32 @@
 			},
 		},
 		methods:{
+			
 			collegeSelect(e){
-				console.log(e)
+				
 				this.model1.userInfo.college = e.value[0];
 				this.majorIndex=e.indexs[0]+1;
 				
 				// this.model1.userInfo.major = "请选择专业";
 				if (this.model1.userInfo.college=== "非专业书籍") {
 				  this.model1.userInfo.major = "非专业书籍"
+				  this.majorIndex=0;
 				}
 				this.showCollege=false;
 			},
 			majorSelect(e){
 				console.log(e)
-				if (e.value[0] !== "请先选择学院") {
+				
+				if (e.value[0] !== "请选择专业") {
 				  this.model1.userInfo.major = e.value
 				}
 				this.showMajor=false;
 			},
 			gradeSelect(e){
+				console.log(e)
 				this.model1.userInfo.grade= e.name
 			},
 			finish(){
-				
 					if(this.model1.userInfo.name!==''&&this.model1.userInfo.price!==''&&this.model1.userInfo.college!==''&&this.model1.userInfo.major!==''&&this.model1.userInfo.grade!==''&&this.fileList1.length!=0){
 						  uni.request({
 							url:'http://127.0.0.1:4523/m1/3091110-0-default/user/book',
@@ -444,10 +459,12 @@
 			
 			// 删除图片
 			deletePic(event) {
+				
 				this[`fileList${event.name}`].splice(event.index, 1)
 			},
 			// 新增图片
 			async afterRead(event) {
+				
 				// 当设置 multiple 为 true 时, file 为数组格式，否则为对象格式
 				let lists = [].concat(event.file)
 				let fileListLen = this[`fileList${event.name}`].length
