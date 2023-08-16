@@ -10,7 +10,7 @@ const state = {
         id:0,
         praiseCnt:0,
         commentCnt:0,
-        imageArr:[],
+        images:[],
     },
 }
 const mutations = {
@@ -51,13 +51,14 @@ const actions = {
             method:"GET",
             url: 'https://101.43.254.115:7115/post',
             data:{
-                pageNum:1 + num,
+                pageNum:0 + num,
                 pageSize:5,
                 keyword:"",
             },
             success(res) {
                 if(num != 0){
                     console.log("获取下拉数据");
+                    console.log(num);
                     console.log(res.data.data);
                     commit('setMoreTopicList' , res.data.data)
                 }
