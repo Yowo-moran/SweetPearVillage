@@ -3,7 +3,7 @@
         <!-- 左侧头像 -->
         <view class="left">
             <view class="portrait">
-                <img src="../../static/portrait.png" @click="jump">
+                <img src="../../static/portrait.png" @click="chat(selfInfo.userId , selfInfo.nickName)">
             </view>
         </view>
         <!-- 右侧（昵称+文本内容+点赞评论） -->
@@ -17,8 +17,9 @@
                     {{ selfInfo.content }}
                 </view>
                 <view class="pics">
-                    <!-- <view class="pic" wx:for="{{ imageArr }}" wx:key="index"> -->
-                        <!-- <image src="{{ item.image }}"></image> -->
+                    <!-- <view class="pic" wx:if="{{ imageArr.length > 0 }}" wx:for="{{ imageArr }}" wx:key="index">
+                        <image wx:if="{{ item.image }}" src="{{ item.image }}"></image>
+                    </view> -->
                     <view class="pic"><img src="../../static/bochi.png" ></view>
                     <view class="pic"><img src="../../static/bochi.png" ></view>
                     <view class="pic"><img src="../../static/bochi.png" ></view>
@@ -62,6 +63,11 @@ export default {
                     url:`topicDetail?id=${id}`
                 })
             }
+        },
+        chat(userId , nickName){
+            uni.navigateTo({
+                    url:`/pages/massage/chat/chat?openId=${userId}&title=${nickName}`
+                })
         },
         async checkLikeStatus(pid){
             const url = `https://101.43.254.115:7115/post/like/${pid}`;
@@ -127,9 +133,10 @@ export default {
     watch:{
 
     },
-    onLoad(){
-        console.log(imageArr);
-    }
+    // onLoad(){
+    //     console.log("图片");
+    //     console.log(this.info.images);
+    // }
 }
 </script>
 
