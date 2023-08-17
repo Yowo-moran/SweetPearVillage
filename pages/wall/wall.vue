@@ -25,7 +25,9 @@ export default {
 	},
 	onLoad(){
 		this.status = 'loading';
-		this.getList(0);
+		if(wx.getStorageSync('token')){
+			this.getList(0);
+		}
 	},
 	onReachBottom(){
 		this.count ++;
