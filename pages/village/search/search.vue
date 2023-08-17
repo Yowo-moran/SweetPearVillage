@@ -65,8 +65,10 @@
 				loading:false,
 				tagType:'',
 				rewardSearchInfo:[],
+				leaveSearchInfo:[],
 				has_history:true,
 				rewardPageNum:1,
+				leavePageNum:1,
 				status1:'loading'
 			}
 		},
@@ -77,17 +79,32 @@
 			},
 			// 点击搜索
 			goSearch(){
-				if(this.tagType=='悬赏'){
-					if(this.value.trim()!=''){
-						this.$store.dispatch('village/setHistoryList',{
-							name:this.value.trim(),
-							type:this.tagType
-						})
-						this.is_histroy=false
+				if(this.value.trim()!=''){
+					// 添加历史记录
+					this.$store.dispatch('village/setHistoryList',{
+						name:this.value.trim(),
+						type:this.tagType
+					})
+					this.is_histroy=false
+					if(this.tagType=='悬赏'){
 						this.rewardSearchInfo=[]
 						this.searchReward({keyword:this.value.trim(),pageNum:this.rewardPageNum})
+					}else if(this.tagType=='闲置'){
+						this.leaveSearchInfo=[]
+						this.searchLeave({searchText:this.value.trim(),pageNum:this.leavePageNum})
 					}
 				}
+				// if(this.tagType=='悬赏'){
+				// 	if(this.value.trim()!=''){
+				// 		this.$store.dispatch('village/setHistoryList',{
+				// 			name:this.value.trim(),
+				// 			type:this.tagType
+				// 		})
+				// 		this.is_histroy=false
+				// 		this.rewardSearchInfo=[]
+				// 		this.searchReward({keyword:this.value.trim(),pageNum:this.rewardPageNum})
+				// 	}
+				// }
 			},
 			// 点击历史记录
 			goHistoryList(item){
@@ -148,6 +165,54 @@
 					},
 					fail:res=>{
 						this.has_history=false
+					}
+				})
+			},
+			// 搜索闲置
+			searchLeave(options={}){
+				const {pageSize=6,pageNum=1,searchText='',sort='asc'}=options
+				console.log(searchText);
+				uni.request({
+					method:'GET',
+					url:'https://101.43.254.115:7115/item/search',
+					data:{
+						pageSize,
+						pageNum,
+						searchText,
+						sort
+					},
+					header:{
+						'Authorization':uni.getStorageSync('token')
+					},
+					success:res=>{
+						console.log(res);
+						// 如果成功返回数据
+						// if(res.statusCode==200&&res.data.data.total!=0){
+						// 	// 判断数据是否合并
+						// 	if(this.rewardSearchInfo.length==0){
+						// 		this.rewardSearchInfo=res.data.data.rewards
+						// 	}else{
+						// 		this.rewardSearchInfo=[...res.data.data.rewards,...this.rewardSearchInfo]
+						// 	}
+						// 	if(res.data.data.total<6){
+						// 		this.status1='nomore'
+						// 	}
+						// 	this.has_history=true
+						// }else if(res.statusCode==200&&res.data.data.total==0){
+						// 	// 如果第一次请求就没数据 即数据长度为0
+						// 	if(this.rewardSearchInfo.length==0){
+						// 		this.has_history=false
+						// 	}else{
+						// 		// 再发送请求，但返回的数据为0
+						// 		this.status1='nomore'
+						// 	}	
+						// }else{
+						// 	this.has_history=false
+						// }
+					},
+					fail:res=>{
+						console.log(res);
+						// this.has_history=false
 					}
 				})
 			},

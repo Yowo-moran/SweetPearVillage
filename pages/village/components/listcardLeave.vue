@@ -1,6 +1,6 @@
 <template>
 	<!-- 横向卡片 闲置 -->
-	<view class="rowlistItem"  @click="jump">
+	<view class="rowlistItem"  @click="jump" :style="{backgroundColor:(leaveInfo.sold?'#D7D7D7':'#fff')}">
 		<view class="listItemImage">
 			<image :src="leaveInfo.avatar"></image>
 		</view>
@@ -12,6 +12,7 @@
 				<view class="price">￥ {{leaveInfo.price}}</view>
 			</view>
 		</view>
+		<image class="forbid" src='../../../static/售出.png' v-if="leaveInfo.sold"></image>
 	</view>
 </template>
 
@@ -30,8 +31,9 @@
 		},
 		methods: {
 			jump(){
+				if(!this.leaveInfo.sold)
 				uni.navigateTo({
-					url:'/pages/massage/chat/chat'
+					url:`/pages/massage/chat/chat?openId=${this.leaveInfo.userId}&title=${this.leaveInfo.nickName}`
 				})
 			}
 		},
@@ -44,6 +46,7 @@
 <style lang="scss" scoped>
 .rowlistItem{
 	display: flex;
+	position: relative;
 	justify-content: space-around;
 	margin: 20rpx;
 	padding: 15rpx 30rpx;
@@ -101,10 +104,25 @@
 				display: inline-block;
 				vertical-align:middle;
 				margin-top: 3rpx;
-				font-size: 32rpx;
+				font-size: 32rpx;		
+				// 自动换行
+				word-wrap: break-word;
+				word-break: break-all;
+				white-space: pre-line;
 				color: #b38f8f;
 			}
 		}
+	}
+	.forbid{
+		position: absolute;
+		right: 50rpx;
+		top: 40rpx;
+		width: 100rpx;
+		height: 100rpx;
+		background-color: #fff;
+		border-radius: 50%;
+		overflow: hidden;
+		opacity: 0.7;
 	}
 }
 .rowlistItem:first-child{

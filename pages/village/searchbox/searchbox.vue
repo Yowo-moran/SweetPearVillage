@@ -416,6 +416,7 @@
 				this.collegeValue=e.value[0]
 				this.majorIndex = e.indexs[0]+1;
 				this.collegeShow=false
+				this.majorityValue="默认"
 			},
 			majorSelect(e){
 				if (e.value[0] !== "请先选择学院") {
@@ -464,6 +465,9 @@
 				this.gradeValue='',
 				this.priceSortReward=0
 				this.priceSortBook=0
+				// 由于仅仅在点击确定时才会传递标签关键字，所以刷新后关键字还保留原来的，这里要手动刷新一下
+				// this.$emit('rewardKeyword',JSON.parse(JSON.stringify([...this.rewardkeyword,this.priceSortReward])))
+				// this.$emit('bookKeyword',JSON.parse(JSON.stringify(this.collegekeyword)))
 			}
 		}
 }
