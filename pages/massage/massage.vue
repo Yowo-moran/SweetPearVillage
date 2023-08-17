@@ -1,6 +1,5 @@
 <template>
   <view style="display: flex; flex-direction: column">
-    <inform-vc v-if="isShow"></inform-vc>
     <view class="notice">
       <view class="left">
         <u-icon name="chat" size="64"></u-icon>
@@ -79,13 +78,9 @@ export default {
     ...mapActions("message", ["getChatList"]),
   },
   onLoad() {
-    /* 
-    setTimeout(() => {
-      this.isShow = true;
-    }, 1000);
-	setTimeout(()=>{
-		this.isShow = false;
-	},5000) */
+    if(!wx.getStorageSync('token')) uni.switchTab({
+    	url:'/pages/mine/mine'
+    })
   },
   onShow() {
     console.log("messageShow");
