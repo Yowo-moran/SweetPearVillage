@@ -1,9 +1,9 @@
 <template>
 	<view class="searchBar">
-		<navigator class="search" :url="'/pages/village/search/search?tagName='+tagName">
+		<view class="search" @click="jump">
 			<image class="searchIcon" src="../../../static/搜索-黑.png"></image> 
 			<view class="searchText">uniapp\vue</view>
-		</navigator>
+		</view>
 		<view class="setting" @click="show = true" v-if="tagName=='悬赏'||tagName=='书籍'">
 			<image class="settingIcon" src="../../../static/设置.png" ></image> 
 		</view>
@@ -396,6 +396,12 @@
 			}
 		},
 		methods: {
+			// 路由跳转
+			jump(){
+				uni.navigateTo({
+					url: `/pages/village/search/search?tagName=${this.tagName}&rewardkeyword=${JSON.stringify(this.rewardkeyword)}`
+				  });
+			},
 			chooseTag(index,item){
 				// 判断选中还是取消
 				const oldIndex=this.currentTags.indexOf(index)

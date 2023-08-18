@@ -67,7 +67,9 @@ const actions={
 	 setHistoryList({commit,state},history){
 		 let list=state.historyList
 		 list.unshift(history)
-		 commit('SETHISTORYLIST',list)
+		 // 添加后检查是否有重复项
+		 const newlist = [...new Set(list.map(JSON.stringify))].map(JSON.parse);
+		 commit('SETHISTORYLIST',newlist)
 	 },
 	 clearHistoryList({commit,state}){
 		 commit('CLEARHISTORYLIST')
@@ -161,7 +163,7 @@ const actions={
 				pageSize
 			},
 			header:{
-				'Authorization':uni.getStorageSync('token')
+				'Authorization':wx.getStorageSync('token')
 			},
 			success:res=>{
 			// console.log(res);
