@@ -96,6 +96,7 @@ export default {
     if (details) {
       this.setLogined(true);
       this.setPersonalDetails(details);
+	  console.log('set')
     }
   },
   data() {
@@ -216,7 +217,18 @@ export default {
   },
   computed: {
     ...mapState("mine", ["logined", "personalDetails"]),
-    ...mapState("message", ["chatList"]),
+    ...mapState("message", ["newChat"]),
+  },
+  watch: {
+    newChat: {
+      deep:true,
+      handler() {
+        this.isShow = true;
+        setTimeout(() => {
+          this.isShow = false;
+        }, 2000);
+      },
+    },
   },
 };
 </script>

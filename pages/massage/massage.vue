@@ -77,12 +77,15 @@ export default {
     },
     ...mapActions("message", ["getChatList"]),
   },
-  onLoad() {
-    if(!wx.getStorageSync('token')) uni.switchTab({
-    	url:'/pages/mine/mine'
-    })
-  },
   onShow() {
+	  const token = wx.getStorageSync('token')
+	    console.log(token)
+	  if(!token){
+	  	console.log('message Load')
+	  	uni.switchTab({
+	  		url:'/pages/mine/mine'
+	  	})
+	  }
     console.log("messageShow");
     if (wx.getStorageSync("token")) this.getChatList();
   },

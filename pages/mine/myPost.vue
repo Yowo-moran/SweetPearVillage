@@ -1,6 +1,16 @@
 <template>
   <view class="allPost">
-    <InformVc v-if="isShow"></InformVc>
+    <view
+      style="
+        width: 100%;
+        height: 123rpx;
+        position: absolute;
+        top: 12%;
+        z-index: 999;
+      "
+    >
+      <InformVc v-if="isShow"></InformVc>
+    </view>
     <u-navbar leftText="我的帖子" :autoBack="true" placeholder> </u-navbar>
     <Post :list="postList" @getPostList="getPostList" />
   </view>
@@ -46,8 +56,22 @@ export default {
         },
       });
     },
+    ...mapActions("mine", ["getToken"]),
   },
-  ...mapActions("mine", ["getToken"]),
+  computed: {
+    ...mapState("message", ["newChat"]),
+  },
+  watch: {
+    newChat: {
+      deep: true,
+      handler() {
+        this.isShow = true;
+        setTimeout(() => {
+          this.isShow = false;
+        }, 2000);
+      },
+    },
+  },
 };
 </script>
 

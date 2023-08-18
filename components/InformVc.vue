@@ -52,7 +52,7 @@ export default {
   transform: translateX(-50%);
   display: flex;
   justify-content: space-around;
-  height: 10vh;
+  height: 123rpx;
   background-color: #ffffff;
   animation-name: aniamte;
   animation-duration: 1s;
