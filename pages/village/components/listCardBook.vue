@@ -1,6 +1,6 @@
 <template>
 	<!-- 纵向卡片 书籍 -->	
-	<view class="verListItem"  @click="jump">
+	<view class="verListItem"  @click="jump" :style="{backgroundColor:(!bookInfo.states?'#D7D7D7':'#fff')}">
 		<view class="bookPhoto">
 			<image :src="bookInfo.image"></image>
 		</view>
@@ -12,7 +12,9 @@
 				<view class="college"><view style="width: 30%">学院：</view><view style="width: 70%;">{{bookInfo.college}}</view></view>
 				<view class="majority"><view  style="width: 30%;">专业：</view><view style="width: 70%;">{{bookInfo.major}}</view></view>
 			</view>
+			<image class="forbid" src='../../../static/售出.png' v-if="!bookInfo.states"></image>
 		</view>
+	
 	</view>
 </template>
 
@@ -31,8 +33,9 @@
 		},
 		methods: {
 			jump(){
+				if(this.bookInfo.states)
 				uni.navigateTo({
-					url:'/pages/massage/chat/chat'
+					url:`/pages/massage/chat/chat?openId=${this.bookInfo.userId}`
 				})
 			}
 		},
@@ -45,10 +48,11 @@
 <style lang="scss" scoped>
 .verListItem{
     display: inline-block;
+	
     margin: 15rpx 18.75rpx;
     padding: 30rpx 5rpx;
     width: 45%;
-    background-color: #F3F3EA;
+    background-color: #fff;
     box-sizing: border-box;
     .bookPhoto{ 
         width: 75%;
@@ -61,10 +65,16 @@
         }
     }
     .listItemContent{
+		position: relative;
         margin-top: 40rpx;
         width: 100%;
         .price{
-            text-align: center;
+			width: 100%;
+			// 自动换行
+			word-wrap: break-word;
+			word-break: break-all;
+			white-space: pre-line;
+			text-align: center;
            font-size: 40rpx;
            color: #b38f8f;
         }
@@ -86,7 +96,20 @@
 			.majority{
 				display: flex;
 			}
+			
         }
+		.forbid{
+			position: absolute;
+			right: 60rpx;
+			top: 20rpx;
+			width: 100rpx;
+			height: 100rpx;
+			background-color: #fff;
+			border-radius: 50%;
+			overflow: hidden;
+			opacity: 0.7;
+		}
     }
+	
 }
 </style>

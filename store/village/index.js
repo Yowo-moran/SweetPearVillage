@@ -23,6 +23,7 @@ const mutations={
 	},
 	// 悬赏主页面展示
 	GETREWARDINFO(state,info){
+		console.log('悬赏',info);
 		if(info.length<6){
 			state.rewardstatus='nomore'
 		}
@@ -36,7 +37,7 @@ const mutations={
 	},
 	// 书籍主页面展示
 	GETBOOKINFO(state,info){
-		// console.log(info);
+		console.log('书籍',info);
 		if(info.length<6){
 			state.bookstatus='nomore'
 		}
@@ -50,7 +51,7 @@ const mutations={
 	},
 	// 闲置主页面展示
 	GETLEAVEINFO(state,info){
-		// console.log(info);
+		console.log('闲置',info);
 		if(info.length<6){
 			state.leavestatus='nomore'
 		}
@@ -74,11 +75,13 @@ const actions={
 	 // 悬赏请求
 	 getRewardInfo({commit,state},options={}){
 		 const {pageNum=1,pageSize=6,types='',isClear=false,sortBy='amount_asc'}=options
-		 console.log(sortBy);
+		 // console.log(sortBy,types);
+		 console.log(pageNum);
 		 if(isClear){
-			 state.rewardInfo=[]
+			 state.rewardInfo=[],
+			 state.rewardstatus='loading'
 		 }
-		 // console.log(types,'ah');
+		 console.log(sortBy,'生姜',pageNum,'页数');
 		 uni.request({
 		 	method:'GET',
 			url:'https://101.43.254.115:7115/rewards',
@@ -93,7 +96,7 @@ const actions={
 				'Authorization':uni.getStorageSync('token')
 			},
 			success:res=>{
-				console.log(res);
+				// console.log(res);
 				if(res.statusCode==200&&res.data.data.total!=0){
 					commit('GETREWARDINFO',res.data.data.rewards)
 					state.rewardstatus='loading'
@@ -113,6 +116,7 @@ const actions={
 		 const{pageNum=1,pageSize=6,keyWord='',isClear=false}=options
 		 if(isClear){
 		 	state.leaveInfo=[]
+			state.leavestatus='loading'
 		 }
 		 uni.request({
 		 	method:"GET",
@@ -141,6 +145,7 @@ const actions={
 		 const {college='',major='',grade='',page=1,pageSize=6,isClear=false,sortBy=''}=options
 		 if(isClear){
 		 	state.bookInfo=[]
+			state.bookstatus='loading'
 		 }
 		 console.log(college,major,grade,'参数');
 		 // console.log('page',page,'pageSize',pageSize,college,major,grade);
@@ -159,7 +164,7 @@ const actions={
 				'Authorization':uni.getStorageSync('token')
 			},
 			success:res=>{
-			console.log(res);
+			// console.log(res);
 				if(res.statusCode==200&&res.data.data.total!=0){
 					state.bookstatus='loading'
 					commit('GETBOOKINFO',res.data.data.records)

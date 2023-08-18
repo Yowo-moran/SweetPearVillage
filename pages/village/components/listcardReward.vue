@@ -1,6 +1,6 @@
 <template>
 	<!-- 横向卡片 悬赏-->
-	<view class=listItem  @click="jump"> 
+	<view class=listItem  @click="jump" :style="{backgroundColor:(!rewardInfo.status?'#D7D7D7':'#fff')}"> 
 		<view class="listItemContent">
 			<view>{{rewardInfo.deliveryAddress}}代取，送至{{rewardInfo.senderAddress}}</view>
 			<view>{{rewardInfo.rewardContent}}</view>
@@ -13,6 +13,7 @@
 			<!-- 价格 -->
 			<view class="price">￥ {{rewardInfo.rewardAmount}}</view>
 		</view>
+		<image class="forbid" src='../../../static/售出.png' v-if="!rewardInfo.status"></image>
 	</view>
 </template>
 
@@ -30,8 +31,10 @@
 		},
 		methods: {
 			jump(){
+				// 若为假则无法点击
+				if(this.rewardInfo.status)  
 				uni.navigateTo({
-					url:'/pages/massage/chat/chat'
+					url:`/pages/massage/chat/chat?openId=${this.rewardInfo.userId}&title=${this.rewardInfo.nickName}`
 				})
 			}
 		},
@@ -45,9 +48,10 @@
 .listItem{
     display: flex;
     flex-direction: column;
+	position: relative;
     height: 200rpx;
     // width: 100%;
-	background-color: #F3F3EA;
+	background-color: #fff;
     margin: 30rpx 10rpx;
     border-radius: 15rpx;
     padding: 20rpx 40rpx;
@@ -90,10 +94,25 @@
         .price{
 			// width: 250rpx;
             // margin-right: 10rpx;
+			// 自动换行
+			word-wrap: break-word;
+			word-break: break-all;
+			white-space: pre-line;
 			font-size: 40rpx;
 			color: #b38f8f;
         }
     }
+	.forbid{
+		position: absolute;
+		right: 100rpx;
+		bottom: 45rpx;
+		width: 100rpx;
+		height: 100rpx;
+		background-color: #fff;
+		border-radius: 50%;
+		overflow: hidden;
+		opacity: 0.8;
+	}
 }
 .listItem:first-child{
 	margin-top: 15rpx;
