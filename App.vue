@@ -19,10 +19,12 @@ export default {
   },
   computed: {
     ...mapState("mine", ["logined"]),
+	...mapState('message',['socket'])
   },
   watch: {
     logined: {
       handler() {
+		  if(this.socket.readyState !== 1)
         this.connectWebSocket();
       },
     },

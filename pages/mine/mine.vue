@@ -96,6 +96,7 @@ export default {
     if (details) {
       this.setLogined(true);
       this.setPersonalDetails(details);
+	  console.log('set')
     }
   },
   data() {
