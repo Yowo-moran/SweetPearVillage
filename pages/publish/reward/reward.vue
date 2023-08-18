@@ -138,7 +138,7 @@
 								deliveryAddress:this.model1.userInfo.getPlace,
 					  		},
 					  		header: {
-					  			'Authorization': '',
+					  			Authorization: wx.getStorageSync("token"),
 					  		},
 					  		success:(res)=>{
 					  			console.log(res);

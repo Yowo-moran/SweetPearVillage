@@ -114,7 +114,7 @@
 									images:this.images,
 						  		},
 						  		header: {
-						  			Authorization: '',
+						  			Authorization: wx.getStorageSync("token"),
 						  		},
 						  		success:(res)=>{
 						  			console.log(res);
@@ -168,8 +168,8 @@
 						url: 'http://127.0.0.1:4523/m1/3091110-0-default/post/image', 
 						filePath: url,
 						name: 'file',
-						formData: {
-							user: 'test'
+						header: {
+						  Authorization: wx.getStorageSync("token"),
 						},
 						success: (res) => {
 							setTimeout(() => {
