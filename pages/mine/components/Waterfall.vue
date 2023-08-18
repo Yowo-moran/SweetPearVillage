@@ -1,5 +1,6 @@
 <template>
   <view class="waterfall">
+    <InformVc v-if="isShow"></InformVc>
     <view id="left-column" class="column"
       ><slot name="left" :leftList="leftList"></slot
     ></view>
@@ -9,7 +10,12 @@
   </view>
 </template>
 <script>
+import InformVc from "@/components/InformVc.vue";
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 export default {
+  components: {
+    InformVc
+  },
   props: {
     value: {
       type: Array,
@@ -32,6 +38,7 @@ export default {
       leftList: [],
       rightList: [],
       tempList: [],
+      isShow:false
     };
   },
   watch: {
@@ -44,6 +51,15 @@ export default {
 	  this.rightList = [];
       this.splitData();
     },
+    newChat: {
+      deep: true,
+      handler() {
+        this.isShow = true;
+        setTimeout(() => {
+          this.isShow = false;
+        }, 2000);
+      },
+    },
   },
   mounted() {
     this.tempList = this.cloneData(this.copyFlowList);
@@ -53,6 +69,7 @@ export default {
     copyFlowList() {
       return this.cloneData(this.value);
     },
+    ...mapState("message", ["newChat"]),
   },
   methods: {
     async splitData() {
@@ -88,6 +105,7 @@ export default {
  
 <style lang="scss" scoped>
 .waterfall {
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
