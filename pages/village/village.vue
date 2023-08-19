@@ -64,12 +64,15 @@
 			...mapState("message", ["newChat"]),
 		},
 		watch:{
-			newChat(){
-				this.isShow=true
-				setTimeout(()=>{
-					this.isShow=false
-				},2000)
-			}
+			newChat: {
+			  deep:true,
+			  handler() {
+			    this.isShow = true;
+			    setTimeout(() => {
+			      this.isShow = false;
+			    }, 2000);
+			  },
+			},
 		}
 	}
 </script>

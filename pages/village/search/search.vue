@@ -106,7 +106,6 @@
 			goHistoryList(item){
 				this.value=item.name
 				this.initializeData()
-				this.status3='loading'
 				// 重新添加历史记录
 				this.$store.dispatch('village/setHistoryList',{
 					name:this.value.trim(),
@@ -148,7 +147,7 @@
 							if(this.rewardSearchInfo.length==0){
 								this.rewardSearchInfo=res.data.data.rewards
 							}else{
-								this.rewardSearchInfo=[...res.data.data.rewards,...this.rewardSearchInfo]
+								this.rewardSearchInfo=[...this.rewardSearchInfo,...res.data.data.rewards]
 							}
 							if(res.data.data.total<6){
 								this.status1='nomore'
@@ -193,7 +192,7 @@
 							if(this.leaveSearchInfo.length==0){
 								this.leaveSearchInfo=res.data.data
 							}else{
-								this.leaveSearchInfo=[...res.data.data,...this.leaveSearchInfo]
+								this.leaveSearchInfo=[...this.leaveSearchInfo,...res.data.data]
 							}
 							if(res.data.data.length<6){
 								this.status2='nomore'
@@ -212,7 +211,6 @@
 						}
 					},
 					fail:res=>{
-						console.log(res);
 						this.status2='loading'
 					}
 				})
@@ -240,7 +238,7 @@
 							if(this.bookSearchInfo.length==0){
 								this.bookSearchInfo=res.data.data
 							}else{
-								this.bookSearchInfo=[...res.data.data,...this.bookSearchInfo]
+								this.bookSearchInfo=[...this.bookSearchInfo,...res.data.data]
 							}
 							if(res.data.data.length<6){
 								this.status3='nomore'
@@ -272,6 +270,9 @@
 				}else if(this.tagType=='闲置'&&this.status2=='loading'){
 					this.leavePageNum++;
 					this.searchReward({pageNum:this.leavePageNum,searchText:this.value})
+				}else if(this.tagType=='书籍'&&this.status3=='loading'){
+					this.bookPageNum++
+					this.serachBook({pageNum:this.bookPageNum,searchText:this.value})
 				}
 			},
 			// 初始化数据
@@ -284,6 +285,9 @@
 				this.status1='loading'
 				this.status2='loading'
 				this.status3='loading'
+				this.rewardPageNum=1
+				this.leavePageNum=1
+				this.bookPageNum=1
 			}
 		},
 	computed:{
@@ -297,16 +301,21 @@
 		value(){
 			if(this.value===''){
 				this.is_histroy=true
-				this.rewardSearchInfo=[],
+				this.rewardSearchInfo=[]
 				this.leaveSearchInfo=[]
+				this.bookSearchInfo=[]
+		
 			}
 		},
-		newChat(){
-			this.isShow=true
-			setTimeout(()=>{
-				this.isShow=false
-			},2000)
-		}
+		newChat: {
+		  deep:true,
+		  handler() {
+		    this.isShow = true;
+		    setTimeout(() => {
+		      this.isShow = false;
+		    }, 2000);
+		  },
+		},
 	},
 }
 </script>
@@ -353,6 +362,7 @@
 			.searchButton{
 				color: #000;
 				font-size: 30rpx;
+				margin: auto 0;
 				height: 40rpx;
 				width: 70rpx;
 				box-sizing: border-box;

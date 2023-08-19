@@ -32,10 +32,18 @@
 		methods: {
 			jump(){
 				// 若为假则无法点击
-				if(this.rewardInfo.status)  
-				uni.navigateTo({
-					url:`/pages/massage/chat/chat?openId=${this.rewardInfo.userId}&title=${this.rewardInfo.nickName}`
-				})
+				if(this.rewardInfo.status){
+					// 若当前无token则跳转到我的
+					if(wx.getStorageSync('token')){
+						uni.navigateTo({
+							url:`/pages/massage/chat/chat?openId=${this.rewardInfo.userId}&title=${this.rewardInfo.nickName}`
+						})
+					}else{
+						uni.switchTab({
+							url:`/pages/mine/mine`
+						})
+					}
+				}  
 			}
 		},
 		watch:{
