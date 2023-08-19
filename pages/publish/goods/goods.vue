@@ -37,12 +37,13 @@
 		
 		<!-- 信息提示 -->
 		<u-modal :show="show"  :content="content" width="550rpx" @confirm=" show=false;"></u-modal>
-		
+		<u-toast ref="uToast"></u-toast>
 	</view>
 </template>
 
 <script>
 	import InformVc from '../../../components/InformVc.vue';
+	import {mapState } from "vuex";
 	export default {
 		components:{InformVc},
 		data() {
@@ -70,32 +71,28 @@
 			};
 		},
 		computed:{
-			Data(){
-				return this.$store.state.newChat;
-			},
+			...mapState("message", ["newChat"]),
 		},
 		watch:{
-			Data:{
-				handler(newValue,oldValue){
+			newChat(){
 					this.mesShow=true;
 					setTimeout(()=>{
 						this.mesShow=false;
 					},2000)
-				},
-				deep:true,
 				
 			},
 		},
 		methods:{
 			finish(){
-				var index=this.fileList1.length
-				var i;
-				for( i=0;i<index;i++){
-					this.images[i]=this.fileList1[i].thumb;
-				}
+				
+				// var index=this.fileList1.length
+				// var i;
+				// for( i=0;i<index;i++){
+				// 	this.images[i]=this.fileList1[i].thumb;
+				// }
 				  if(this.model1.user.describe!==''&&this.model1.user.price!==''&&this.fileList1.length!=0){
 				  	  uni.request({
-				  		url:'http://127.0.0.1:4523/m2/3091110-0-default/100490088',
+				  		url:'https://101.43.254.115:7115/item',
 				  		method:'post',
 				    	data:{
 				  			description:this.model1.user.describe,
@@ -114,7 +111,11 @@
 				  		fail:(res)=>{
 				  			console.log(res);
 				  			console.log("发送失败");
-				    		}
+							this.$refs.uToast.show({
+								title:'发布失败',
+								message:'发布失败',
+							})
+				    	}
 				  	 })
 				   }else{
 				  	 this.show=true;
@@ -140,8 +141,11 @@
 						message: '上传中'
 					})
 				})
+				
 				for (let i = 0; i < lists.length; i++) {
+					
 					const result = await this.uploadFilePromise(lists[i].url)
+					this.images[i]=result.message;
 					let item = this[`fileList${event.name}`][fileListLen]
 					this[`fileList${event.name}`].splice(fileListLen, 1, Object.assign(item, {
 					status: 'success',
@@ -154,7 +158,7 @@
 			uploadFilePromise(url) {
 				return new Promise((resolve, reject) => {
 					let a = uni.uploadFile({
-						url:"http://127.0.0.1:4523/m1/3091110-0-default/item/image", 
+						url:"https://101.43.254.115:7115/item/image", 
 						filePath: url,
 						name: 'file',
 						header: {
@@ -162,7 +166,7 @@
 						},
 						success: (res) => {
 							setTimeout(() => {
-								
+								console.log(res)
 								resolve(res.data)
 							}, 1000)
 						}

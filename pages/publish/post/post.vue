@@ -34,13 +34,14 @@
 		</view>
 		
 		<u-modal :show="show" :content='message' width="550rpx" @confirm=" show=false;"></u-modal>
-		
+		<u-toast ref="uToast"></u-toast>
 	</view>
 </template>
 
 <script>
 	
 	import InformVc from '../../../components/InformVc.vue';
+	import {mapState } from "vuex";
 	export default {
 		components:{InformVc},
 		data() {
@@ -62,52 +63,40 @@
 			};
 		},
 		computed:{
-			Data(){
-				return this.$store.state.newChat;
-			},
+			...mapState("message", ["newChat"]),
 		},
 		watch:{
-			Data:{
-				handler(newValue,oldValue){
+			newChat(){
 					this.mesShow=true;
 					setTimeout(()=>{
 						this.mesShow=false;
 					},2000)
-				},
-				deep:true,
 				
 			},
 		},
 		methods:{
 			finish(){
+				
 					if(this.model1.user.content!==''||this.fileList1.length!=0){
-						// var index=this.fileList1.length
 						
-						var i=0;
-						// while(i<index){
-						// 	this.imagesObj.pos=i+1;
+						
+						// var i=0;
+						
+						// while(i<this.fileList1.length){
+						// 	var imagesObj={
+						// 		pos:"",
+						// 		image:"",
+						// 	}
 							
-						// 	this.imagesObj.image=this.fileList1[i].thumb;
-						// 	console.log(this.fileList1)
-						// 	this.images[i]=this.imagesObj;
+						// 	imagesObj.pos=i+1;
+						// 	imagesObj.image=this.fileList1[i].thumb;
+						// 	// console.log(this.imagesObj.image)
+						// 	this.images[i]=imagesObj;
 						// 	console.log(this.images)
 						// 	i++;
 						// }
-						while(i<this.fileList1.length){
-							var imagesObj={
-								pos:"",
-								image:"",
-							}
-							// this.images[i]=this.fileList1[i].thumb
-							imagesObj.pos=i+1;
-							imagesObj.image=this.fileList1[i].thumb;
-							// console.log(this.imagesObj.image)
-							this.images[i]=imagesObj;
-							console.log(this.images)
-							i++;
-						}
 						  uni.request({
-						  	url:'http://127.0.0.1:4523/m1/3091110-0-default/post/',
+						  	url:'https://101.43.254.115:7115/post/',
 						  		method:'post',
 						  		data:{
 									content:this.model1.user.content,
@@ -125,6 +114,10 @@
 						  		fail:(res)=>{
 						  			console.log(res);
 						  			console.log("发送失败");
+									this.$refs.uToast.show({
+										title:'发布失败',
+										message:'发布失败',
+									})
 						  		}
 						  })
 				}else{
@@ -151,6 +144,16 @@
 				})
 				for (let i = 0; i < lists.length; i++) {
 					const result = await this.uploadFilePromise(lists[i].url)
+					// console.log(result)
+					var imagesObj={
+						pos:"",
+						image:"",
+					}
+					imagesObj.pos=i+1;
+					imagesObj.image=result.message;
+					// console.log(this.imagesObj.image)
+					this.images[i]=imagesObj;
+					
 					
 					let item = this[`fileList${event.name}`][fileListLen]
 					this[`fileList${event.name}`].splice(fileListLen, 1, Object.assign(item, {
@@ -165,7 +168,7 @@
 			uploadFilePromise(url) {
 				return new Promise((resolve, reject) => {
 					let a = uni.uploadFile({
-						url: 'http://127.0.0.1:4523/m1/3091110-0-default/post/image', 
+						url: 'https://101.43.254.115:7115/post/image', 
 						filePath: url,
 						name: 'file',
 						header: {
@@ -173,7 +176,7 @@
 						},
 						success: (res) => {
 							setTimeout(() => {
-								
+								// resolve(JSON.parse(res.data).message);
 								resolve(res)
 							}, 1000)
 						}

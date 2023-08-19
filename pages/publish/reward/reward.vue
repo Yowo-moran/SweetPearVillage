@@ -59,12 +59,13 @@
 		</view>
 		<!-- 信息提示 -->
 		<u-modal :show="show"  :content='content' width="550rpx" @confirm=" show=false;"></u-modal>
-		
+		<u-toast ref="uToast"></u-toast>
 	</view>
 </template>
 
 <script>
 	import InformVc from '../../../components/InformVc.vue';
+	import {mapState } from "vuex";
 	export default {
 		components:{InformVc},
 		data() {
@@ -105,31 +106,27 @@
 			};
 		},
 		computed:{
-			Data(){
-				return this.$store.state.newChat;
-			},
+			...mapState("message", ["newChat"]),
 		},
 		watch:{
-			Data:{
-				handler(newValue,oldValue){
+			newChat(){
 					this.mesShow=true;
 					setTimeout(()=>{
 						this.mesShow=false;
 					},2000)
-				},
-				deep:true,
 				
 			},
 		},
 		 methods:{
 			 
+						
 		      placeSelect(e){
 				  this.model1.userInfo.place=e.name
 			  },
 			  finish(){
 				  if(this.model1.userInfo.content!==''&&this.model1.userInfo.price!==''){
 					  uni.request({
-					  	url:'http://127.0.0.1:4523/m1/3091110-0-default/rewards',
+					  	url:'https://101.43.254.115:7115/rewards',
 					  		method:'post',
 					  		data:{
 								rewardContent:this.model1.userInfo.content,
@@ -149,6 +146,10 @@
 					  		fail:(res)=>{
 					  			console.log(res);
 					  			console.log("发送失败");
+								this.$refs.uToast.show({
+									title:'发布失败',
+									message:'发布失败',
+								})
 					  		}
 					  })
 				  }else{

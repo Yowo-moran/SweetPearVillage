@@ -1,5 +1,5 @@
 <template>
-	<view class="body">
+	<view class="body" >
 		<InformVc v-show="mesShow"></InformVc>
 		<view class="pic">
 			<image src="../../static/发布页图片.png" mode="aspectFill"></image>
@@ -49,30 +49,35 @@
 
 <script>
 	import InformVc from '../../components/InformVc.vue';
+	import {mapState } from "vuex";
 	export default {
 		components:{InformVc},
 		data() {
 			return {
 				mesShow:false,
+				all:false,
+				
 			};
 		},
 		computed:{
-			Data(){
-				return this.$store.state.newChat;
-			},
+			...mapState("message", ["newChat"]),
 		},
 		watch:{
-			Data:{
-				handler(newValue,oldValue){
+			newChat(){
 					this.mesShow=true;
 					setTimeout(()=>{
 						this.mesShow=false;
 					},2000)
-				},
-				deep:true,
 				
 			},
 		},
+		// onLoad(){
+			
+		// 	// if(wx.getStorageSync('token')){
+		// 	// 	this.all=true;
+		// 		// console.log(wx.getStorageSync('token'))
+		// 	// }
+		// },
 		methods:{
 			goReward(){
 				uni.navigateTo({
