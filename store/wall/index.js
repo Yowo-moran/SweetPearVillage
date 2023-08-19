@@ -2,16 +2,7 @@ const state = {
     topicList:[],
     commentList:[],
     status:'loadmore',
-    info:{
-        nickName:"",
-        content:"",
-        avatar:"",
-        updateTime:"",
-        id:0,
-        praiseCnt:0,
-        commentCnt:0,
-        images:[],
-    },
+    info:{},
 }
 const mutations = {
     setTopicList(state , list){

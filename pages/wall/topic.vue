@@ -3,7 +3,7 @@
         <!-- 左侧头像 -->
         <view class="left">
             <view class="portrait">
-                <img src="../../static/portrait.png" @click="chat(selfInfo.userId , selfInfo.nickName)">
+                <img wx:if="{{ info.avatar }}" src="{{ info.avatar }}" @click="chat(selfInfo.userId , selfInfo.nickName)">
             </view>
         </view>
         <!-- 右侧（昵称+文本内容+点赞评论） -->
@@ -17,13 +17,11 @@
                     {{ selfInfo.content }}
                 </view>
                 <view class="pics">
-                    <!-- <view class="pic" wx:if="{{ imageArr.length > 0 }}" wx:for="{{ imageArr }}" wx:key="index">
-                        <image wx:if="{{ item.image }}" src="{{ item.image }}"></image>
-                    </view> -->
-                    <view class="pic"><img src="../../static/bochi.png" ></view>
-                    <view class="pic"><img src="../../static/bochi.png" ></view>
-                    <view class="pic"><img src="../../static/bochi.png" ></view>
-                    <view class="pic"><img src="../../static/bochi.png" ></view>
+                    <view wx:if="{{ imageArr.length > 0 }}" wx:for="{{ imageArr }}" wx:key="index">
+                        <view class="pic">
+                            <image src="{{ item.image }}" alt="图片加载失败"></image>
+                        </view>
+                    </view>
                 </view>
             </view>
             <!-- 时间、点赞、评论 -->
@@ -32,13 +30,13 @@
                 <view class="star">
                     <view class="starNum">{{ selfInfo.praiseCnt }}</view>
                     <view class="icon1">
-                        <img :src="praiseSrc" @click="like(selfInfo.id)">
+                        <image :src="praiseSrc" @click="like(selfInfo.id)"></image>
                     </view>
                 </view>
                 <view class="comment">
                     <view class="commentNum">{{ selfInfo.commentCnt }}</view>
                     <view class="icon2">
-                        <img src="../../static/评论.png" @click="jump(selfInfo.id)">
+                        <image src="../../static/评论.png" @click="jump(selfInfo.id)"></image>
                     </view>
                 </view>
             </view>
@@ -133,10 +131,6 @@ export default {
     watch:{
 
     },
-    // onLoad(){
-    //     console.log("图片");
-    //     console.log(this.info.images);
-    // }
 }
 </script>
 
@@ -217,7 +211,7 @@ export default {
                         height: 160rpx;
                         // background-color: pink;
                         // border: 1px solid palevioletred;
-                        img{
+                        image{
                             width: 100%;
                             height: 100%;
                             overflow: hidden;
@@ -259,7 +253,7 @@ export default {
                     .icon1 {
                         height: 45rpx;
                         width: 45rpx;
-                        img {
+                        image {
                             width: 100%;
                             height: 100%;
                         }
@@ -285,7 +279,7 @@ export default {
                     .icon2 {
                         height: 35rpx;
                         width: 35rpx;
-                        img {
+                        image {
                             width: 100%;
                             height: 100%;
                         }
