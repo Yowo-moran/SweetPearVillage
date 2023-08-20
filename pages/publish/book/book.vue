@@ -99,7 +99,7 @@
 		@delete="deletePic"
 		name="1"
 		multiple
-		:maxCount="10"
+		:maxCount="1"
 		
 		></u-upload>
 		<view class="bottom">
@@ -149,6 +149,7 @@
 						grade:'',
 					},
 				},
+				images:'',
 				college:[
         ["非专业书籍",
           "机械工程学院",
@@ -375,7 +376,7 @@
       ],
 				fileList1: [],
 				majorIndex:1,
-				images:[],
+				
 				sample:'',
 			};
 		},
@@ -417,14 +418,12 @@
 				console.log(e)
 				this.model1.userInfo.grade= e.name
 			},
+			
+			
+			
 			finish(){
-				
-				// var index=this.fileList1.length
-				// var i;
-				// for( i=0;i<index;i++){
-				// 	this.images[i]=this.fileList1[i].thumb;
-				// }
-				if(this.model1.userInfo.name!==''&&this.model1.userInfo.price!==''&&this.model1.userInfo.college!==''&&this.model1.userInfo.major!==''&&this.model1.userInfo.grade!==''&&this.fileList1.length!=0){
+					
+				if(this.model1.userInfo.name!==''&&this.model1.userInfo.price!==''&&this.model1.userInfo.college!==''&&this.model1.userInfo.major!==''&&this.model1.userInfo.grade!==''&&this.fileList1.length!==0){
 						  uni.request({
 							url:'https://101.43.254.115:7115/user/book',
 							method:'post',
@@ -440,13 +439,13 @@
 					  			Authorization: wx.getStorageSync("token"),
 					  		},
 					 		success:(res)=>{
-						  		console.log(res);
+						  // 		console.log(res);
 								
 								console.log("发送成功");				
 								uni.navigateBack();
 					  		},
 							fail:(res)=>{
-								console.log(res);
+								// console.log(res);
 								console.log("发送失败");
 								this.$refs.uToast.show({
 									title:'发布失败',
@@ -469,7 +468,6 @@
 			},
 			// 新增图片
 			async afterRead(event) {
-				
 				// 当设置 multiple 为 true 时, file 为数组格式，否则为对象格式
 				let lists = [].concat(event.file)
 				let fileListLen = this[`fileList${event.name}`].length
@@ -482,10 +480,8 @@
 				})
 				for (let i = 0; i < lists.length; i++) {
 					const result = await this.uploadFilePromise(lists[i].url)
-					this.images[i]=result.message;
 					console.log(result)
-					this.images[i]=result.message;
-					console.log(this.images)
+					this.images=result;
 					let item = this[`fileList${event.name}`][fileListLen]
 					this[`fileList${event.name}`].splice(fileListLen, 1, Object.assign(item, {
 					status: 'success',
@@ -496,22 +492,21 @@
 				}
 			},
 			
-			
-			
 			uploadFilePromise(url) {
 				return new Promise((resolve, reject) => {
-					wx.uploadFile({
+					let a=uni.uploadFile({
 						url: 'https://101.43.254.115:7115/user/book/image', 
 						filePath: url,
-						name: 'file',
+						name: 'image',
 						header: {
 						  Authorization: wx.getStorageSync("token"),
 						},
 						
 						success: (res) => {
 							setTimeout(() => {
-								console.log(res.data)
-								resolve(res.data)
+								console.log(JSON.parse(res.data).message)
+								// resolve(res.data)
+								 resolve(JSON.parse(res.data).message);
 							}, 1000)
 						}
 					});

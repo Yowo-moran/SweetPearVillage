@@ -96,7 +96,7 @@
 						// 	i++;
 						// }
 						  uni.request({
-						  	url:'https://101.43.254.115:7115/post/',
+						  	url:'https://101.43.254.115:7115/post',
 						  		method:'post',
 						  		data:{
 									content:this.model1.user.content,
@@ -144,13 +144,13 @@
 				})
 				for (let i = 0; i < lists.length; i++) {
 					const result = await this.uploadFilePromise(lists[i].url)
-					// console.log(result)
+					console.log(result)
 					var imagesObj={
 						pos:"",
 						image:"",
 					}
 					imagesObj.pos=i+1;
-					imagesObj.image=result.message;
+					imagesObj.image=result[0];
 					// console.log(this.imagesObj.image)
 					this.images[i]=imagesObj;
 					
@@ -170,14 +170,14 @@
 					let a = uni.uploadFile({
 						url: 'https://101.43.254.115:7115/post/image', 
 						filePath: url,
-						name: 'file',
+						name: 'image',
 						header: {
 						  Authorization: wx.getStorageSync("token"),
 						},
 						success: (res) => {
 							setTimeout(() => {
-								// resolve(JSON.parse(res.data).message);
-								resolve(res)
+								resolve(JSON.parse(res.data).data.names);
+								
 							}, 1000)
 						}
 					});

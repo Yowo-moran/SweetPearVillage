@@ -28,6 +28,7 @@
 			 		name="1"
 			 		multiple
 					:capture="capture"
+					:maxCount="1"
 			 	></u-upload> 
 	
 		
@@ -67,7 +68,7 @@
 				},
 				
 				capture:['album', 'camera'],
-				images:[],
+				images:'',
 			};
 		},
 		computed:{
@@ -92,7 +93,7 @@
 				// }
 				  if(this.model1.user.describe!==''&&this.model1.user.price!==''&&this.fileList1.length!=0){
 				  	  uni.request({
-				  		url:'https://101.43.254.115:7115/item',
+				  		url:"https://101.43.254.115:7115/item",
 				  		method:'post',
 				    	data:{
 				  			description:this.model1.user.describe,
@@ -100,14 +101,17 @@
 				  			price:this.model1.user.price,
 				  			
 				  		},
+						
+
 				  		header: {
-				    			Authorization: wx.getStorageSync("token"),
-				    		},
+				    		Authorization: wx.getStorageSync("token"),
+								
+				    	},
 				   		success:(res)=>{
 				  	  		console.log(res);
 				  			console.log("发送成功");				
 				  			uni.navigateBack();
-				    		},
+				    	},
 				  		fail:(res)=>{
 				  			console.log(res);
 				  			console.log("发送失败");
@@ -145,7 +149,7 @@
 				for (let i = 0; i < lists.length; i++) {
 					
 					const result = await this.uploadFilePromise(lists[i].url)
-					this.images[i]=result.message;
+					this.images=result;
 					let item = this[`fileList${event.name}`][fileListLen]
 					this[`fileList${event.name}`].splice(fileListLen, 1, Object.assign(item, {
 					status: 'success',
@@ -160,14 +164,13 @@
 					let a = uni.uploadFile({
 						url:"https://101.43.254.115:7115/item/image", 
 						filePath: url,
-						name: 'file',
+						name: 'image',
 						header: {
 						  Authorization: wx.getStorageSync("token"),
 						},
 						success: (res) => {
 							setTimeout(() => {
-								console.log(res)
-								resolve(res.data)
+								resolve(JSON.parse(res.data).message);
 							}, 1000)
 						}
 					});

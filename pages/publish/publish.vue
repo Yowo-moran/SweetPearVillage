@@ -73,10 +73,10 @@
 		},
 		// onLoad(){
 			
-		// 	// if(wx.getStorageSync('token')){
-		// 	// 	this.all=true;
-		// 		// console.log(wx.getStorageSync('token'))
-		// 	// }
+		// 	if(wx.getStorageSync('token')){
+		// 		this.all=true;
+		// 		console.log(wx.getStorageSync('token'))
+		// 	}
 		// },
 		methods:{
 			goReward(){

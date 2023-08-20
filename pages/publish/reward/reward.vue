@@ -124,7 +124,7 @@
 				  this.model1.userInfo.place=e.name
 			  },
 			  finish(){
-				  if(this.model1.userInfo.content!==''&&this.model1.userInfo.price!==''){
+				  if(this.model1.userInfo.content!==''&&this.model1.userInfo.price!==''&&this.model1.userInfo.place!==''&&this.model1.userInfo.getPlace!==''){
 					  uni.request({
 					  	url:'https://101.43.254.115:7115/rewards',
 					  		method:'post',
