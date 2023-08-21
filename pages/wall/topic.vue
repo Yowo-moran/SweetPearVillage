@@ -16,8 +16,8 @@
                 <view class="text">
                     {{ selfInfo.content }}
                 </view>
-                <view class="pics">
-                    <view v-if="imageArr.length > 0" v-for="(item,index) in imageArr" :key="index">
+                <view class="pics" v-if="imageArr.length > 0">
+                    <view v-for="(item,index) in imageArr" :key="index">
                         <view class="pic">
                             <image :src="item.image" alt="图片加载失败"></image>
                         </view>
@@ -55,7 +55,6 @@ export default {
     methods:{
         jump(id){
             let thisPage = getCurrentPages();
-            // console.log(thisPage);
             if(thisPage[thisPage.length - 1].route == 'pages/wall/wall'){
                 uni.navigateTo({
                     url:`topicDetail?id=${id}`

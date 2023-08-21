@@ -13,7 +13,6 @@ export default {
 	data() {
 		return {
 			count:1,
-			// status:'loadmore'
 			status:this.$store.state.wall.status
 		}
 	},
@@ -22,12 +21,19 @@ export default {
 	},
 	methods:{
 		...mapActions("wall" , ['getList']),
+		reLoad(){
+			this.$store.state.wall.topicList = [];
+			this.count = 1;
+		}
 	},
-	onLoad(){
+	onShow(){
 		this.status = 'loading';
 		if(wx.getStorageSync('token')){
 			this.getList(0);
 		}
+	},
+	onHide(){
+		this.reLoad();
 	},
 	onReachBottom(){
 		this.count ++;
