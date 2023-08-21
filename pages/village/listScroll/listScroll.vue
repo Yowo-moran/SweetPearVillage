@@ -106,17 +106,18 @@
 					// 这里不能改变原数组的值，否则一直执行这个函数
 					let priceSort=[...this.curRewardKeyword].pop()||0
 					let rewardKeywordTag=[...this.curRewardKeyword].slice(0,-1)
-					let sortBy=(priceSort==0||priceSort==1)?'amount_asc':'amount_desc'
-					console.log(this.curRewardKeyword,priceSort,sortBy);
+					// let sortBy=(priceSort==0||priceSort==1)?'amount_asc':'amount_desc'
+					let sortBy=(priceSort==0?'':priceSort==1?'amount_asc':'amount_desc')
+					// console.log(this.curRewardKeyword,priceSort,sortBy);
 					this.$store.dispatch('village/getRewardInfo',{pageNum:this.rewardpage,pageSize:6,types:this.rewardKeywordTag,sortBy})
 				}else if(this.tagName=='书籍'&&this.bookstatus=='loading'){
 					this.bookpage++
 					const {college,major,grade,BooksortBy}=this
-					console.log(college,major,grade,BooksortBy);
+					// console.log(college,major,grade,BooksortBy);
 					this.$store.dispatch('village/getBookInfo',{page:this.bookpage,pageSize:6,college,major,grade,sortBy:BooksortBy})
 				}else if(this.tagName=='闲置'&&this.leavestatus=='loading'){
 					this.leavepage++
-					console.log(this.leavepage);
+					// console.log(this.leavepage);
 					this.$store.dispatch('village/getLeaveInfo',{pageNum:this.leavepage,pageSize:6})
 				}
 			},
@@ -165,7 +166,8 @@
 				let rewardKeywordTag=[...this.curRewardKeyword].slice(0,-1)||[]
 				// 若为空数组则传递空字符串
 				if(rewardKeywordTag.length==0) rewardKeywordTag=''
-				let sortBy=	(priceSort==0||priceSort==1)?'amount_asc':'amount_desc'
+				// let sortBy=	(priceSort==0||priceSort==1)?'amount_asc':'amount_desc'
+				let sortBy=(priceSort==0?'':priceSort==1?'amount_asc':'amount_desc')
 				this.$store.dispatch('village/getRewardInfo',{types:rewardKeywordTag,isClear:true,sortBy})
 			},
 			bookkeywords(){
@@ -194,7 +196,6 @@
 
 <style scoped>
 	.scroll{
-		background-color: #D6D7B9;
 		height: 100%;
 		flex: 1;
 		box-sizing: border-box;

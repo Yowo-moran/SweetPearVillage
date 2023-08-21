@@ -61,7 +61,9 @@
 		components:{listCardReward,listCardBook,listCardLeave},
 		onLoad (options) {
 			this.tagType=options.tagName
-			console.log(JSON.parse(options.rewardkeyword) );
+			const rewardKeyword=JSON.parse(options.rewardkeyword)
+			this.rewardkeyword=(rewardKeyword.length==0?'':rewardKeyword)
+			console.log( this.rewardkeyword);
 			},
 		data() {
 			return {
@@ -71,6 +73,7 @@
 				searchList: [],
 				loading:false,
 				tagType:'',
+				rewardkeyword:'',
 				rewardSearchInfo:[],
 				leaveSearchInfo:[],
 				bookSearchInfo:[],
@@ -94,7 +97,7 @@
 					})
 					this.initializeData()
 					if(this.tagType=='悬赏'){
-						this.searchReward({keyword:this.value.trim(),pageNum:this.rewardPageNum})
+						this.searchReward({keyword:this.value.trim(),pageNum:this.rewardPageNum,types:this.rewardkeyword})
 					}else if(this.tagType=='闲置'){
 						this.searchLeave({searchText:this.value.trim(),pageNum:this.leavePageNum})
 					}else if(this.tagType=='书籍'){
@@ -266,7 +269,7 @@
 			upper(){
 				if(this.tagType=='悬赏'&&this.status1=='loading'){
 					this.rewardPageNum++;
-					this.searchReward({pageNum:this.rewardPageNum,keyword:this.value})
+					this.searchReward({pageNum:this.rewardPageNum,keyword:this.value,types:this.rewardkeyword})
 				}else if(this.tagType=='闲置'&&this.status2=='loading'){
 					this.leavePageNum++;
 					this.searchReward({pageNum:this.leavePageNum,searchText:this.value})
@@ -324,12 +327,13 @@
 	page{
 		height: 100vh;
 		display: flex;
-		background-color: #f5f5f5;
+		
 	}
 	.search {
 		height: 100%;
 		display: flex;
 		flex-direction: column;
+		
 		.searchInput{
 			display: flex;
 			width: 100%;
@@ -421,6 +425,7 @@
 			text-align: center;
 			font-size: 12px;
 			color: #666;
+			
 		}
 	}
 </style>

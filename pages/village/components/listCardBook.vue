@@ -1,8 +1,8 @@
 <template>
 	<!-- 纵向卡片 书籍 -->	
-	<view class="verListItem"  @click="jump" :style="{backgroundColor:(!bookInfo.states?'#D7D7D7':'#fff')}">
+	<view class="verListItem"  @click="jump" :style="{backgroundColor:(!bookInfo.states?'#D7D7D7':'#F2F2E5')}">
 		<view class="bookPhoto">
-			<image :src="bookInfo.image"></image>
+			<image :src="bookInfo.image" alt="图片加载失败"></image>
 		</view>
 		<view class="listItemContent">
 			<view class="price">￥ {{bookInfo.price}}</view>
@@ -12,7 +12,7 @@
 				<view class="college"><view style="width: 30%">学院：</view><view style="width: 70%;">{{bookInfo.college}}</view></view>
 				<view class="majority"><view  style="width: 30%;">专业：</view><view style="width: 70%;">{{bookInfo.major}}</view></view>
 			</view>
-			<image class="forbid" src='../../../static/售出.png' v-if="!bookInfo.states"></image>
+			<image class="forbid" src='../../../static/售出.png' v-if="!bookInfo.states" alt="图片加载失败"></image>
 		</view>
 	
 	</view>
@@ -45,7 +45,7 @@
 						})
 					}
 				}
-			}
+			},
 		},
 		watch:{
 			
@@ -56,11 +56,11 @@
 <style lang="scss" scoped>
 .verListItem{
     display: inline-block;
-	
     margin: 15rpx 18.75rpx;
     padding: 30rpx 5rpx;
     width: 45%;
-    background-color: #fff;
+    background-color: #F2F2E5;
+	
     box-sizing: border-box;
     .bookPhoto{ 
         width: 75%;

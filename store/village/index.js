@@ -1,3 +1,5 @@
+import colorGradient from "uview-ui/libs/function/colorGradient";
+
 const state={
 	// 历史记录
 	historyList:[],
@@ -77,28 +79,27 @@ const actions={
 	 
 	 // 悬赏请求
 	 getRewardInfo({commit,state},options={}){
-		 const {pageNum=1,pageSize=6,types='',isClear=false,sortBy='amount_asc'}=options
+		 const {pageNum=1,pageSize=6,types='',isClear=false,sortBy=''}=options
 		 // console.log(sortBy,types);
-		 console.log(pageNum);
+		 // console.log('sortBy',sortBy);
+		 if(sortBy==''){
+			var bookdata={pageSize,pageNum,types} 
+		 }else{
+			var bookdata={pageSize,pageNum,types,sortBy}
+		 }
 		 if(isClear){
 			 state.rewardInfo=[],
 			 state.rewardstatus='loading'
 		 }
-		 console.log(sortBy,'生姜',pageNum,'页数');
+		 // console.log(bookdata);
 		 uni.request({
 		 	method:'GET',
 			url:'https://101.43.254.115:7115/rewards',
-			data:{
-				pageSize,
-				pageNum,
-				sortBy,
-				types
-			},
+			data:bookdata,
 			header:{
 				'Authorization':uni.getStorageSync('token')
 			},
 			success:res=>{
-				// console.log(res);
 				if(res.statusCode==200&&res.data.data.total!=0){
 					commit('GETREWARDINFO',res.data.data.rewards)
 					state.rewardstatus='loading'
