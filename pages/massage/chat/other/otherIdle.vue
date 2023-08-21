@@ -1,5 +1,6 @@
 <template>
   <view class="allIdle">
+	  <u-navbar leftText="我的闲置" :autoBack="true" placeholder> </u-navbar>
     <Idle
       v-for="(item, index) in idleList"
       :key="index"

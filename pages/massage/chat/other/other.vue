@@ -84,6 +84,7 @@ export default {
       method: "GET",
       success(res) {
         that.personalDetails = res.data.data;
+		console.log(that.personalDetails)
       },
     });
   },

@@ -39,7 +39,7 @@
         ></u-album>
         <view class="content-bottom">
           <view class="time">{{ Time(item.createTime) }}</view>
-          <view style="width: 340rpx; display: flex">
+          <view style="width: 340rpx; display: flex; justify-content: flex-end;">
             <view class="likes">
               <text style="margin-right: 20rpx">{{ item.praiseCnt }}</text>
               <u-icon name="thumb-up" color="#b9ba88" size="50rpx"></u-icon>
@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import moment from "moment";
 export default {
   name: "MyPost",
   props: {
@@ -74,7 +75,7 @@ export default {
     },
     jump(id) {
       uni.navigateTo({
-        url: `topicDetail?id=${id}`,
+        url: `/pages/wall/topicDetail?id=${id}`,
       });
     },
   },
@@ -102,6 +103,11 @@ export default {
     }
     .photos {
       margin-top: 20rpx;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      // grid-template-columns: 1fr;
+      grid-row-gap: 10rpx;
+      grid-column-gap: 5rpx;
     }
     .content-bottom {
       width: 100%;
@@ -115,15 +121,24 @@ export default {
         font-weight: 400;
       }
       .likes {
-        width: 110rpx;
+        width: 100rpx;
         display: flex;
         align-items: center;
         color: #b9ba88;
-        
+        button {
+          font-size: 21rpx;
+          padding: 0;
+          width: 70rpx;
+          height: 30rpx;
+          line-height: 30rpx;
+          color: #7c7d54;
+          margin-right: 20rpx;
+          background-color: #c1c4a6;
+        }
       }
       .comments {
         color: #b9ba88;
-        width: 40rpx;
+        width: 100rpx;
         display: flex;
         align-items: center;
       }

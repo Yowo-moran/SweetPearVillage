@@ -175,7 +175,7 @@
 		{
 			"path": "pages/massage/chat/other/otherBook",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "我的书籍",
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom",
 				"navigationBarTextStyle": "black"
@@ -184,14 +184,16 @@
 		{
 			"path": "pages/massage/chat/other/otherIdle",
 			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"navigationBarTitleText": "我的闲置",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "black"
 			}
 		},
 		{
 			"path": "pages/massage/chat/other/otherPost",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "我的帖子",
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom",
 				"navigationBarTextStyle": "black"
@@ -200,7 +202,7 @@
 		{
 			"path": "pages/massage/chat/other/otherReward",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "我的悬赏",
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom",
 				"navigationBarTextStyle": "black"

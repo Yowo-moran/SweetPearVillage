@@ -6,39 +6,48 @@
 </template>
 
 <script>
-import Post from "./components/post.vue";
+import InformVc from "@/components/InformVc.vue";
+import { mapActions} from "vuex";
+import Post from "./components/MyPost.vue";
 export default {
   components: {
     Post,
+    InformVc,
   },
-  onLoad(option) {
-  	this.openId = option.openId
+  onLoad(option){
+	  console.log(option.openId)
+	  this.openId = option.openId
   },
-  onShow(){
-	  this.getPostList()
+  onShow() {
+    this.getPostList();
   },
   data() {
     return {
-      postList: [
-      ],
-	  openId:'',
+      postList: [],
+      isShow: false,
+	  openId:''
     };
   },
-  methods:{
-	  async getPostList(){
-		const that = this;
-		await wx.request({
-		  url: `https://101.43.254.115:7115/post/user/${that.openId}`,
-		  success(res) {
-		    if (res.data.code !== "00000") {
-		      console.log(res.data.message);
-		      return;
-		    }
-		    console.log(res);
-		    that.postList = res.data.data.posts;
-		  },
-		});  
-	  }
+  methods: {
+    async getPostList() {
+      const that = this;
+      await wx.request({
+        url: `https://101.43.254.115:7115/post/user/${that.openId}`,
+        success(res) {
+          if (res.data.code === "D0400") {
+            that.getToken(); //刷新token
+            that.getPostList(); //重新执行用户操作
+          }
+          if (res.data.code !== "00000") {
+            console.log(res.data.message);
+            return;
+          }
+          console.log(res);
+          that.postList = res.data.data.posts;
+        },
+      });
+    },
+    ...mapActions("mine", ["getToken"]),
   }
 };
 </script>
