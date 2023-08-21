@@ -3,7 +3,7 @@
         <!-- 左侧头像 -->
         <view class="left">
             <view class="portrait">
-                <img wx:if="{{ info.avatar }}" src="{{ info.avatar }}" @click="chat(selfInfo.userId , selfInfo.nickName)">
+                <img v-if="info.avatar" :src="info.avatar" @click="chat(selfInfo.userId , selfInfo.nickName)">
             </view>
         </view>
         <!-- 右侧（昵称+文本内容+点赞评论） -->
@@ -17,9 +17,9 @@
                     {{ selfInfo.content }}
                 </view>
                 <view class="pics">
-                    <view wx:if="{{ imageArr.length > 0 }}" wx:for="{{ imageArr }}" wx:key="index">
+                    <view v-if="imageArr.length > 0" v-for="(item,index) in imageArr" :key="index">
                         <view class="pic">
-                            <image src="{{ item.image }}" alt="图片加载失败"></image>
+                            <image :src="item.image" alt="图片加载失败"></image>
                         </view>
                     </view>
                 </view>
