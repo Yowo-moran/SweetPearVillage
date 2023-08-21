@@ -74,6 +74,7 @@ const actions={
 	 clearHistoryList({commit,state}){
 		 commit('CLEARHISTORYLIST')
 	 },
+	 
 	 // 悬赏请求
 	 getRewardInfo({commit,state},options={}){
 		 const {pageNum=1,pageSize=6,types='',isClear=false,sortBy='amount_asc'}=options
@@ -90,7 +91,6 @@ const actions={
 			data:{
 				pageSize,
 				pageNum,
-				keyword:'',
 				sortBy,
 				types
 			},
@@ -109,7 +109,7 @@ const actions={
 			},
 			fail:res=>{
 				console.log(res);
-				state.rewardstatus='nomore'
+				state.rewardstatus='loading'
 			}
 		 })
 	 },
@@ -138,7 +138,7 @@ const actions={
 			},
 			fail:res=>{
 				console.log(res);
-				state.leavestatus='nomore'
+				state.leavestatus='loading'
 			}
 		 })
 	 },
@@ -176,7 +176,7 @@ const actions={
 			},
 			fail:res=>{
 				console.log(res);
-				state.bookstatus='nomore'
+				state.bookstatus='loading'
 			}
 		 })
 	 },

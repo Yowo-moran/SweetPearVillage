@@ -31,10 +31,18 @@
 		},
 		methods: {
 			jump(){
-				if(!this.leaveInfo.sold)
-				uni.navigateTo({
-					url:`/pages/massage/chat/chat?openId=${this.leaveInfo.userId}&title=${this.leaveInfo.nickName}`
-				})
+				if(!this.leaveInfo.sold){
+					// 若当前无token则跳转到我的
+					if(wx.getStorageSync('token')){
+						uni.navigateTo({
+							url:`/pages/massage/chat/chat?openId=${this.leaveInfo.userId}&title=${this.leaveInfo.nickName}`
+						})
+					}else{
+						uni.switchTab({
+							url:`/pages/mine/mine`
+						})
+					}
+				}
 			}
 		},
 		watch:{

@@ -2,7 +2,7 @@
 	<view class="searchBar">
 		<view class="search" @click="jump">
 			<image class="searchIcon" src="../../../static/搜索-黑.png"></image> 
-			<view class="searchText">uniapp\vue</view>
+			<view class="searchText">{{searchValue}}</view>
 		</view>
 		<view class="setting" @click="show = true" v-if="tagName=='悬赏'||tagName=='书籍'">
 			<image class="settingIcon" src="../../../static/设置.png" ></image> 
@@ -392,7 +392,8 @@
 				  }
 				],
 				priceSortReward:0,
-				priceSortBook:0
+				priceSortBook:0,
+				searchValue:'搜索食堂、快递外卖代收点'
 			}
 		},
 		methods: {
@@ -462,6 +463,13 @@
 				this.collegeValue=''
 				this.majorityValue=''
 				this.gradeValue=''
+				if(this.tagName=='悬赏'){
+					this.searchValue='搜索食堂、快递外卖代收点'
+				}else if(this.tagName=='书籍'){
+					this.searchValue='搜索书名、专业、学院'
+				}else if(this.tagName=='闲置'){
+					this.searchValue='搜索物品名称'
+				}
 			},
 			clearTags(){
 				this.currentTags=[]
