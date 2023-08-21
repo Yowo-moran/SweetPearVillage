@@ -55,7 +55,7 @@
 		data() {
 			return {
 				mesShow:false,
-				all:false,
+				
 				
 			};
 		},
@@ -71,13 +71,20 @@
 				
 			},
 		},
-		// onLoad(){
+		onShow() {
+			const token = wx.getStorageSync('token')
+			console.log(token)
+			if(!token){
+			  	console.log('publish Load')
+			  	uni.switchTab({
+			  		url:'/pages/mine/mine'
+			  	})
+			}else{
+				console.log("publishShow");
+			}
 			
-		// 	if(wx.getStorageSync('token')){
-		// 		this.all=true;
-		// 		console.log(wx.getStorageSync('token'))
-		// 	}
-		// },
+			
+		},
 		methods:{
 			goReward(){
 				uni.navigateTo({
