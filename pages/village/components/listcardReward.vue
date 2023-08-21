@@ -1,19 +1,19 @@
 <template>
 	<!-- 横向卡片 悬赏-->
-	<view class=listItem  @click="jump" :style="{backgroundColor:(!rewardInfo.status?'#D7D7D7':'#fff')}"> 
+	<view class=listItem  @click="jump" :style="{backgroundColor:(!rewardInfo.status?'#D7D7D7':'#F2F2E5')}"> 
 		<view class="listItemContent">
 			<view>{{rewardInfo.deliveryAddress}}代取，送至{{rewardInfo.senderAddress}}</view>
 			<view>{{rewardInfo.rewardContent}}</view>
 		</view>
 		<view class="userInfo">
 			<!-- 用户头像 -->
-			<image class="userAvatar" :src="rewardInfo.avatar"></image>
+			<image class="userAvatar" :src="rewardInfo.avatar" alt="图片加载失败"></image>
 			<!-- 用户名称 -->
 			<view class="userName">{{rewardInfo.nickName}}</view>
 			<!-- 价格 -->
 			<view class="price">￥ {{rewardInfo.rewardAmount}}</view>
 		</view>
-		<image class="forbid" src='../../../static/售出.png' v-if="!rewardInfo.status"></image>
+		<image class="forbid" src='../../../static/售出.png' v-if="!rewardInfo.status" alt="图片加载失败"></image>
 	</view>
 </template>
 
@@ -59,7 +59,7 @@
 	position: relative;
     height: 200rpx;
     // width: 100%;
-	background-color: #fff;
+	background-color: #F2F2E5;
     margin: 30rpx 10rpx;
     border-radius: 15rpx;
     padding: 20rpx 40rpx;
