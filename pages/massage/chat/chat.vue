@@ -6,7 +6,7 @@
     >
 
     <view class="box" :style="{ height: safeArea + 'px' }">
-		<loading v-if="load"></loading>
+      <loading v-if="load"></loading>
       <scroll-view
         :scroll-top="scrollTop"
         class="message-container"
@@ -158,11 +158,11 @@
 <script>
 import moment from "moment";
 import { mapState, mapActions, mapMutations } from "vuex";
-import loading from './loading.vue'
+import loading from "./loading.vue";
 export default {
-	components:{
-		loading
-	},
+  components: {
+    loading,
+  },
   data() {
     return {
       avatar: "",
@@ -190,7 +190,8 @@ export default {
       newTop: 0,
       isChat: false,
       isFirst: true,
-	  load:true
+      load: true,
+      isTop: false,
     };
   },
   onLoad(options) {
@@ -235,11 +236,11 @@ export default {
         Authorization: wx.getStorageSync("token"),
       },
     });
-	this.CLEAR_OLDCHAT();
+    this.CLEAR_OLDCHAT();
   },
   methods: {
     ...mapActions("message", ["getInform", "sendMine", "getHistory"]),
-    ...mapMutations("message", ["ADD_NEWCHAT","CLEAR_OLDCHAT"]),
+    ...mapMutations("message", ["ADD_NEWCHAT", "CLEAR_OLDCHAT"]),
     back() {
       uni.navigateBack();
     },
@@ -485,7 +486,7 @@ export default {
           console.log("@handler", newVal, oldVal);
           this.toBottom();
           this.isFirst = false;
-		  this.load = false
+          this.load = false;
         }
       },
     },
@@ -641,7 +642,7 @@ export default {
       position: relative;
       bottom: 0;
       margin: 30rpx 0;
-	  margin-bottom: 0;
+      margin-bottom: 0;
       display: flex;
       justify-content: space-around;
       height: 200rpx;

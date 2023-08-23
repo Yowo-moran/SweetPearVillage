@@ -34,13 +34,13 @@ const actions = {
 	connectWebSocket({ commit }) {
 		const token = wx.getStorageSync('token')
 		// const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvcGVuaWQiOiIyMzc1Njk3OTY5MDc3NDYxNDQ2MDM0OTA0MTU0IiwiaWQiOjEsImV4cCI6MTY5MjY5MDI0NX0.nfYhj4tjKmDKIHp4eH15_HjS64urMazIhM1tsSINR1U'
-		function creatSocket(){
+		function creatSocket() {
 			const socket = wx.connectSocket({
 				url: `wss://silentdragon.pro:7115/private-chat/{${token}}`
 			})
 			socket.onOpen(() => {
 				console.log('WebSocket connection established')
-				
+
 			})
 			socket.onMessage((res) => {
 				const data = JSON.parse(res.data)
@@ -62,7 +62,7 @@ const actions = {
 			})
 			commit('SET_SOCKET', socket);
 		}
-		
+
 		creatSocket();
 	},
 
@@ -118,26 +118,28 @@ const actions = {
 		})
 	},
 	async getHistory({ commit }, { msgId, that, openId, time }) {
-		that.load = true;
-		await wx.request({
-			url: `https://101.43.254.115:7115/chat-history/${openId}`,
-			data: {
-				currentMsgId: msgId
-			},
-			header: {
-				Authorization: wx.getStorageSync('token')
-			},
-			method: 'GET',
-			success(res) {
-				console.log(res);
-				if (res.data.data.chatHistoryList[0]) {
-					commit('ADD_OLDCHAT', { data: res.data.data.chatHistoryList, that: that, time: time })
-				}else{
-					that.load = false
-					that.isTop = true;
+		if (!that.isTop) {
+			that.load = true;
+			await wx.request({
+				url: `https://101.43.254.115:7115/chat-history/${openId}`,
+				data: {
+					currentMsgId: msgId
+				},
+				header: {
+					Authorization: wx.getStorageSync('token')
+				},
+				method: 'GET',
+				success(res) {
+					console.log(res);
+					if (res.data.data.chatHistoryList[0]) {
+						commit('ADD_OLDCHAT', { data: res.data.data.chatHistoryList, that: that, time: time })
+					} else {
+						that.load = false
+						that.isTop = true;
+					}
 				}
-			}
-		})
+			})
+		}
 	}
 }
 
@@ -224,19 +226,21 @@ const mutations = {
 			return item.sendTime === time
 		})
 		console.log(index)
-		that.$nextTick(()=>{
+		that.$nextTick(() => {
 			that.query = uni.createSelectorQuery().in(that);
-			that.query.selectAll('.message').boundingClientRect((data)=>{
+			that.query.selectAll('.message').boundingClientRect((data) => {
 				const elements = Array.from(data);
 				console.log(elements);
-				if(!elements.length) return;
+				if (!elements.length) return;
 				that.scrollTop = elements[index].top - elements[0].top
-				that.load = false;
 			}).exec()
+			setTimeout(() => {
+				that.load = false;
+			}, 500)
 		})
 	},
 	// 清除历史记录
-	CLEAR_OLDCHAT(state){
+	CLEAR_OLDCHAT(state) {
 		state.chatHistoryList = [];
 	}
 }
