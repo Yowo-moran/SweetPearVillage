@@ -1,5 +1,3 @@
-import colorGradient from "uview-ui/libs/function/colorGradient";
-
 const state={
 	// 历史记录
 	historyList:[],
@@ -80,13 +78,14 @@ const actions={
 	 // 悬赏请求
 	 getRewardInfo({commit,state},options={}){
 		 const {pageNum=1,pageSize=6,types='',isClear=false,sortBy=''}=options
-		 // console.log(sortBy,types);
-		 // console.log('sortBy',sortBy);
-		 if(sortBy==''){
-			var bookdata={pageSize,pageNum,types} 
+		 console.log('请求');
+		 console.log('sortBy',sortBy,pageNum);
+		 if(types==''){
+			var bookdata={pageSize,pageNum,sortBy} 
 		 }else{
 			var bookdata={pageSize,pageNum,types,sortBy}
 		 }
+		 console.log(bookdata);
 		 if(isClear){
 			 state.rewardInfo=[],
 			 state.rewardstatus='loading'

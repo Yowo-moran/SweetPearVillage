@@ -63,7 +63,7 @@
 			this.tagType=options.tagName
 			const rewardKeyword=JSON.parse(options.rewardkeyword)
 			this.rewardkeyword=(rewardKeyword.length==0?'':rewardKeyword)
-			console.log( this.rewardkeyword);
+			// console.log( this.rewardkeyword);
 			},
 		data() {
 			return {
@@ -115,7 +115,7 @@
 					type:this.tagType
 				})
 				if(this.tagType=='悬赏'){
-					this.searchReward({keyword:item.name})
+					this.searchReward({keyword:item.name,types:this.rewardkeyword})
 				}else if(this.tagType=='闲置'){
 					this.searchLeave({searchText:item.name})
 				}else if(this.tagType=='书籍'){
@@ -129,7 +129,7 @@
 			// 搜索悬赏
 			searchReward(options={}){
 				const {pageSize=6,pageNum=1,keyword='',types=''}=options
-				console.log(types);
+				console.log('types',types);
 				uni.request({
 					method:'GET',
 					url:'https://101.43.254.115:7115/rewards/search',
@@ -145,7 +145,7 @@
 					success:res=>{
 						console.log(res);
 						// 如果成功返回数据
-						if(res.statusCode==200&&res.data.data.total!=0){
+						if(res.statusCode==200&&res.data.code=='00000'&&res.data.data.total!=0){
 							// 判断数据是否合并
 							if(this.rewardSearchInfo.length==0){
 								this.rewardSearchInfo=res.data.data.rewards
@@ -156,7 +156,7 @@
 								this.status1='nomore'
 							}
 							this.has_history=true
-						}else if(res.statusCode==200&&res.data.data.total==0){
+						}else if(res.statusCode==200&&res.data.code=='00000'&&res.data.data.total==0){
 							// 如果第一次请求就没数据 即数据长度为0
 							if(this.rewardSearchInfo.length==0){
 								this.has_history=false
