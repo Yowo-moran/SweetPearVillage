@@ -31,15 +31,15 @@
 		<view class="scroll" v-else>
 			<scroll-view  :scroll-y="true" @scrolltolower="upper" class="demo-scroll-block" v-if="has_history">
 				<view v-if="tagType=='悬赏'">
-					<listCardReward v-for="item,index in rewardSearchInfo" :key="index" :rewardInfo="item"></listCardReward>
+					<listCardReward v-for="item in rewardSearchInfo" :key="item.id" :rewardInfo="item"></listCardReward>
 					<u-loadmore :status="status1" />
 				</view>
 				<view v-else-if="tagType=='闲置'">
-					<listCardLeave v-for="item,index in leaveSearchInfo" :key="index" :leaveInfo="item"></listCardLeave>
+					<listCardLeave v-for="item in leaveSearchInfo" :key="item.id" :leaveInfo="item"></listCardLeave>
 					<u-loadmore :status="status2" />
 				</view>
 				<view v-else-if="tagType=='书籍'">
-					<listCardBook v-for="item,index in bookSearchInfo" :key="index" :bookInfo="item"></listCardBook>
+					<listCardBook v-for="item in bookSearchInfo" :key="item.id" :bookInfo="item"></listCardBook>
 					<u-loadmore :status="status3" />
 				</view>
 			</scroll-view>
@@ -56,14 +56,12 @@
 	import listCardReward from '../components/listcardReward.vue';
 	import listCardBook from '../components/listCardBook.vue';
 	import listCardLeave from '../components/listcardLeave.vue';
-	import { callWithErrorHandling } from "vue";
 	export default {
 		components:{listCardReward,listCardBook,listCardLeave},
 		onLoad (options) {
 			this.tagType=options.tagName
 			const rewardKeyword=JSON.parse(options.rewardkeyword)
 			this.rewardkeyword=(rewardKeyword.length==0?'':rewardKeyword)
-			// console.log( this.rewardkeyword);
 			},
 		data() {
 			return {

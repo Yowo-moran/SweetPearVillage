@@ -47,9 +47,6 @@
 				}
 			},
 		},
-		watch:{
-			
-		}
 	}
 </script>
 
@@ -78,6 +75,7 @@
         width: 100%;
         .price{
 			width: 100%;
+			margin-bottom: 5px;
 			// 自动换行
 			word-wrap: break-word;
 			word-break: break-all;

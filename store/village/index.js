@@ -96,7 +96,7 @@ const actions={
 			url:'https://101.43.254.115:7115/rewards',
 			data:bookdata,
 			header:{
-				'Authorization':uni.getStorageSync('token')
+				'Authorization':wx.getStorageSync('token')
 			},
 			success:res=>{
 				if(res.statusCode==200&&res.data.data.total!=0){
@@ -128,6 +128,9 @@ const actions={
 				pageSize,
 				keyWord
 			},
+			header:{
+				'Authorization':wx.getStorageSync('token')
+			},
 			success:res=>{
 				if(res.statusCode==200&&res.data.data.total!=0){
 					commit('GETLEAVEINFO',res.data.data.items)
@@ -149,7 +152,7 @@ const actions={
 		 	state.bookInfo=[]
 			state.bookstatus='loading'
 		 }
-		 console.log(college,major,grade,'参数');
+		 // console.log(college,major,grade,'参数');
 		 // console.log('page',page,'pageSize',pageSize,college,major,grade);
 		 uni.request({
 		 	method:'GET',
