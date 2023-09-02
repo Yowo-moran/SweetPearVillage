@@ -87,6 +87,7 @@
 </template>
 
 <script>
+	import url from '@/api/api.js';
 import InformVc from "@/components/InformVc.vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 export default {
@@ -98,6 +99,7 @@ export default {
       this.setPersonalDetails(details);
 	  console.log('set')
     }
+	console.log(url);
   },
   data() {
     return {
@@ -114,7 +116,7 @@ export default {
           if (res.code) {
             //发起网络请求
             wx.request({
-              url: "https://101.43.254.115:7115/user/" + res.code,
+              url: url+"/user/" + res.code,
               success(res) {
                 if (res.data.code !== "00000") {
                   console.log("登录失败！");
