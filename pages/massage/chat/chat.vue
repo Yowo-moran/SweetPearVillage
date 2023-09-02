@@ -156,6 +156,7 @@
 
 
 <script>
+import url from "@/api/api.js";
 import moment from "moment";
 import { mapState, mapActions, mapMutations } from "vuex";
 import loading from "./loading.vue";
@@ -230,7 +231,7 @@ export default {
   onUnload() {
     console.log("bye");
     wx.request({
-      url: "https://101.43.254.115:7115/chat-page/quit",
+      url: url + "/chat-page/quit",
       method: "POST",
       header: {
         Authorization: wx.getStorageSync("token"),
@@ -291,7 +292,7 @@ export default {
       this.ADD_NEWCHAT(temp);
       console.log("upload");
       wx.uploadFile({
-        url: "https://101.43.254.115:7115/chat/file",
+        url: url + "/chat/file",
         filePath: temp.message,
         name: "file",
         header: {
@@ -402,7 +403,7 @@ export default {
           console.log(temp.message);
           this.ADD_NEWCHAT(temp);
           uni.uploadFile({
-            url: "https://101.43.254.115:7115/chat/file",
+            url: url + "/chat/file",
             filePath: temp.message,
             name: "file",
             header: {

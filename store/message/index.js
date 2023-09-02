@@ -1,3 +1,5 @@
+import url from '@/api/api.js'
+
 const state = {
 	// 用于让聊天界面保持当前位置
 	count: 0,
@@ -36,7 +38,7 @@ const actions = {
 		// const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvcGVuaWQiOiIyMzc1Njk3OTY5MDc3NDYxNDQ2MDM0OTA0MTU0IiwiaWQiOjEsImV4cCI6MTY5MjY5MDI0NX0.nfYhj4tjKmDKIHp4eH15_HjS64urMazIhM1tsSINR1U'
 		function creatSocket() {
 			const socket = wx.connectSocket({
-				url: `wss://silentdragon.pro:7115/private-chat/{${token}}`
+				url: `wss://sweatpear.silentdragon.pro/private-chat/{${token}}`
 			})
 			socket.onOpen(() => {
 				console.log('WebSocket connection established')
@@ -82,7 +84,7 @@ const actions = {
 
 	async getChatList({ commit }) {
 		await wx.request({
-			url: 'https://101.43.254.115:7115/page/message',
+			url: url + '/page/message',
 			header: {
 				Authorization: wx.getStorageSync('token')
 				// Authorization: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvcGVuaWQiOiIyMzc1Njk3OTY5MDc3NDYxNDQ2MDM0OTA0MTU0IiwiaWQiOjEsImV4cCI6MTY5MjY5MDI0NX0.nfYhj4tjKmDKIHp4eH15_HjS64urMazIhM1tsSINR1U'
@@ -102,7 +104,7 @@ const actions = {
 		console.log(talkerOpenId)
 		commit('SET_CHATTER', talkerOpenId)
 		await wx.request({
-			url: `https://101.43.254.115:7115/chat-page/${talkerOpenId}`,
+			url: `${url}/chat-page/${talkerOpenId}`,
 			header: {
 				Authorization: wx.getStorageSync('token')
 			},
@@ -121,7 +123,7 @@ const actions = {
 		if (!that.isTop) {
 			that.load = true;
 			await wx.request({
-				url: `https://101.43.254.115:7115/chat-history/${openId}`,
+				url: `${url}/chat-history/${openId}`,
 				data: {
 					currentMsgId: msgId
 				},

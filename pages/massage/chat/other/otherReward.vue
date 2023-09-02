@@ -12,14 +12,15 @@
 </template>
 
 <script>
+import url from "@/api/api.js";
 import Reward from "./components/reward.vue";
 export default {
   components: {
     Reward,
   },
-  onLoad(option){
-	console.log(option.openId)
-	this.openId = option.openId
+  onLoad(option) {
+    console.log(option.openId);
+    this.openId = option.openId;
   },
   onShow() {
     this.getRewardList();
@@ -28,14 +29,14 @@ export default {
     return {
       rewardList: [],
       isShow: false,
-	  openId:''
+      openId: "",
     };
   },
   methods: {
     async getRewardList() {
       const that = this;
       await wx.request({
-        url: `https://101.43.254.115:7115/users/${that.openId}/rewards`,
+        url: `${url}/users/${that.openId}/rewards`,
         success(res) {
           if (res.data.code !== "00000") {
             console.log(res.data.message);
@@ -47,7 +48,6 @@ export default {
       });
     },
   },
-  
 };
 </script>
 

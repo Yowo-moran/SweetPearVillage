@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import url from "@/api/api.js";
 export default {
   data() {
     return {
@@ -77,14 +78,14 @@ export default {
     this.openId = openId;
     const that = this;
     wx.request({
-      url: `https://101.43.254.115:7115/user-info/${openId}`,
+      url: `${url}/user-info/${openId}`,
       header: {
         Authorization: wx.getStorageSync("token"),
       },
       method: "GET",
       success(res) {
         that.personalDetails = res.data.data;
-		console.log(that.personalDetails)
+        console.log(that.personalDetails);
       },
     });
   },
