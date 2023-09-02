@@ -1,3 +1,5 @@
+import url from '@/api/api.js'
+
 const state = {
     topicList:[],
     commentList:[],
@@ -40,7 +42,7 @@ const actions = {
     getList({ commit } , num){
         wx.request({
             method:"GET",
-            url: 'https://101.43.254.115:7115/post',
+            url: url + '/post',
             data:{
                 pageNum:0 + num,
                 pageSize:5,
@@ -64,9 +66,9 @@ const actions = {
         })
     },
     getTopicDetail({ commit } , pid) {
-        const url = `https://101.43.254.115:7115/post/${pid}`;
+        const temp = url + `/post/${pid}`;
         wx.request({
-            url: url,
+            url: temp,
             method: "GET",
             header: {
                 Authorization: wx.getStorageSync('token')
@@ -79,10 +81,10 @@ const actions = {
         });
     },
     getCommentList({ commit } , pid){
-        const url = `https://101.43.254.115:7115/post/comment/${pid}`;
+        const temp = url + `/post/comment/${pid}`;
         wx.request({
             method:"GET",
-            url: url,
+            url: temp,
             header:{
                 Authorization: wx.getStorageSync('token')
             },
@@ -98,7 +100,7 @@ const actions = {
     addComment({ commit } , val){
         wx.request({
             method:"POST",
-            url: 'https://101.43.254.115:7115/post/comment',
+            url: url + '/post/comment',
             data:val,
             header:{
                 Authorization: wx.getStorageSync('token')

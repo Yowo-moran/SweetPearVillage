@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import url from '@/api/api.js'
 export default {
     props:["info" , "index"],
     data() {
@@ -67,10 +68,10 @@ export default {
                 })
         },
         async checkLikeStatus(pid){
-            const url = `https://101.43.254.115:7115/post/like/${pid}`;
+            const temp = url + `/post/like/${pid}`;
             const that = this;
             await wx.request({
-                url: url,
+                url: temp,
                 method: "GET",
                 header: {
                     Authorization: wx.getStorageSync('token')
@@ -87,10 +88,10 @@ export default {
             });
         },
         async like(pid){
-            const url = `https://101.43.254.115:7115/post/like/${pid}`;
+            const temp = url + `/post/like/${pid}`;
             const that = this;
             await wx.request({
-                url: url,
+                url: temp,
                 method: "POST",
                 header: {
                     Authorization: wx.getStorageSync('token')
