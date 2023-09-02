@@ -45,6 +45,7 @@
 <script>
 	import InformVc from '../../../components/InformVc.vue';
 	import {mapState } from "vuex";
+	import url from '@/api/api.js';
 	export default {
 		components:{InformVc},
 		data() {
@@ -93,7 +94,7 @@
 				// }
 				  if(this.model1.user.describe!==''&&this.model1.user.price!==''&&this.fileList1.length!=0){
 				  	  uni.request({
-				  		url:"https://101.43.254.115:7115/item",
+				  		url:url+'/item',
 				  		method:'post',
 				    	data:{
 				  			description:this.model1.user.describe,
@@ -159,11 +160,11 @@
 				fileListLen++
 				}
 				},
-			uploadFilePromise(url) {
+			uploadFilePromise(url1) {
 				return new Promise((resolve, reject) => {
 					let a = uni.uploadFile({
-						url:"https://101.43.254.115:7115/item/image", 
-						filePath: url,
+						url:url+'/item/image', 
+						filePath: url1,
 						name: 'image',
 						header: {
 						  Authorization: wx.getStorageSync("token"),

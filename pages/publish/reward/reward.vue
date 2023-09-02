@@ -66,6 +66,7 @@
 <script>
 	import InformVc from '../../../components/InformVc.vue';
 	import {mapState } from "vuex";
+	import url from '@/api/api.js';
 	export default {
 		components:{InformVc},
 		data() {
@@ -126,7 +127,7 @@
 			  finish(){
 				  if(this.model1.userInfo.content!==''&&this.model1.userInfo.price!==''&&this.model1.userInfo.place!==''&&this.model1.userInfo.getPlace!==''){
 					  uni.request({
-					  	url:'https://101.43.254.115:7115/rewards',
+					  	url:url+'/rewards',
 					  		method:'post',
 					  		data:{
 								rewardContent:this.model1.userInfo.content,
