@@ -27,8 +27,6 @@
 			</view>
 		</swiper-item>
 	</swiper>
-	
-	
 </template>
 <script>
 	import listCardReward from '../components/listcardReward.vue';
@@ -66,11 +64,15 @@
 				grade:'',
 				BooksortBy:'',
 				triggered:false,
-				curRewardKeyword:[]
+				curRewardKeyword:[],
+				isFirstReward:true,
+				isFirstBook:true,
+				isFirstLeave:true
 			}
 		},
 		mounted(){
 			this.$store.dispatch('village/getRewardInfo')
+			this.isFirstReward=false
 		},
 		methods: {
 			skipChange(e){
@@ -79,21 +81,18 @@
 			},
 			onRefresh(){
 				this.triggered= true;
-				this.$emit('clearTag')
+				this.$emit('clearTag',this.tagName)
 				if(this.tagName=='悬赏'){
 					this.rewardpage=1;
 					this.curRewardKeyword=[]
-					this.$store.dispatch('village/getRewardInfo',{isClear:true})
 				}else if(this.tagName=='书籍'){
 					this.college=''
 					this.major=''
 					this.grade=''
 					this.BooksortBy=''
 					this.bookpage=1
-					this.$store.dispatch('village/getBookInfo',{isClear:true})
 				}else if(this.tagName=='闲置'){
 					this.leavepage=1
-					this.$store.dispatch('village/getLeaveInfo',{isClear:true})
 				}
 				setTimeout(() => {
 					this.triggered = false;
@@ -135,60 +134,64 @@
 		watch:{
 			// 点击tabbar 请求新数据
 			tagName(){
-				if(this.tagName=='悬赏'){
+				if(this.tagName=='悬赏'&&this.isFirstReward){
 					// 判断数据是否为空，若不是则不会再自动请求
-					if(this.rewardInfo.length==0){
+						this.isFirstReward=false
+						console.log('qingqiu',this.isFirstReward);
 						console.log(this.rewardInfo);
 						this.rewardpage=1;
-						this.$store.dispatch('village/getRewardInfo')
-					}				
-				}else if(this.tagName=='书籍'){
-					if(this.bookInfo.length==0){
+						this.$store.dispatch('village/getRewardInfo')	
+				}else if(this.tagName=='书籍'&&this.isFirstBook){
+						this.isFirstBook=false
 						console.log(this.bookInfo);
 						this.bookpage=1
 						this.$store.dispatch('village/getBookInfo')
-					}
-				}else if(this.tagName=='闲置'){
-					if(this.leaveInfo.length==0){
+				}else if(this.tagName=='闲置'&&this.isFirstLeave){
+						this.isFirstLeave=false
 						this.leavepage=1
 						this.$store.dispatch('village/getLeaveInfo')
-					}
 					
 				}
 			},
 			// 悬赏页标签改变时
-			rewardKeywords(){
-				this.rewardpage=1;
-				// 这里不能改变原数组的值，否则一直执行这个函数
-				// 在当前组件保存一下值
-				this.curRewardKeyword=this.rewardKeywords
-				let priceSort=[...this.curRewardKeyword].pop()||0
-				let rewardKeywordTag=[...this.curRewardKeyword].slice(0,-1)||[]
-				// 若为空数组则传递空字符串
-				if(rewardKeywordTag.length==0) rewardKeywordTag=''
-				// let sortBy=	(priceSort==0||priceSort==1)?'amount_asc':'amount_desc'
-				let sortBy=(priceSort==0?'':priceSort==1?'amount_asc':'amount_desc')
-				this.$store.dispatch('village/getRewardInfo',{types:rewardKeywordTag,isClear:true,sortBy})
-			},
-			bookkeywords(){
-				this.bookpage=1
-				// 若为默认，则变为空字符串
-				for (let key in this.bookkeywords) {
-				   if (this.bookkeywords.hasOwnProperty(key)) {
-				     if (this.bookkeywords[key] === '默认') {
-				       this.bookkeywords[key] = '';
-				     }
-				   }
-				 }
-				const {collegeValue,gradeValue,majorityValue,sortBys}=this.bookkeywords
-				if(sortBys==1){
-					this.BooksortBy=1
-				}else if(sortBys==2){
-					this.BooksortBy=0
-				}else{
-					this.BooksortBy=''
+			rewardKeywords:{
+				deep:true,
+				handler:function(){
+					console.log('changed');
+					this.rewardpage=1;
+					// 这里不能改变原数组的值，否则一直执行这个函数
+					// 在当前组件保存一下值
+					this.curRewardKeyword=this.rewardKeywords
+					let priceSort=[...this.curRewardKeyword].pop()||0
+					let rewardKeywordTag=[...this.curRewardKeyword].slice(0,-1)||[]
+					// 若为空数组则传递空字符串
+					if(rewardKeywordTag.length==0) rewardKeywordTag=''
+					// let sortBy=	(priceSort==0||priceSort==1)?'amount_asc':'amount_desc'
+					let sortBy=(priceSort==0?'':priceSort==1?'amount_asc':'amount_desc')
+					this.$store.dispatch('village/getRewardInfo',{types:rewardKeywordTag,isClear:true,sortBy})
 				}
-			this.$store.dispatch('village/getBookInfo',{college:collegeValue,major:gradeValue,grade:majorityValue,isClear:true,sortBy:this.BooksortBy})
+		
+			},
+			bookkeywords:{
+				deep:true,
+				handler:function(){
+					this.bookpage=1
+					let newbookkeyword=JSON.parse(JSON.stringify(this.bookkeywords))
+					// 若为默认，则变为空字符串
+					for (let key in newbookkeyword) {
+					   if (newbookkeyword.hasOwnProperty(key)) {
+					     if (newbookkeyword[key] === '默认') {
+					       newbookkeyword[key] = '';
+					     }
+					   }
+					 }
+					const {collegeValue,gradeValue,majorityValue,sortBys}=newbookkeyword
+					this.BooksortBy=(sortBys==1?1:sortBys==2?0:'')
+					this.major=majorityValue
+					this.college=collegeValue
+					this.grade=gradeValue
+					this.$store.dispatch('village/getBookInfo',{college:collegeValue,major:majorityValue,grade:gradeValue,isClear:true,sortBy:this.BooksortBy})
+				}
 			}
 		}
 }

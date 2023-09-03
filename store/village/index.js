@@ -1,7 +1,5 @@
 import url from '@/api/api.js'
 const state={
-	// 历史记录
-	historyList:[],
 	// 悬赏的数据
 	rewardInfo:[],
 	// 书籍的数据
@@ -14,17 +12,9 @@ const state={
 	leavestatus:'loading',
 }
 const mutations={
-	// 设置历史记录
-	SETHISTORYLIST(state,history){
-		state.historyList=history;
-	},
-	// 清除历史记录
-	CLEARHISTORYLIST(state){
-		state.historyList=[]
-	},
 	// 悬赏主页面展示
 	GETREWARDINFO(state,info){
-		console.log('悬赏',info);
+		// console.log('悬赏',info);
 		if(info.length<6){
 			state.rewardstatus='nomore'
 		}
@@ -52,7 +42,7 @@ const mutations={
 	},
 	// 闲置主页面展示
 	GETLEAVEINFO(state,info){
-		console.log('闲置',info);
+		// console.log('闲置',info);
 		if(info.length<6){
 			state.leavestatus='nomore'
 		}
@@ -65,17 +55,6 @@ const mutations={
 	},
 }
 const actions={
-	 setHistoryList({commit,state},history){
-		 let list=state.historyList
-		 list.unshift(history)
-		 // 添加后检查是否有重复项
-		 const newlist = [...new Set(list.map(JSON.stringify))].map(JSON.parse);
-		 commit('SETHISTORYLIST',newlist)
-	 },
-	 clearHistoryList({commit,state}){
-		 commit('CLEARHISTORYLIST')
-	 },
-	 
 	 // 悬赏请求
 	 getRewardInfo({commit,state},options={}){
 		 const {pageNum=1,pageSize=6,types='',isClear=false,sortBy=''}=options
@@ -88,6 +67,7 @@ const actions={
 		 }
 		 console.log(bookdata);
 		 if(isClear){
+
 			 state.rewardInfo=[],
 			 state.rewardstatus='loading'
 		 }
@@ -118,6 +98,7 @@ const actions={
 	 getLeaveInfo({commit,state},options={}){
 		 const{pageNum=1,pageSize=6,keyWord='',isClear=false}=options
 		 if(isClear){
+			 
 		 	state.leaveInfo=[]
 			state.leavestatus='loading'
 		 }
@@ -127,7 +108,6 @@ const actions={
 			data:{
 				pageNum,
 				pageSize,
-				keyWord
 			},
 			header:{
 				'Authorization':wx.getStorageSync('token')
@@ -150,11 +130,13 @@ const actions={
 	 getBookInfo({commit,state},options={}){
 		 const {college='',major='',grade='',page=1,pageSize=6,isClear=false,sortBy=''}=options
 		 if(isClear){
+			
 		 	state.bookInfo=[]
 			state.bookstatus='loading'
 		 }
 		 // console.log(college,major,grade,'参数');
-		 // console.log('page',page,'pageSize',pageSize,college,major,grade);
+		 console.log('page',page,'pageSize',pageSize,'college',college,'major',major,'grade',grade);
+		 // console.log(major);
 		 uni.request({
 		 	method:'GET',
 		 	url:url+'/user/book/page',
@@ -170,7 +152,7 @@ const actions={
 				'Authorization':wx.getStorageSync('token')
 			},
 			success:res=>{
-			// console.log(res);
+			console.log(res);
 				if(res.statusCode==200&&res.data.data.total!=0){
 					state.bookstatus='loading'
 					commit('GETBOOKINFO',res.data.data.records)

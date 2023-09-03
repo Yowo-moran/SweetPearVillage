@@ -88,7 +88,7 @@
 				 rewardkeyword:[],
 				 currentTags:[],
 				 // 书籍页关键字
-				 collegekeyword:{},
+				 // collegekeyword:{},
 				collegeShow: false,
 				collegeValue:'',
 				majorityShow: false,
@@ -372,6 +372,7 @@
 			},
 			// 点击确定
 			submit(){
+				console.log(this.rewardkeyword,this.priceSortReward);
 				// 将数组深拷贝过去 并入价格排序参数
 				this.$emit('rewardKeyword',JSON.parse(JSON.stringify([...this.rewardkeyword,this.priceSortReward])))
 				// 将选中的标签传给父组件
@@ -379,8 +380,8 @@
 			},
 			bookSubmit(){
 				const{collegeValue,majorityValue,gradeValue}=this
-				this.collegekeyword={collegeValue,majorityValue,gradeValue,sortBys:this.priceSortBook}
-				this.$emit('bookKeyword',JSON.parse(JSON.stringify(this.collegekeyword)))
+				let collegekeyword={collegeValue,majorityValue,gradeValue,sortBys:this.priceSortBook}
+				this.$emit('bookKeyword',JSON.parse(JSON.stringify(collegekeyword)))
 				this.show=false
 			},
 			// 悬赏价格排序
@@ -394,11 +395,6 @@
 		},
 		watch:{
 			tagName(){
-				this.currentTags=[]
-				this.rewardkeyword=[]
-				this.collegeValue=''
-				this.majorityValue=''
-				this.gradeValue=''
 				if(this.tagName=='悬赏'){
 					this.searchValue='搜索食堂、快递外卖代收点'
 				}else if(this.tagName=='书籍'){
@@ -413,8 +409,18 @@
 				this.collegeValue=''
 				this.majorityValue=''
 				this.gradeValue='',
+				this.majorIndex=0
 				this.priceSortReward=0
 				this.priceSortBook=0
+				if(this.tagName=='悬赏'){
+					this.$emit('rewardKeyword',JSON.parse(JSON.stringify([...this.rewardkeyword,this.priceSortReward])))
+				 }
+				else if(this.tagName=='书籍'){
+					const{collegeValue,majorityValue,gradeValue}=this
+					let collegekeyword={collegeValue,majorityValue,gradeValue,sortBys:this.priceSortBook}
+					this.$emit('bookKeyword',JSON.parse(JSON.stringify(collegekeyword)))
+				}
+				
 				// 由于仅仅在点击确定时才会传递标签关键字，所以刷新后关键字还保留原来的，这里要手动刷新一下
 				// this.$emit('rewardKeyword',JSON.parse(JSON.stringify([...this.rewardkeyword,this.priceSortReward])))
 				// this.$emit('bookKeyword',JSON.parse(JSON.stringify(this.collegekeyword)))
