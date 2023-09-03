@@ -1,3 +1,4 @@
+import url from '@/api/api.js'
 const state={
 	// 历史记录
 	historyList:[],
@@ -37,7 +38,7 @@ const mutations={
 	},
 	// 书籍主页面展示
 	GETBOOKINFO(state,info){
-		console.log('书籍',info);
+		// console.log('书籍',info);
 		if(info.length<6){
 			state.bookstatus='nomore'
 		}
@@ -78,8 +79,8 @@ const actions={
 	 // 悬赏请求
 	 getRewardInfo({commit,state},options={}){
 		 const {pageNum=1,pageSize=6,types='',isClear=false,sortBy=''}=options
-		 console.log('请求');
-		 console.log('sortBy',sortBy,pageNum);
+		 // console.log('请求');
+		 // console.log('sortBy',sortBy,pageNum);
 		 if(types==''){
 			var bookdata={pageSize,pageNum,sortBy} 
 		 }else{
@@ -93,7 +94,7 @@ const actions={
 		 // console.log(bookdata);
 		 uni.request({
 		 	method:'GET',
-			url:'https://101.43.254.115:7115/rewards',
+			url:url+'/rewards',
 			data:bookdata,
 			header:{
 				'Authorization':wx.getStorageSync('token')
@@ -122,7 +123,7 @@ const actions={
 		 }
 		 uni.request({
 		 	method:"GET",
-			url:'https://101.43.254.115:7115/item',
+			url:url+'/item',
 			data:{
 				pageNum,
 				pageSize,
@@ -156,7 +157,7 @@ const actions={
 		 // console.log('page',page,'pageSize',pageSize,college,major,grade);
 		 uni.request({
 		 	method:'GET',
-		 	url:'https://101.43.254.115:7115/user/book/page',
+		 	url:url+'/user/book/page',
 			data:{
 				college,
 				major,

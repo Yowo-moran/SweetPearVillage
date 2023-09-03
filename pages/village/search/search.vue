@@ -56,6 +56,7 @@
 	import listCardReward from '../components/listcardReward.vue';
 	import listCardBook from '../components/listCardBook.vue';
 	import listCardLeave from '../components/listcardLeave.vue';
+	import url from '@/api/api.js'
 	export default {
 		components:{listCardReward,listCardBook,listCardLeave},
 		onLoad (options) {
@@ -130,7 +131,7 @@
 				console.log('types',types);
 				uni.request({
 					method:'GET',
-					url:'https://101.43.254.115:7115/rewards/search',
+					url:url + '/rewards/search',
 					data:{
 						pageSize,
 						pageNum,
@@ -177,7 +178,7 @@
 				console.log(searchText);
 				uni.request({
 					method:'GET',
-					url:'https://101.43.254.115:7115/item/search',
+					url:url + '/item/search',
 					data:{
 						pageSize,
 						pageNum,
@@ -222,7 +223,7 @@
 				console.log(searchText);
 				uni.request({
 					method:'GET',
-					url:'https://101.43.254.115:7115/user/book/search',
+					url:url + '/user/book/search',
 					data:{
 						pageSize,
 						pageNum,
