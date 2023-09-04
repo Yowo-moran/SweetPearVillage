@@ -63,6 +63,7 @@
 			this.tagType=options.tagName
 			const rewardKeyword=JSON.parse(options.rewardkeyword)
 			this.rewardkeyword=(rewardKeyword.length==0?'':rewardKeyword)
+			this.historyList=(wx.getStorageSync('searchHistory')||[]).filter(item=>item.type==this.tagType)
 			},
 		data() {
 			return {
@@ -70,6 +71,7 @@
 				value:'',
 				is_histroy: true,
 				searchList: [],
+				historyList:[],
 				loading:false,
 				tagType:'',
 				rewardkeyword:'',
@@ -90,7 +92,7 @@
 			goSearch(){
 				if(this.value.trim()!=''){
 					// 添加历史记录
-					this.$store.dispatch('village/setHistoryList',{
+					this.setHistoryList({
 						name:this.value.trim(),
 						type:this.tagType
 					})
@@ -109,7 +111,7 @@
 				this.value=item.name
 				this.initializeData()
 				// 重新添加历史记录
-				this.$store.dispatch('village/setHistoryList',{
+				this.setHistoryList({
 					name:this.value.trim(),
 					type:this.tagType
 				})
@@ -123,7 +125,21 @@
 			},
 			//清除历史记录
 			clearHistroy(){
-				this.$store.dispatch('village/clearHistoryList')
+				this.clearHistoryList()
+			},
+			// 设置历史记录
+			setHistoryList(history){
+				const searchHistory=wx.getStorageSync('searchHistory')||[]
+				searchHistory.unshift(history)
+				 // 添加后检查是否有重复项
+				const newlist = [...new Set(searchHistory.map(JSON.stringify))].map(JSON.parse);
+				wx.setStorageSync('searchHistory',newlist)
+				this.historyList=(wx.getStorageSync('searchHistory')||[]).filter(item=>item.type==this.tagType)
+			},
+			// 清除历史记录
+			clearHistoryList(){
+				wx.removeStorageSync('searchHistory')
+				this.historyList=(wx.getStorageSync('searchHistory')||[]).filter(item=>item.type==this.tagType)
 			},
 			// 搜索悬赏
 			searchReward(options={}){
@@ -175,7 +191,6 @@
 			// 搜索闲置
 			searchLeave(options={}){
 				const {pageSize=6,pageNum=1,searchText=''}=options
-				console.log(searchText);
 				uni.request({
 					method:'GET',
 					url:url + '/item/search',
@@ -188,8 +203,9 @@
 						'Authorization':uni.getStorageSync('token')
 					},
 					success:res=>{
+						console.log(res);
 						// 如果成功返回数据
-						if(res.statusCode==200&&res.data.data.length!=0){
+						if(res.statusCode==200&&res.data.code=='00000'&&res.data.data.length!=0){
 							// 判断数据是否合并
 							if(this.leaveSearchInfo.length==0){
 								this.leaveSearchInfo=res.data.data
@@ -200,7 +216,7 @@
 								this.status2='nomore'
 							}
 							this.has_history=true
-						}else if(res.statusCode==200&&res.data.data.length==0){
+						}else if(res.statusCode==200&&res.data.code=='00000'&&res.data.data.length==0){
 							// 如果第一次请求就没数据 即数据长度为0
 							if(this.leaveSearchInfo.length==0){
 								this.has_history=false
@@ -235,7 +251,7 @@
 					success:res=>{
 						console.log(res);
 						// 如果成功返回数据
-						if(res.statusCode==200&&res.data.data.length!=0){
+						if(res.statusCode==200&&res.data.code=='00000'&&res.data.data.length!=0){
 							// 判断数据是否合并
 							if(this.bookSearchInfo.length==0){
 								this.bookSearchInfo=res.data.data
@@ -246,7 +262,7 @@
 								this.status3='nomore'
 							}
 							this.has_history=true
-						}else if(res.statusCode==200&&res.data.data.length==0){
+						}else if(res.statusCode==200&&res.data.code=='00000'&&res.data.data.length==0){
 							// 如果第一次请求就没数据 即数据长度为0
 							if(this.bookSearchInfo.length==0){
 								this.has_history=false
@@ -294,10 +310,11 @@
 		},
 	computed:{
 		...mapState("message", ["newChat"]),
-		historyList(){
-			// 将历史记录分块展示 仅当tagType和记录中的type相等时
-			return this.$store.state.village.historyList.filter(item=>item.type==this.tagType)
-		},
+		// historyList(){
+		// 	console.log('computed');
+		// 	// 将历史记录分块展示 仅当tagType和记录中的type相等时
+		// 	return (wx.getStorageSync('searchHistory')||[]).filter(item=>item.type==this.tagType)
+		// },
 	},
 	watch:{
 		value(){
@@ -306,7 +323,6 @@
 				this.rewardSearchInfo=[]
 				this.leaveSearchInfo=[]
 				this.bookSearchInfo=[]
-		
 			}
 		},
 		newChat: {
