@@ -13,7 +13,7 @@
       <scroll-view
         scroll-y="true"
         class="scroll"
-        v-if="chatList.receiverName !== ''"
+        v-if="chatList !== []"
       >
         <view
           class="scrollItem"
