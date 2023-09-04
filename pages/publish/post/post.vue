@@ -25,7 +25,7 @@
 		 		@delete="deletePic"
 		 		name="1"
 		 		multiple
-		 		:maxCount="10"
+		 		:maxCount="4"
 		 	></u-upload>
 		
 		
