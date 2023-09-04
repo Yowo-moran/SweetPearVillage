@@ -114,7 +114,7 @@
 </template>
 
 <script>
-import url from "@/api/api.js";
+import Url from "@/api/api.js";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 export default {
   onLoad() {
@@ -456,7 +456,7 @@ export default {
     uploadFilePromise(url) {
       return new Promise((resolve, reject) => {
         let a = uni.uploadFile({
-          url: url + "/user/book/image", // 仅为示例，非真实的接口地址
+          url: Url + "/user/book/image", // 仅为示例，非真实的接口地址
           filePath: url,
           name: "image",
           header: {
@@ -476,7 +476,7 @@ export default {
       const result = await this.uploadFilePromise(that.fileList1[0].url);
       await wx.request({
         method: "PUT",
-        url: url + "/user/book",
+        url: Url + "/user/book",
         data: {
           id: that.editBookForm.id,
           bookName: that.editBookForm.bookName,

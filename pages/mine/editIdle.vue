@@ -140,11 +140,11 @@ export default {
         },
       });
     },
-    uploadFilePromise(url) {
+    uploadFilePromise(Url) {
       return new Promise((resolve, reject) => {
         let a = uni.uploadFile({
           url: url + "/item/image",
-          filePath: url,
+          filePath: Url,
           name: "image",
           header: {
             Authorization: wx.getStorageSync("token"),
