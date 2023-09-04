@@ -158,7 +158,7 @@
 						'Authorization':uni.getStorageSync('token')
 					},
 					success:res=>{
-						console.log(res);
+						// console.log(res);
 						// 如果成功返回数据
 						if(res.statusCode==200&&res.data.code=='00000'&&res.data.data.total!=0){
 							// 判断数据是否合并
@@ -203,7 +203,7 @@
 						'Authorization':uni.getStorageSync('token')
 					},
 					success:res=>{
-						console.log(res);
+						// console.log(res);
 						// 如果成功返回数据
 						if(res.statusCode==200&&res.data.code=='00000'&&res.data.data.length!=0){
 							// 判断数据是否合并

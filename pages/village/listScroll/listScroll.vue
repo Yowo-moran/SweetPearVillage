@@ -81,18 +81,30 @@
 			},
 			onRefresh(){
 				this.triggered= true;
-				this.$emit('clearTag',this.tagName)
 				if(this.tagName=='悬赏'){
-					this.rewardpage=1;
-					this.curRewardKeyword=[]
+					// 区分是未选择任何标签和价格排序就刷新还是选择标签和价格排序的情况下的刷新
+					if(this.curRewardKeyword.length==0){
+						this.$store.dispatch('village/getRewardInfo',{isClear:true})
+					}else{
+						this.$emit('clearTag',this.tagName)
+						this.rewardpage=1;
+						this.curRewardKeyword=[]
+					}
 				}else if(this.tagName=='书籍'){
-					this.college=''
-					this.major=''
-					this.grade=''
-					this.BooksortBy=''
-					this.bookpage=1
+					const {college,major,grade,BooksortBy}=this
+					if(college==''&&major==''&&grade==''&&BooksortBy==''){
+						this.$store.dispatch('village/getBookInfo',{isClear:true})
+					}else{
+						this.$emit('clearTag',this.tagName)
+						this.college=''
+						this.major=''
+						this.grade=''
+						this.BooksortBy=''
+						this.bookpage=1
+					}
 				}else if(this.tagName=='闲置'){
 					this.leavepage=1
+					this.$store.dispatch('village/getLeaveInfo',{isClear:true})
 				}
 				setTimeout(() => {
 					this.triggered = false;
@@ -166,7 +178,6 @@
 					let rewardKeywordTag=[...this.curRewardKeyword].slice(0,-1)||[]
 					// 若为空数组则传递空字符串
 					if(rewardKeywordTag.length==0) rewardKeywordTag=''
-					// let sortBy=	(priceSort==0||priceSort==1)?'amount_asc':'amount_desc'
 					let sortBy=(priceSort==0?'':priceSort==1?'amount_asc':'amount_desc')
 					this.$store.dispatch('village/getRewardInfo',{types:rewardKeywordTag,isClear:true,sortBy})
 				}

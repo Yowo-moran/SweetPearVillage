@@ -404,23 +404,22 @@
 				}
 			},
 			clearTags(){
-				this.currentTags=[]
-				this.rewardkeyword=[]
-				this.collegeValue=''
-				this.majorityValue=''
-				this.gradeValue='',
-				this.majorIndex=0
-				this.priceSortReward=0
-				this.priceSortBook=0
 				if(this.tagName=='悬赏'){
+					this.currentTags=[]
+					this.rewardkeyword=[]
+					this.priceSortReward=0
 					this.$emit('rewardKeyword',JSON.parse(JSON.stringify([...this.rewardkeyword,this.priceSortReward])))
 				 }
 				else if(this.tagName=='书籍'){
+					this.collegeValue=''
+					this.majorityValue=''
+					this.gradeValue='',
+					this.majorIndex=0
+					this.priceSortBook=0
 					const{collegeValue,majorityValue,gradeValue}=this
 					let collegekeyword={collegeValue,majorityValue,gradeValue,sortBys:this.priceSortBook}
 					this.$emit('bookKeyword',JSON.parse(JSON.stringify(collegekeyword)))
 				}
-				
 				// 由于仅仅在点击确定时才会传递标签关键字，所以刷新后关键字还保留原来的，这里要手动刷新一下
 				// this.$emit('rewardKeyword',JSON.parse(JSON.stringify([...this.rewardkeyword,this.priceSortReward])))
 				// this.$emit('bookKeyword',JSON.parse(JSON.stringify(this.collegekeyword)))

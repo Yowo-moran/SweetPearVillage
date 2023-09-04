@@ -67,7 +67,6 @@ const actions={
 		 }
 		 console.log(bookdata);
 		 if(isClear){
-
 			 state.rewardInfo=[],
 			 state.rewardstatus='loading'
 		 }

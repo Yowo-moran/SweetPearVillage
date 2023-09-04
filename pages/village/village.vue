@@ -23,9 +23,9 @@
 	import searchbox from './searchbox/searchbox.vue'
 	export default {
 		components:{navbar,listScroll,searchbox,InformVc},
-		mounted(){
-			console.log(uni.getStorageSync('token'));
-		},
+		// mounted(){
+		// 	console.log(uni.getStorageSync('token'));
+		// },
 		data() {
 			return {
 				// 当前标签值
