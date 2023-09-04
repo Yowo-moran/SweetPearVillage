@@ -36,8 +36,9 @@
     </view>
   </view>
 </template>
- 
+
 <script>
+import url from "@/api/api.js";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 export default {
   name: "MyBook",
@@ -55,7 +56,7 @@ export default {
       const that = this;
       await wx.request({
         method: "POST",
-        url: "https://101.43.254.115:7115/user/book/state/" + id,
+        url: url + "/user/book/state/" + id,
         header: {
           Authorization: wx.getStorageSync("token"),
         },
@@ -74,7 +75,7 @@ export default {
       const that = this;
       await wx.request({
         method: "DELETE",
-        url: "https://101.43.254.115:7115/user/book/" + id,
+        url: url + "/user/book/" + id,
         header: {
           Authorization: wx.getStorageSync("token"),
         },
@@ -99,7 +100,7 @@ export default {
   },
 };
 </script>
- 
+
 <style lang="scss">
 .waterfall-box {
   margin: 10rpx;

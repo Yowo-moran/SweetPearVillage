@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import url from "@/api/api.js";
 import InformVc from "@/components/InformVc.vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import Reward from "./components/reward.vue";
@@ -49,7 +50,7 @@ export default {
       const that = this;
       await wx.request({
         method: "DELETE",
-        url: "https://101.43.254.115:7115/users/me/rewards/" + that.item.id,
+        url: url + "/users/me/rewards/" + that.item.id,
         header: {
           Authorization: wx.getStorageSync("token"),
         },
@@ -74,10 +75,7 @@ export default {
       const that = this;
       await wx.request({
         method: "PUT",
-        url:
-          "https://101.43.254.115:7115/users/me/rewards/" +
-          that.item.id +
-          "/state",
+        url: url + "/users/me/rewards/" + that.item.id + "/state",
         header: {
           Authorization: wx.getStorageSync("token"),
         },
@@ -94,7 +92,7 @@ export default {
     async getRewardList() {
       const that = this;
       await wx.request({
-        url: "https://101.43.254.115:7115/users/me/rewards",
+        url: url + "/users/me/rewards",
         header: {
           Authorization: wx.getStorageSync("token"),
         },

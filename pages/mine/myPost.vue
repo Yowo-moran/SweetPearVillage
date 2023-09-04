@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import url from "@/api/api.js";
 import InformVc from "@/components/InformVc.vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import Post from "./components/post.vue";
@@ -38,7 +39,7 @@ export default {
     async getPostList() {
       const that = this;
       await wx.request({
-        url: "https://101.43.254.115:7115/post/my",
+        url: url + "/post/my",
         header: {
           Authorization: wx.getStorageSync("token"),
         },

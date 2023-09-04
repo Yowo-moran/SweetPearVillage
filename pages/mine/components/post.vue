@@ -1,6 +1,11 @@
 <template>
   <view>
-    <view class="post-item" v-for="(item, index) in list" :key="index" @click="jump(item.id)">
+    <view
+      class="post-item"
+      v-for="(item, index) in list"
+      :key="index"
+      @click="jump(item.id)"
+    >
       <u-image
         :src="item.avatar"
         :lazy-load="true"
@@ -57,6 +62,7 @@
 </template>
 
 <script>
+import url from "@/api/api.js";
 import moment from "moment";
 export default {
   name: "MyPost",
@@ -78,7 +84,7 @@ export default {
       const that = this;
       await wx.request({
         method: "DELETE",
-        url: "https://101.43.254.115:7115/post/" + id,
+        url: url + "/post/" + id,
         header: {
           Authorization: wx.getStorageSync("token"),
         },

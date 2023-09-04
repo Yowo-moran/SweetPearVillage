@@ -66,6 +66,7 @@
 </template>
 
 <script>
+import url from "@/api/api.js";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 export default {
   onLoad() {
@@ -136,9 +137,7 @@ export default {
       const that = this;
       await wx.request({
         method: "PUT",
-        url:
-          "https://101.43.254.115:7115/users/me/rewards/" +
-          that.editRewardForm.id,
+        url: url + "/users/me/rewards/" + that.editRewardForm.id,
         data: {
           rewardContent: that.editRewardForm.rewardContent,
           rewardAmount: that.editRewardForm.rewardAmount,

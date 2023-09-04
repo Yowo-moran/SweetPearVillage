@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import url from "@/api/api.js";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 export default {
   onLoad() {
@@ -123,7 +124,7 @@ export default {
       const token = wx.getStorageSync("token");
       await wx.request({
         method: "GET",
-        url: "https://101.43.254.115:7115/item/" + id,
+        url: url + "/item/" + id,
         header: {
           Authorization: token,
         },
@@ -142,7 +143,7 @@ export default {
     uploadFilePromise(url) {
       return new Promise((resolve, reject) => {
         let a = uni.uploadFile({
-          url: "https://101.43.254.115:7115/item/image",
+          url: url + "/item/image",
           filePath: url,
           name: "image",
           header: {
@@ -162,7 +163,7 @@ export default {
       const result = await this.uploadFilePromise(that.fileList1[0].url);
       await wx.request({
         method: "PUT",
-        url: "https://101.43.254.115:7115/item",
+        url: url + "/item",
         data: {
           id: that.editIdle.id,
           description: that.editIdle.description,

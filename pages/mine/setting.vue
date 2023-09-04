@@ -439,7 +439,7 @@ export default {
       // });
       await wx.request({
         method: "POST",
-        url: "https://101.43.254.115:7115/information",
+        url: url + "/information",
         data: {
           newNickname: that.editDetails.nickName,
           newSex: that.editDetails.sex,

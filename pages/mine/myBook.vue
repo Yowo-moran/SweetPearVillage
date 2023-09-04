@@ -13,10 +13,11 @@
 </template>
 
 <script>
+import url from "@/api/api.js";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import Waterfall from "./components/Waterfall.vue";
 import Book from "./components/Book.vue";
-export default {
+export default { 
   components: {
     Waterfall,
     Book
@@ -36,7 +37,7 @@ export default {
       const that = this;
       this.bookList = [];
       await wx.request({
-        url: "https://101.43.254.115:7115/user/book",
+        url: url + "/user/book",
         data: {
           page: 1,
           pageSize: 200,

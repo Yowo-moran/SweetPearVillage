@@ -87,7 +87,7 @@
 </template>
 
 <script>
-	import url from '@/api/api.js';
+import url from '@/api/api.js';
 import InformVc from "@/components/InformVc.vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 export default {
@@ -194,7 +194,7 @@ export default {
     async editAvatar(e) {
       const that = this;
       await uni.uploadFile({
-        url: "https://101.43.254.115:7115/avatar",
+        url: url + "/avatar",
         filePath: e.detail.avatarUrl,
         name: "avatar",
         header: {

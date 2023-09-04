@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import url from "@/api/api.js";
 import InformVc from "@/components/InformVc.vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import Idle from "./components/idle.vue";
@@ -49,7 +50,7 @@ export default {
       const that = this;
       await wx.request({
         method: "DELETE",
-        url: "https://101.43.254.115:7115/item/" + that.item.id,
+        url: url + "/item/" + that.item.id,
         header: {
           Authorization: wx.getStorageSync("token"),
         },
@@ -74,7 +75,7 @@ export default {
       const that = this;
       await wx.request({
         method: "PUT",
-        url: "https://101.43.254.115:7115/item/sold?itemId=" + that.item.id,
+        url: url + "/item/sold?itemId=" + that.item.id,
         header: {
           Authorization: wx.getStorageSync("token"),
         },
@@ -91,7 +92,7 @@ export default {
     async getIdleList() {
       const that = this;
       await wx.request({
-        url: "https://101.43.254.115:7115/item/my",
+        url: url + "/item/my",
         header: {
           Authorization: wx.getStorageSync("token"),
         },
