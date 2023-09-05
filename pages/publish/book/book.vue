@@ -194,8 +194,8 @@
             "机械类",
             "能源动力类",
 			
-			
-          ],
+			],
+          
         ],
         [
           [
@@ -413,7 +413,8 @@
 				console.log(e)
 				
 				if (e.value[0] !== "请选择专业") {
-				  this.model1.userInfo.major = e.value
+					
+				  this.model1.userInfo.major = e.value[0]
 				}
 				this.showMajor=false;
 			},
@@ -431,12 +432,12 @@
 							url:url+'/user/book',
 							method:'post',
 					  		data:{
-								name:this.model1.userInfo.name,
+								bookName:this.model1.userInfo.name,
 								price:this.model1.userInfo.price,
 								college:this.model1.userInfo.college,
 								grade:this.model1.userInfo.grade,
 								major:this.model1.userInfo.major,
-								iamge:this.images,
+								image:this.images,
 							},
 							header: {
 					  			Authorization: wx.getStorageSync("token"),
