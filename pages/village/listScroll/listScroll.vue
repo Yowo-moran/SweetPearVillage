@@ -1,7 +1,7 @@
 <template>
 	<!-- 添加左右滑动区 一定要设置高度为100% -->
 	<!-- 注册滑动事件 -->
-	<swiper style="height:100%" @change="skipChange" :current="activeIndex" >
+	<swiper class="swiper" :style="{backgroundColor:(tagName=='悬赏'?'#CDA893':'#D6D7B9')}"@change="skipChange" :current="activeIndex" >
 		<swiper-item  v-for="(item,indexone) in 3" :key="indexone" @touchmove.stop>
 			<!-- listCard -->
 			<view class="scroll">
@@ -149,8 +149,8 @@
 				if(this.tagName=='悬赏'&&this.isFirstReward){
 					// 判断数据是否为空，若不是则不会再自动请求
 						this.isFirstReward=false
-						console.log('qingqiu',this.isFirstReward);
-						console.log(this.rewardInfo);
+						// console.log('qingqiu',this.isFirstReward);
+						// console.log(this.rewardInfo);
 						this.rewardpage=1;
 						this.$store.dispatch('village/getRewardInfo')	
 				}else if(this.tagName=='书籍'&&this.isFirstBook){
@@ -209,10 +209,15 @@
 </script>
 
 <style scoped>
+	.swiper{
+		height:100%
+	}
 	.scroll{
 		height: 100%;
 		flex: 1;
 		box-sizing: border-box;
+		background-color: ;
+		padding-top: 5rpx;
 	}
 	.demo-scroll-block {
 		width: 100%;

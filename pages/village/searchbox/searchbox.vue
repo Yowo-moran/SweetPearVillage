@@ -1,7 +1,7 @@
 <template>
 	<view class="searchBar">
 		<view class="search" @click="jump">
-			<image class="searchIcon" src="../../../static/搜索-黑.png"></image> 
+			<image class="searchIcon" src="../../../static/搜索.png"></image> 
 			<view class="searchText">{{searchValue}}</view>
 		</view>
 		<view class="setting" @click="show = true" v-if="tagName=='悬赏'||tagName=='书籍'">
@@ -444,9 +444,8 @@
 			align-items: center;
 			padding: 0 20rpx;
 			height: 60rpx;
-			width: 85%;
-			border-radius: 60rpx;
-			background-color:#E3FBE3;
+			width: 100%;
+			background-color:#D6D7B9;
 			.searchIcon{
 				margin-right: 20rpx;
 				width: 36rpx;
@@ -454,20 +453,21 @@
 				// border:1px solid red;
 			}
 			.searchText{
-				font-size: 32rpx;
-				color: #999;
+				font-size: 30rpx;
+				color: #fff;
 			}
 		}
 		.setting{
-			width: 12%;
-			height: 100%;
-			padding: 20rpx;
+			width: 8%;
+			height: 50rpx;
+			margin: 20rpx;
 			box-sizing: border-box;
-			// background-color: green;
+			// background-color: #E3FBE3;
 			image{
 				width: 100%;
 				height: 100%;
 			}
+			
 		}
 	.upopup{
 		.chooseTag{

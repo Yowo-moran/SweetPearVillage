@@ -1,6 +1,6 @@
 <template>
 	<!-- 横向卡片 闲置 -->
-	<view class="rowlistItem"  @click="jump" :style="{backgroundColor:(leaveInfo.sold?'#D7D7D7':'#F2F2E5')}">
+	<view class="rowlistItem"  @click="jump" :style="{backgroundColor:(leaveInfo.sold?'#D7D7D7':'#fff')}">
 		<view class="listItemImage">
 			<image :src="leaveInfo.avatar" alt="图片加载失败"></image>
 		</view>
@@ -59,7 +59,8 @@
 	margin: 20rpx;
 	padding: 15rpx 30rpx;
 	border-radius: 10rpx;
-	background-color: #F2F2E5;
+	// background-color: #F2F2E5;
+	background-color: #fff;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, .32), 0 0 6px rgba(0, 0, 0, .20);
 	box-sizing: border-box;
 	.listItemImage{
