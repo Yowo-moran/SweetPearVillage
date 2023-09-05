@@ -18,7 +18,7 @@
         </button>
         <view class="username" style="margin-right: 130rpx">
           <text
-            style="font-weight: bold; font-size: 36rpx; color: #818258"
+            style="font-weight: bold; font-size: 33rpx; color: #818258"
             @click="
               if (!this.logined) {
                 loginPopup = true;
@@ -26,8 +26,9 @@
             "
             >{{ personalDetails.nickName }}</text
           >
-
-          <text style="margin-top: 20rpx">{{ personalDetails.gender }}</text>
+          <text style="margin-top: 20rpx">{{
+            personalDetails.sex === 0 ? "boy" : "girl"
+          }}</text>
         </view>
         <view @click="jumpTo('/pages/mine/setting')"
           ><img
@@ -87,7 +88,7 @@
 </template>
 
 <script>
-import url from '@/api/api.js';
+import url from "@/api/api.js";
 import InformVc from "@/components/InformVc.vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 export default {
@@ -97,9 +98,9 @@ export default {
     if (details) {
       this.setLogined(true);
       this.setPersonalDetails(details);
-	  console.log('set')
+      console.log("set");
     }
-	console.log(url);
+    console.log(url);
   },
   data() {
     return {
@@ -116,7 +117,7 @@ export default {
           if (res.code) {
             //发起网络请求
             wx.request({
-              url: url+"/user/" + res.code,
+              url: url + "/user/" + res.code,
               success(res) {
                 if (res.data.code !== "00000") {
                   console.log("登录失败！");
@@ -223,7 +224,7 @@ export default {
   },
   watch: {
     newChat: {
-      deep:true,
+      deep: true,
       handler() {
         this.isShow = true;
         setTimeout(() => {
@@ -247,7 +248,7 @@ export default {
   .header {
     box-sizing: border-box;
     width: 100vw;
-    height: 400rpx;
+    height: 550rpx;
     padding: 15rpx;
     padding-left: 35rpx;
     background-color: #ffffff;
@@ -259,6 +260,7 @@ export default {
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
+      margin-top: 180rpx;
       button {
         padding: 0;
         margin: 0;
@@ -269,9 +271,9 @@ export default {
         border: 0;
       }
       .username {
+        height: 80%;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
       }
     }
     .usermajor {
@@ -288,7 +290,6 @@ export default {
       width: 100%;
       height: 120rpx;
       margin-bottom: 20rpx;
-      background-color: #c4ddaf;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -302,6 +303,9 @@ export default {
         height: 50rpx;
         margin-right: 40rpx;
       }
+    }
+    .options :hover {
+      background-color: #c4ddaf;
     }
   }
 }

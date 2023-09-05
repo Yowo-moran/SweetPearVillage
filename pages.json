@@ -239,7 +239,7 @@
 	"tabBar": {
 		"color": "#6F876F",
 		"selectedColor": "#BFC6AE",
-		"backgroundColor": "#E3FBE3",
+		"backgroundColor": "#fff",
 		"list": [
 			{
 				"text": "村村",
