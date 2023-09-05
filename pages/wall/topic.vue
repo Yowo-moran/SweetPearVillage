@@ -131,6 +131,9 @@ export default {
     watch:{
 
     },
+    onShow(){
+        
+    }
 }
 </script>
 
@@ -231,7 +234,7 @@ export default {
                     // border:2px solid red;
                     // width: rpx;
                     font-size: 25rpx;
-                    color: #878864;
+                    color: black;
                     margin-right: 120rpx;
                 }
                 .star {
