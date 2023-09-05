@@ -8,6 +8,7 @@
         top: 12%;
         z-index: 999;
       "
+      v-if="isShow"
     >
       <InformVc v-if="isShow"></InformVc>
     </view>

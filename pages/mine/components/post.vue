@@ -4,7 +4,6 @@
       class="post-item"
       v-for="(item, index) in list"
       :key="index"
-      @click="jump(item.id)"
     >
       <u-image
         :src="item.avatar"
@@ -48,11 +47,11 @@
             <view class="likes">
               <button @click="deletePost(item.id)">删除</button>
               <text style="margin-right: 20rpx">{{ item.praiseCnt }}</text>
-              <u-icon name="thumb-up" color="#b9ba88" size="50rpx"></u-icon>
+              <u-icon name="thumb-up" color="#b9ba88" size="50rpx" @click.stop="jump(item.id)"></u-icon>
             </view>
             <view class="comments" style="margin-left: 20rpx">
               <text style="margin-right: 20rpx">{{ item.commentCnt }}</text>
-              <u-icon name="chat" color="#b9ba88" size="50rpx"></u-icon>
+              <u-icon name="chat" color="#b9ba88" size="50rpx" @click.stop="jump(item.id)"></u-icon>
             </view>
           </view>
         </view>

@@ -1,6 +1,6 @@
 <template>
 	<!-- 纵向卡片 书籍 -->	
-	<view class="verListItem"  @click="jump" :style="{backgroundColor:(!bookInfo.states?'#D7D7D7':'#F2F2E5')}">
+	<view class="verListItem"  @click="jump" :style="{backgroundColor:(!bookInfo.states?'#D7D7D7':'#fff')}">
 		<view class="bookPhoto">
 			<image :src="bookInfo.image" alt="图片加载失败"></image>
 		</view>
@@ -56,9 +56,10 @@
     margin: 15rpx 18.75rpx;
     padding: 30rpx 5rpx;
     width: 45%;
-    background-color: #F2F2E5;
-	
+    // background-color: #F2F2E5;
+	background-color: #fff;
     box-sizing: border-box;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, .32), 0 0 6px rgba(0, 0, 0, .20);
     .bookPhoto{ 
         width: 75%;
         margin: 0 auto;

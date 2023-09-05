@@ -29,7 +29,7 @@
 		</view>
 		<!-- 搜索结果 -->
 		<view class="scroll" v-else>
-			<scroll-view  :scroll-y="true" @scrolltolower="upper" class="demo-scroll-block" v-if="has_history">
+			<scroll-view  :scroll-y="true" @scrolltolower="upper" class="demo-scroll-block" v-if="has_history" >
 				<view v-if="tagType=='悬赏'">
 					<listCardReward v-for="item in rewardSearchInfo" :key="item.id" :rewardInfo="item"></listCardReward>
 					<u-loadmore :status="status1" />
@@ -431,6 +431,7 @@
 				width: 100%;
 				height: 90vh;
 				display: flex;
+				background-color: #E4E0E0;
 			}
 		}
 		.no-data {

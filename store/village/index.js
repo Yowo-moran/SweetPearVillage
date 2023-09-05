@@ -17,6 +17,7 @@ const mutations={
 		// console.log('悬赏',info);
 		if(info.length<6){
 			state.rewardstatus='nomore'
+			console.log(state.rewardstatus);
 		}
 		// 合并数据
 		if(state.rewardInfo.length==0){
@@ -79,6 +80,7 @@ const actions={
 				'Authorization':wx.getStorageSync('token')
 			},
 			success:res=>{
+				console.log(res);
 				if(res.statusCode==200&&res.data.data.total!=0){
 					commit('GETREWARDINFO',res.data.data.rewards)
 					state.rewardstatus='loading'
@@ -97,7 +99,6 @@ const actions={
 	 getLeaveInfo({commit,state},options={}){
 		 const{pageNum=1,pageSize=6,keyWord='',isClear=false}=options
 		 if(isClear){
-			 
 		 	state.leaveInfo=[]
 			state.leavestatus='loading'
 		 }
@@ -129,7 +130,6 @@ const actions={
 	 getBookInfo({commit,state},options={}){
 		 const {college='',major='',grade='',page=1,pageSize=6,isClear=false,sortBy=''}=options
 		 if(isClear){
-			
 		 	state.bookInfo=[]
 			state.bookstatus='loading'
 		 }

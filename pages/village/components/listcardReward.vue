@@ -1,6 +1,6 @@
 <template>
 	<!-- 横向卡片 悬赏-->
-	<view class=listItem  @click="jump" :style="{backgroundColor:(!rewardInfo.status?'#D7D7D7':'#F2F2E5')}"> 
+	<view class=listItem  @click="jump" :style="{backgroundColor:(!rewardInfo.status?'#D7D7D7':'#fff')}"> 
 		<view class="listItemContent">
 			<view>{{rewardInfo.deliveryAddress}}代取，送至{{rewardInfo.senderAddress}}</view>
 			<view>{{rewardInfo.rewardContent}}</view>
@@ -59,12 +59,15 @@
 	position: relative;
     height: 200rpx;
     // width: 100%;
-	background-color: #F2F2E5;
+	// background-color: #F2F2E5;
+	background-color: #fff;
     margin: 30rpx 10rpx;
     border-radius: 15rpx;
     padding: 20rpx 40rpx;
-    box-sizing: border-box;
+	overflow: hidden;
     font-size: 28rpx;
+	box-sizing: border-box;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, .32), 0 0 6px rgba(0, 0, 0, .20);
     .listItemContent{
         height: 45%;
         width: 65%;
@@ -123,6 +126,6 @@
 	}
 }
 .listItem:first-child{
-	margin-top: 15rpx;
+	margin-top: 30rpx;
 }
 </style>

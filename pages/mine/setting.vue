@@ -115,6 +115,7 @@
 </template>
 
 <script>
+import url from "@/api/api.js";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 export default {
   onReady() {
@@ -461,6 +462,7 @@ export default {
           }
           // console.log(res.data.message);
           that.setPersonalDetails(that.editDetails);
+          uni.navigateBack();
           uni.setStorage({
             key: "details",
             data: that.editDetails,

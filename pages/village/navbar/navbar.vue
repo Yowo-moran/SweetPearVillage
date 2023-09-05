@@ -52,10 +52,12 @@
 			display: flex;
 			justify-content: space-around;
 			align-items: center;
-			// background-color: green;
 			font-size: 45rpx;
 			height: 100%;
 			width: 100%;
+			// view{
+			// 	background-color: #E3FBE3;
+			// }
 			.active{
 				border-bottom: 10rpx solid #8FBC8F;
 			}
