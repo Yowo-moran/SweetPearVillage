@@ -29,12 +29,12 @@ export default {
 
 <style lang="scss" scoped>
     .main {
-        border: 2px solid #c5c870;
+        // border: 2px solid #c5c870;
         padding: 10rpx;
         width: 600rpx;
         display: flex;
         margin-bottom: 10rpx;
-        border-radius: 10rpx;
+        border-radius: 12rpx;
         .userName {
             // width: 130rpx;
             height: 30rpx;
